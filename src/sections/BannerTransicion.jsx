@@ -2,7 +2,7 @@ import React from 'react';
 
 export default function BannerTransicion() {
   return (
-    <section className="bg-[var(--color-abrow-nude)] py-12 px-6 border-y border-[var(--color-abrow-dark)]/5 relative overflow-hidden">
+    <section className="bg-[var(--color-abrow-nude)] py-12 px-6 border-y border-[var(--color-abrow-dark)]/5 relative z-20 overflow-hidden">
       {/* Fondo Floral Discreto */}
       <div className="absolute inset-0 opacity-5 pointer-events-none bg-[radial-gradient(#3D1E16_1px,transparent_1px)] [background-size:16px_16px]" />
       

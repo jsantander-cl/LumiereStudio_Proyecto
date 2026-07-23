@@ -2,7 +2,7 @@ import React from 'react';
 
 export default function Galeria() {
   return (
-    <section id="galeria" className="bg-[var(--color-abrow-darkbg)] text-white py-20 px-6 md:px-12 lg:px-24">
+    <section id="galeria" className="bg-[var(--color-abrow-darkbg)] text-white py-20 px-6 md:px-12 lg:px-24 relative z-20">
       <div className="max-w-7xl mx-auto space-y-16">
         
         {/* Encabezado */}
