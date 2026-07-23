@@ -12,10 +12,10 @@ export default function CTABanner() {
           se deslizan por encima, revelándola u ocultándola progresivamente. */}
       <div
         className="absolute inset-0 -z-10 bg-fixed bg-cover bg-center"
-        style={{ backgroundImage: "url('/img/ChatGPT Image 20 jul 2026, 11_33_05 p.m..png')" }}
+        style={{ backgroundImage: "url('/img/banner.png')" }}
       />
       {/* Velo oscuro para legibilidad del texto */}
-      <div className="absolute inset-0 -z-10 bg-black/30" />
+      <div className="absolute inset-0 -z-10 bg-black/50" />
 
       <div className="max-w-7xl mx-auto w-full flex justify-end relative z-10 px-6 md:px-12 lg:px-24 pb-12 md:pb-20">
         <div className="bg-[var(--color-abrow-cream)] text-right space-y-3 max-w-md p-8 md:p-10 shadow-xl">
