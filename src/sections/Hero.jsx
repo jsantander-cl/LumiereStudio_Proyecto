@@ -38,7 +38,7 @@ function Hero() {
       {/* Parte Inferior: imagen a lo ancho completo */}
       <div className="w-full h-[420px] md:h-[600px]">
         <img
-          src="/public/img/hero.png"
+          src="/hero.png"
           alt="Aplicación de maquillaje de cejas"
           className="w-full h-full object-cover object-center"
         />
