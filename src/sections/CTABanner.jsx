@@ -1,4 +1,4 @@
-import React from 'react';
+import { Link } from 'react-router-dom';
 
 export default function CTABanner() {
   return (
@@ -24,12 +24,12 @@ export default function CTABanner() {
             <span className="italic text-[var(--color-abrow-muted)] font-normal">que Merece.</span>
           </h3>
           
-          <a
-            href="#contacto"
+          <Link
+            to="/contacto"
             className="inline-block font-sans text-[11px] tracking-widest uppercase underline underline-offset-4 text-[var(--color-abrow-dark)]"
           >
             Reservar una cita
-          </a>
+          </Link>
         </div>
       </div>
     </section>

@@ -1,4 +1,4 @@
-import React from 'react';
+import { Link } from 'react-router-dom';
 
 const tratamientos = [
   { nombre: 'Perfilado de cejas', precio: '$10.000', desc: "Mejora la forma o la apariencia de tus cejas." },
@@ -71,12 +71,12 @@ export default function ServiciosPrecios() {
               Descubre el Poder de unas <span className="italic">Cejas Perfectas!</span>
             </h4>
             <p className="font-sans text-xs text-white/70">¡Reserve su cita hoy mismo!</p>
-            <a
-              href="#contacto"
+            <Link
+              to="/contacto"
               className="bg-white text-[var(--color-abrow-dark)] px-6 py-3 font-sans text-[10px] uppercase tracking-widest hover:bg-white/90 transition-all"
             >
               Reserva ahora
-            </a>
+            </Link>
           </div>
         </div>
       </div>
