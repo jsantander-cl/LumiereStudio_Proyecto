@@ -7,35 +7,63 @@ const SliderComparador = ({ imgBefore, imgAfter, titulo, especialista }) => {
     <div className="flex flex-col items-center w-full">
       <div className="relative w-full aspect-[4/5] overflow-hidden select-none group">
         {/* Imagen del 'Después' */}
-        <img src={imgAfter} alt="Después" className="absolute inset-0 w-full h-full object-cover" />
-        
+        <img
+          src={imgAfter}
+          alt="Después"
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+
         {/* Imagen del 'Antes' (Recortada según el slider) */}
-        <div 
-          className="absolute inset-0 overflow-hidden" 
-          style={{ clipPath: `polygon(0 0, ${posicion}% 0, ${posicion}% 100%, 0 100%)` }}
+        <div
+          className="absolute inset-0 overflow-hidden"
+          style={{
+            clipPath: `polygon(0 0, ${posicion}% 0, ${posicion}% 100%, 0 100%)`,
+          }}
         >
-          <img src={imgBefore} alt="Antes" className="absolute inset-0 w-full h-full object-cover" />
+          <img
+            src={imgBefore}
+            alt="Antes"
+            className="absolute inset-0 w-full h-full object-cover"
+          />
         </div>
 
-        {/* Línea Divisoria y Controlador */}
-        <div className="absolute top-0 bottom-0 w-[2px] bg-white" style={{ left: `${posicion}%` }}>
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 bg-white text-[var(--color-abrow-dark)] rounded-full flex items-center justify-center shadow-md text-xs font-bold pointer-events-none">
-            ⟨⟩
-          </div>
+        {/* Línea Divisoria Superior */}
+        <div
+          className="absolute top-0 bottom-[calc(50%+20px)] w-[3px] bg-white"
+          style={{ left: `${posicion}%` }}
+        />
+
+        {/* Controlador (Círculo Central) */}
+        <div
+          className="absolute top-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 rounded-full border-[4px] border-white flex items-center justify-center shadow-md pointer-events-none"
+          style={{ left: `${posicion}%` }}
+        >
+          <svg viewBox="0 0 48 48" className="w-6 h-6">
+            <polygon points="20,10 6,24 20,38" fill="white" />
+            <polygon points="28,10 42,24 28,38" fill="white" />
+          </svg>
         </div>
+
+        {/* Línea Divisoria Inferior */}
+        <div
+          className="absolute top-[calc(50%+20px)] bottom-0 w-[3px] bg-white"
+          style={{ left: `${posicion}%` }}
+        />
 
         {/* Input transparente para interactuar */}
-        <input 
-          type="range" 
-          min="0" 
-          max="100" 
+        <input
+          type="range"
+          min="0"
+          max="100"
           value={posicion}
           onChange={(e) => setPosicion(e.target.value)}
           className="absolute inset-0 w-full h-full opacity-0 cursor-ew-resize z-10"
         />
       </div>
 
-      <h4 className="font-serif text-lg text-[var(--color-abrow-dark)] mt-4">{titulo}</h4>
+      <h4 className="font-serif text-lg text-[var(--color-abrow-dark)] mt-4">
+        {titulo}
+      </h4>
       <p className="font-sans text-[10px] tracking-widest text-[var(--color-abrow-muted)] uppercase mt-1">
         {especialista}
       </p>
