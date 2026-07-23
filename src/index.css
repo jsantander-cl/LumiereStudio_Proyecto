@@ -1,0 +1,34 @@
+@import "tailwindcss";
+
+@theme {
+  /* Tipografía real de A-Brow (extraída del CSS fuente de Weblium) */
+  --font-serif: 'Cormorant', Georgia, serif;   /* Titulares elegantes */
+  --font-sans: 'Lato', sans-serif;             /* Cuerpo de texto y menú */
+  --font-btn: 'Poppins', sans-serif;           /* Botones */
+
+  /* Paleta de color exacta (variables --ui-* del sitio original) */
+  --color-abrow-cream: #fcf8f6;     /* ui-light-accent-color */
+  --color-abrow-nude: #f9f2ee;      /* ui-brand-color */
+  --color-abrow-footer: #f2e6e0;    /* fondo footer rgb(242,230,224) */
+  --color-abrow-dark: #673231;      /* ui-dark-shade-color */
+  --color-abrow-muted: #9b7675;     /* ui-dark-accent-color */
+  --color-abrow-text: #ae9b99;      /* texto de cuerpo atenuado */
+  --color-abrow-darkbg: #47231f;    /* fondo sección oscura (Delivering Exceptional / galería) */
+  --color-abrow-darkbg2: #3d1d1c;   /* fondo stats/testimonios */
+
+  --spacing-section-py: 100px;
+  --spacing-content-px: 24px;
+  --spacing-container-max-w: 1200px;
+}
+
+body {
+  background-color: var(--color-abrow-cream);
+  color: var(--color-abrow-dark);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-serif);
+  font-weight: 400;
+}
