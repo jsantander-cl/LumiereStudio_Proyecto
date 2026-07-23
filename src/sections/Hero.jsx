@@ -11,7 +11,7 @@ function Hero() {
         <div
           className="absolute -left--10 -right-0 top-5 w-[360px] h-[360px] pointer-events-none hidden md:block"
         >
-          <img src="/public/img/logosombra.png" alt="Trabajo 1" />
+          <img src="/img/logosombra.png" alt="Trabajo 1" />
         </div>
 
         <div className="relative z-10 max-w-3xl">
@@ -38,7 +38,7 @@ function Hero() {
       {/* Parte Inferior: imagen a lo ancho completo */}
       <div className="w-full h-[420px] md:h-[600px]">
         <img
-          src="/hero.png"
+          src="/img/hero.png"
           alt="Aplicación de maquillaje de cejas"
           className="w-full h-full object-cover object-center"
         />
