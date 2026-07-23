@@ -39,7 +39,7 @@ export default function Servicios() {
         <div className="max-w-5xl mx-auto space-y-0 shadow-sm overflow-hidden">
           <FilaClase 
             inverso={false}
-            imagen="/public/img/INSTA3.png"
+            imagen="/img/INSTA3.png"
             precio="$300.000"
             fecha="Proximamente, 2026"
             titulo="Formación con Modelos en Vivo"
@@ -47,7 +47,7 @@ export default function Servicios() {
           />
           <FilaClase 
             inverso={true}
-            imagen="/public/img/SERVICIO2.png"
+            imagen="/img/SERVICIO2.png"
             precio="$100.000"
             fecha="Proximamente, 2026"
             titulo="Perfecciona tus Técnicas de Microblading"

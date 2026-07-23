@@ -1,12 +1,12 @@
 import React from 'react';
 
 const imagenes = [
-  '/public/img/INSTA1.png',
-  '/public/img/INSTA2.png',
-  '/public/img/INSTA6.png',
-  '/public/img/INSTA4.png',
-  '/public/img/INSTA5.png',
-  '/public/img/ojoB.png',
+  '/img/INSTA1.png',
+  '/img/INSTA2.png',
+  '/img/INSTA6.png',
+  '/img/INSTA4.png',
+  '/img/INSTA5.png',
+  '/img/ojoB.png',
 ];
 
 export default function InstagramGaleria() {

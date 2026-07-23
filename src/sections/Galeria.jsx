@@ -22,15 +22,15 @@ export default function Galeria() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           {/* Lado Izquierdo: Cuadrícula 2x2 */}
           <div className="grid grid-cols-2 gap-4">
-            <img src="/public/img/galeria 11.png" alt="Trabajo 1" className="w-full aspect-square object-cover" />
-            <img src="/public/img/galeria 2.png" alt="Trabajo 2" className="w-full aspect-square object-cover" />
-            <img src="/public/img/tania.png" alt="Trabajo 3" className="w-full aspect-square object-cover" />
-            <img src="/public/img/galeria 4.png" alt="Trabajo 4" className="w-full aspect-square object-cover" />
+            <img src="/img/galeria 11.png" alt="Trabajo 1" className="w-full aspect-square object-cover" />
+            <img src="/img/galeria 2.png" alt="Trabajo 2" className="w-full aspect-square object-cover" />
+            <img src="/img/tania.png" alt="Trabajo 3" className="w-full aspect-square object-cover" />
+            <img src="/img/galeria 4.png" alt="Trabajo 4" className="w-full aspect-square object-cover" />
           </div>
 
           {/* Lado Derecho: Imagen Alta */}
           <div className="w-full h-full min-h-[350px]">
-            <img src="/public/img/galeria 5.png" alt="Trabajo Destacado" className="w-full h-full object-cover" />
+            <img src="/img/galeria 5.png" alt="Trabajo Destacado" className="w-full h-full object-cover" />
           </div>
         </div>
 

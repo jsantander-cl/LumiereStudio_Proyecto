@@ -6,7 +6,7 @@ const beneficios = [
     texto: 'Elija una fecha y hora que le resulten convenientes.',
     icono: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" className="w-6 h-6">
-        <image href="/public/svg/007-appointment-1.svg" width="24" height="24" />
+        <image href="/svg/007-appointment-1.svg" width="24" height="24" />
       </svg>
     ),
   },
@@ -15,7 +15,7 @@ const beneficios = [
     texto: 'Especialista en diseño estetico altamente recomendada.',
     icono: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" className="w-6 h-6">
-        <image href="/public/svg/005-candidate.svg" width="24" height="24" />
+        <image href="/svg/005-candidate.svg" width="24" height="24" />
       </svg>
     ),
   },
@@ -24,7 +24,7 @@ const beneficios = [
     texto: 'Te ayudamos a resaltar tu belleza natural.',
     icono: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" className="w-6 h-6">
-        <image href="/public/svg/017-makeup.svg" width="24" height="24" />
+        <image href="/svg/017-makeup.svg" width="24" height="24" />
       </svg>
     ),
   },
@@ -33,7 +33,7 @@ const beneficios = [
     texto: 'El mejor regalo para tu amiga, madre o pareja.',
     icono: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" className="w-6 h-6">
-        <image href="/public/svg/011-gift-1.svg" width="24" height="24" />
+        <image href="/svg/011-gift-1.svg" width="24" height="24" />
       </svg>
     ),
   },
@@ -42,7 +42,7 @@ const beneficios = [
     texto: 'Luce unas cejas y pestañas perfectas durante mucho tiempo.',
     icono: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" className="w-6 h-6">
-        <image href="/public/svg/015-love-yourself.svg" width="24" height="24" />
+        <image href="/svg/015-love-yourself.svg" width="24" height="24" />
       </svg>
     ),
   },
@@ -71,7 +71,7 @@ export default function Beneficios() {
         {/* Video / Imagen destacada */}
         <div className="relative w-full aspect-[16/9] md:aspect-[21/9] overflow-hidden group cursor-pointer">
           <img
-            src="/public/img/videofalso.png"
+            src="/img/videofalso.png"
             alt="Sesión de cejas en el estudio"
             className="w-full h-full object-cover"
           />

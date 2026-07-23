@@ -44,7 +44,7 @@ export default function ServiciosPrecios() {
         {/* 3 tarjetas: Gift Cards / Other Services / CTA */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="relative aspect-[3/4] overflow-hidden group">
-            <img src="/public/img/giftcardlumiere.png" alt="Gift Cards" className="w-full h-full object-cover" />
+            <img src="/img/giftcardlumiere.png" alt="Gift Cards" className="w-full h-full object-cover" />
             <div className="absolute bottom-6 left-6 right-6 bg-white py-5 text-center">
               <h4 className="font-serif text-lg text-[var(--color-abrow-dark)]">Gift Cards</h4>
               <span className="font-sans text-[10px] tracking-widest text-[var(--color-abrow-muted)] uppercase">
@@ -54,7 +54,7 @@ export default function ServiciosPrecios() {
           </div>
 
           <div className="relative aspect-[3/4] overflow-hidden group">
-            <img src="/public/img/masinfo.png" alt="Other Services" className="w-full h-full object-cover" />
+            <img src="/img/masinfo.png" alt="Other Services" className="w-full h-full object-cover" />
             <div className="absolute bottom-6 left-6 right-6 bg-white py-5 text-center">
               <h4 className="font-serif text-lg text-[var(--color-abrow-dark)]">Otros servicios</h4>
               <span className="font-sans text-[10px] tracking-widest text-[var(--color-abrow-muted)] uppercase">
@@ -65,7 +65,7 @@ export default function ServiciosPrecios() {
 
           <div className="bg-[var(--color-abrow-dark)] text-white aspect-[3/4] flex flex-col items-center justify-center text-center px-8 space-y-4">
             <div viewBox="0 0 40 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-25">
-              <img src="/public/img/cejasblanca.png" alt="Cejas Perfectas" className="w-full h-full object-contain" />
+              <img src="/img/cejasblanca.png" alt="Cejas Perfectas" className="w-full h-full object-contain" />
             </div>
             <h4 className="font-serif text-2xl leading-snug">
               Descubre el Poder de unas <span className="italic">Cejas Perfectas!</span>

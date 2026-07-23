@@ -6,7 +6,7 @@ const puntos = [
     texto: 'Nuestro estudio está ubicado en una villa cerrada con areas verdes.',
     icono: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" className="w-6 h-6">
-        <image href="/public/svg/001-hair-salon.svg" width="24" height="24" />
+        <image href="/svg/001-hair-salon.svg" width="24" height="24" />
       </svg>
     ),
   },
@@ -15,7 +15,7 @@ const puntos = [
     texto: 'Todos los instrumentos que utilizamos están esterilizados.',
     icono: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" className="w-6 h-6">
-        <image href="/public/svg/002-eyebrow-pencil.svg" alt="Herramientas seguras" width="24" height="24" />
+        <image href="/svg/002-eyebrow-pencil.svg" alt="Herramientas seguras" width="24" height="24" />
       </svg>
     ),
   },
@@ -24,7 +24,7 @@ const puntos = [
     texto: '¡Consigue tus cejas en tan solo una hora y media!',
     icono: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" className="w-6 h-6">
-        <image href="/public/svg/016-beauty-salon.svg" alt="Herramientas seguras" width="24" height="24" />
+        <image href="/svg/016-beauty-salon.svg" alt="Herramientas seguras" width="24" height="24" />
       </svg>
     ),
   },
@@ -69,7 +69,7 @@ export default function ResultadosExcepcionales() {
       {/* Columna Imagen */}
       <div className="min-h-[360px] lg:min-h-[640px]">
         <img
-          src="/public/img/trabajando.png"
+          src="/img/trabajando.png"
           alt="Artista trabajando en cejas"
           className="w-full h-full object-cover"
         />

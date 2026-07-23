@@ -8,7 +8,7 @@ export default function Sobrenosotros() {
         {/* Imagen del Bodegón de Productos */}
         <div className="flex justify-center">
           <img 
-            src="/public/img/puluk.png" 
+            src="/img/puluk.png" 
             alt="Premium Products" 
             className="max-h-[380px] object-contain drop-shadow-sm" 
           />

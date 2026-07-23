@@ -71,14 +71,14 @@ export default function Caracteristicas() {
         {/* Columna Sliders */}
         <div className="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-8 w-full">
           <SliderComparador 
-            imgBefore="/public/img/ojoA.png" 
-            imgAfter="/public/img/ojoB.png" 
+            imgBefore="/img/ojoA.png" 
+            imgAfter="/img/ojoB.png" 
             titulo="Lifting Coreano" 
             especialista="CORRECCIóN DE PESTAÑAS" 
           />
           <SliderComparador 
-            imgBefore="/public/img/ojoC.png" 
-            imgAfter="/public/img/ojoD.png" 
+            imgBefore="/img/ojoC.png" 
+            imgAfter="/img/ojoD.png" 
             titulo="Microblading" 
             especialista="Corrección de cejas" 
           />
