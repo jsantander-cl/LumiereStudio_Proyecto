@@ -4,7 +4,7 @@ const preguntasIzquierda = [
   {
     pregunta: '¿Cuánto duran los procedimientos?',
     respuesta:
-      'La mayoría de nuestros tratamientos de cejas duran entre 60 y 90 minutos, dependiendo de la técnica elegida.',
+      'La mayoría de nuestros tratamientos de cejas y pestañas duran entre 60 y 90 minutos, dependiendo de la técnica elegida.',
   },
   {
     pregunta: '¿Es doloroso el microblading?',
@@ -14,7 +14,7 @@ const preguntasIzquierda = [
   {
     pregunta: '¿Podría aconsejarme qué tratamiento elegir?',
     respuesta:
-      'Nuestros expertos te ofrecerán un asesoramiento honesto sobre tu tipo de rostro, la forma actual de tus cejas y los estilos que mejor te sentarán.',
+      'Nuestra experta te ofrecerá un asesoramiento honesto sobre tu tipo de rostro, la forma actual de tus cejas y los estilos de pestañasque mejor te sentarán.',
   },
 ];
 
@@ -25,12 +25,12 @@ const preguntasDerecha = [
   },
   {
     pregunta: '¿Cómo puedo comprar una tarjeta de regalo?',
-    respuesta: 'Puedes adquirir tarjetas de regalo directamente desde nuestra sección "Tarjetas de Regalo" en el sitio.',
+    respuesta: 'Puedes adquirir tarjetas de regalo directamente desde nuestra sección "Tarjetas de Regalo" en el sitio o de manera presencial.',
   },
   {
     pregunta: '¿Qué ocurre si quiero cancelar mi cita?',
     respuesta:
-      'Puedes cancelar o reprogramar tu cita sin costo hasta 24 horas antes escribiéndonos por cualquiera de nuestros canales.',
+      'Puedes reprogramar tu cita sin costo hasta 24 horas antes escribiéndonos por cualquiera de nuestros canales. Si deseas cancelar un servicio agendado no se realiza reembolso de reserva.',
   },
 ];
 
