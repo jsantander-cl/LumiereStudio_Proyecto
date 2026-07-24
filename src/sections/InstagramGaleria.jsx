@@ -1,5 +1,3 @@
-import React from 'react';
-
 const imagenes = [
   '/img/INSTA1.png',
   '/img/INSTA2.png',
@@ -24,7 +22,7 @@ export default function InstagramGaleria() {
 
         <div className="grid grid-cols-3 md:grid-cols-6">
           {imagenes.map((img, idx) => (
-            <div key={idx} className="aspect-square overflow-hidden">
+            <div key={img} className="aspect-square overflow-hidden">
               <img
                 src={img}
                 alt={`Publicación de Instagram ${idx + 1}`}

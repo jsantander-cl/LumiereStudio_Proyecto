@@ -1,6 +1,5 @@
-import React from 'react';
-
 import { Link } from 'react-router-dom';
+import { HashLink } from 'react-router-hash-link';
 
 function Footer() {
   const enlaces = [
@@ -50,16 +49,13 @@ function Footer() {
   return (
     <footer className="bg-[var(--color-abrow-footer)] pt-16 pb-8 px-6 md:px-12">
       <div className="max-w-7xl mx-auto space-y-14">
-        {/* Logotipo Central */}
         <div className="text-center">
           <h4 className="font-serif text-3xl text-[var(--color-abrow-dark)]">
             Lumiere
           </h4>
         </div>
 
-        {/* Fila principal: Horarios / Descripción+menú / Contacto */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 text-sm">
-          {/* Open Hours */}
           <div className="space-y-3">
             <h5 className="font-serif text-lg text-[var(--color-abrow-dark)]">
               Horario de atención
@@ -74,7 +70,6 @@ function Footer() {
             </p>
           </div>
 
-          {/* Descripción + Menú + Redes */}
           <div className="flex flex-col items-center text-center space-y-6">
             <p className="font-sans text-sm text-[var(--color-abrow-muted)] max-w-xs">
               Somos un acogedor estudio de belleza en la ciudad de Antofagasta.
@@ -83,13 +78,14 @@ function Footer() {
 
             <nav className="flex flex-wrap justify-center gap-x-6 gap-y-2 font-serif italic text-sm text-[var(--color-abrow-muted)]">
               {enlaces.map((enlace) => (
-                <a
+                <HashLink
+                  smooth
                   key={enlace.label}
-                  href={enlace.href}
+                  to={enlace.href}
                   className="hover:text-[var(--color-abrow-dark)] transition-colors"
                 >
                   {enlace.label}
-                </a>
+                </HashLink>
               ))}
               <Link
                 to="/contacto"
@@ -101,14 +97,18 @@ function Footer() {
 
             <div className="flex gap-4">
               {redes.map((red) => (
-                <a key={red.nombre} href={red.url} className="...">
-                  {red.nombre}
+                <a
+                  key={red.nombre}
+                  href="#"
+                  aria-label={red.nombre}
+                  className="text-[var(--color-abrow-dark)] hover:opacity-70 transition-opacity"
+                >
+                  {red.icono}
                 </a>
               ))}
             </div>
           </div>
 
-          {/* Contacto */}
           <div className="space-y-3 md:text-right">
             <h5 className="font-serif text-lg text-[var(--color-abrow-dark)]">
               Contacto
@@ -124,7 +124,6 @@ function Footer() {
           </div>
         </div>
 
-        {/* Fila Inferior: Créditos */}
         <div className="border-t border-[var(--color-abrow-dark)]/10 pt-6 flex flex-col sm:flex-row justify-between items-center text-xs text-[var(--color-abrow-muted)] gap-2">
           <p>© Created by jsantander-cl</p>
           <p>Reservados todos los derechos</p>

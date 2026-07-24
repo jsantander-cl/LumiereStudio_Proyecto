@@ -14,7 +14,7 @@ const preguntasIzquierda = [
   {
     pregunta: '¿Podría aconsejarme qué tratamiento elegir?',
     respuesta:
-      'Nuestra experta te ofrecerá un asesoramiento honesto sobre tu tipo de rostro, la forma actual de tus cejas y los estilos de pestañasque mejor te sentarán.',
+      'Nuestra experta te ofrecerá un asesoramiento honesto sobre tu tipo de rostro, la forma actual de tus cejas y los estilos de pestañas que mejor te sentarán.',
   },
 ];
 
@@ -90,7 +90,7 @@ export default function PreguntasFrecuentes() {
             </p>
             {preguntasIzquierda.map((item, i) => (
               <ItemAcordeon
-                key={i}
+                key={item.pregunta}
                 item={item}
                 abierto={abierto === `izq-${i}`}
                 onClick={() => alternar(`izq-${i}`)}
@@ -105,7 +105,7 @@ export default function PreguntasFrecuentes() {
             </p>
             {preguntasDerecha.map((item, i) => (
               <ItemAcordeon
-                key={i}
+                key={item.pregunta}
                 item={item}
                 abierto={abierto === `der-${i}`}
                 onClick={() => alternar(`der-${i}`)}

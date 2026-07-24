@@ -1,5 +1,3 @@
-import React from 'react';
-
 export default function Galeria() {
   return (
     <section id="galeria" className="bg-[var(--color-abrow-darkbg)] text-white py-20 px-6 md:px-12 lg:px-24 relative z-20">
@@ -51,11 +49,12 @@ export default function Galeria() {
           <div className="font-serif text-5xl text-[var(--color-abrow-muted)] opacity-40 leading-none">“</div>
 
           <p className="font-serif italic text-lg md:text-xl text-white leading-relaxed">
-            "Hoy fui a mi cita de microblading y estoy muy feliz con el resultado. La especialista fue muy profesional y me explicó todo el proceso. Mis cejas se ven naturales y definidas. ¡Definitivamente volveré!"
+            " Hoy fui a mi cita de microblading y estoy muy feliz con el resultado. La especialista fue muy profesional y me explicó todo el proceso. Mis cejas se ven naturales y definidas. ¡Definitivamente volveré! "
           </p>
 
           <span className="block font-sans text-[10px] tracking-[0.2em] text-[var(--color-abrow-muted)] uppercase font-semibold">
-            @_paz.is</span>
+            @_paz.is
+          </span>
 
           {/* Dots de Navegación */}
           <div className="flex justify-center space-x-2 pt-4">

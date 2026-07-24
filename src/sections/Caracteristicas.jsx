@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 const SliderComparador = ({ imgBefore, imgAfter, titulo, especialista }) => {
   const [posicion, setPosicion] = useState(50);
@@ -88,7 +88,7 @@ export default function Caracteristicas() {
           </span>
 
           <p className="font-sans text-xs md:text-sm text-[var(--color-abrow-muted)] leading-relaxed max-w-sm">
-            La forma y el color de las cejas cambian significativamente la apariencia general de una persona y la forma en que los demás la perciben. ¡Compruébalo tú mismo!
+            La forma y el color de las cejas cambian significativamente la apariencia general de una persona y la forma en que los demás la perceiben. ¡Compruébalo tú mismo!
           </p>
 
           <button className="mt-4 border border-[var(--color-abrow-dark)] px-7 py-2.5 font-sans text-[11px] uppercase tracking-widest text-[var(--color-abrow-dark)] hover:bg-[var(--color-abrow-dark)] hover:text-white transition-all duration-300">
@@ -102,7 +102,7 @@ export default function Caracteristicas() {
             imgBefore="/img/ojoA.png" 
             imgAfter="/img/ojoB.png" 
             titulo="Lifting Coreano" 
-            especialista="CORRECCIóN DE PESTAÑAS" 
+            especialista="CORRECCIÓN DE PESTAÑAS" 
           />
           <SliderComparador 
             imgBefore="/img/ojoC.png" 

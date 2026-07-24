@@ -1,9 +1,7 @@
-import React from 'react';
-
 const puntos = [
   {
     titulo: 'Lugar Acogedor',
-    texto: 'Nuestro estudio está ubicado en una villa cerrada con areas verdes.',
+    texto: 'Nuestro estudio está ubicado en una villa cerrada con áreas verdes.',
     icono: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" className="w-6 h-6">
         <image href="/svg/001-hair-salon.svg" width="24" height="24" />
@@ -15,7 +13,7 @@ const puntos = [
     texto: 'Todos los instrumentos que utilizamos están esterilizados.',
     icono: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" className="w-6 h-6">
-        <image href="/svg/002-eyebrow-pencil.svg" alt="Herramientas seguras" width="24" height="24" />
+        <image href="/svg/002-eyebrow-pencil.svg" width="24" height="24" />
       </svg>
     ),
   },
@@ -24,7 +22,7 @@ const puntos = [
     texto: '¡Consigue tus cejas en tan solo una hora y media!',
     icono: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" className="w-6 h-6">
-        <image href="/svg/016-beauty-salon.svg" alt="Herramientas seguras" width="24" height="24" />
+        <image href="/svg/016-beauty-salon.svg" width="24" height="24" />
       </svg>
     ),
   },
@@ -43,7 +41,7 @@ export default function ResultadosExcepcionales() {
             Tu mirada: nuestra pasión
           </span>
           <p className="font-sans text-sm text-white/70 leading-relaxed">
-            Estilistas de cejas profesional altamente capacitada que se especializa en las técnicas para dar forma y arreglar las cejas y pestañas a la perfección. Utilizan una variedad de herramientas y productos para realzar la forma y el arco de las cejas y pestañas, rellenar las zonas con menos vello y crear un look personalizado.
+            Estilista de cejas profesional altamente capacitada que se especializa en las técnicas para dar forma y arreglar las cejas y pestañas a la perfección. Utiliza una variedad de herramientas y productos para realzar la forma y el arco de las cejas y pestañas, rellenar las zonas con menos vello y crear un look personalizado.
           </p>
 
           <div className="space-y-6 pt-2 font-black">

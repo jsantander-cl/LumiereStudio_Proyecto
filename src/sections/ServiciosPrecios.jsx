@@ -1,10 +1,10 @@
 import { Link } from 'react-router-dom';
 
 const tratamientos = [
-  { nombre: 'Perfilado de cejas', precio: '$10.000', desc: "Mejora la forma o la apariencia de tus cejas." },
+  { nombre: 'Perfilado de cejas', precio: '$10.000', desc: 'Mejora la forma o la apariencia de tus cejas.' },
   { nombre: 'Microblading', precio: '$120.000', desc: '¡Olvídate del maquillaje durante 18 a 30 semanas con el microblading!' },
   { nombre: 'Limpieza Facial', precio: '$20.000', desc: 'Limpia y exfolia tu piel para dejarla suave y radiante.' },
-  { nombre: 'Lifting Coreano', precio: '$35.000', desc: 'Eleva, alarga y fortalece y nutre tus pestañas desde la raíz' },
+  { nombre: 'Lifting Coreano', precio: '$35.000', desc: 'Eleva, alarga, fortalece y nutre tus pestañas desde la raíz.' },
   { nombre: 'Laminación de cejas', precio: '$25.000', desc: 'Te da unas cejas con apariencia más poblada y corrige su forma natural.' },
   { nombre: 'Corrección de cejas para hombres', precio: '$20.000', desc: 'Consigue una mejor forma para tus cejas o cambia su aspecto.' },
 ];
@@ -64,11 +64,11 @@ export default function ServiciosPrecios() {
           </div>
 
           <div className="bg-[var(--color-abrow-dark)] text-white aspect-[3/4] flex flex-col items-center justify-center text-center px-8 space-y-4">
-            <div viewBox="0 0 40 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-25">
+            <div className="w-25">
               <img src="/img/cejasblanca.png" alt="Cejas Perfectas" className="w-full h-full object-contain" />
             </div>
             <h4 className="font-serif text-2xl leading-snug">
-              Descubre el Poder de unas <span className="italic">Cejas Perfectas!</span>
+              ¡Descubre el Poder de unas <span className="italic">Cejas Perfectas!</span>
             </h4>
             <p className="font-sans text-xs text-white/70">¡Reserve su cita hoy mismo!</p>
             <Link

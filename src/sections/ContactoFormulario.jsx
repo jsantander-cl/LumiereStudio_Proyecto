@@ -64,7 +64,7 @@ export default function ContactoFormulario() {
             src="https://www.google.com/maps?q=Oficina+Solferino+236+Antofagasta+Chile&output=embed"
             className="w-full h-full min-h-[320px] border-0"
             loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
+            referrerpolicy="no-referrer-when-downgrade"
           />
         </div>
       </div>

@@ -1,5 +1,3 @@
-import React from 'react';
-
 const ArticuloItem = ({ imagen, fechaCategoria, titulo, extracto }) => (
   <div className="flex flex-col items-start space-y-3">
     <div className="w-full aspect-[4/3] overflow-hidden">
@@ -14,7 +12,7 @@ const ArticuloItem = ({ imagen, fechaCategoria, titulo, extracto }) => (
       {titulo}
     </h3>
     
-    <p className="font-sans text-xs text-[var(--color-abrow-muted)]/80 leading-relaxed line-clamp-3">
+    <p className="font-sans text-sm text-[var(--color-abrow-muted)]/80 leading-relaxed line-clamp-3">
       {extracto}
     </p>
 
@@ -29,7 +27,6 @@ export default function Blog() {
     <section className="bg-[var(--color-abrow-cream)] py-20 px-6 md:px-12 lg:px-24">
       <div className="max-w-7xl mx-auto space-y-12">
         
-        {/* Encabezado */}
         <div className="text-center space-y-2">
           <h2 className="font-serif text-3xl md:text-4xl text-[var(--color-abrow-dark)]">
             Nuestras Noticias & <span className="italic text-[var(--color-abrow-muted)] font-normal">Articulos</span>
@@ -39,7 +36,6 @@ export default function Blog() {
           </span>
         </div>
 
-        {/* Grid de 3 Columnas */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <ArticuloItem 
             imagen="/img/BLOG 1.png"
@@ -50,7 +46,7 @@ export default function Blog() {
           <ArticuloItem 
             imagen="/img/BLOG 2.png"
             fechaCategoria="02 MAR 2026 | SEGURIDAD"
-            titulo="¿Cuáles son las Principales Normas de Seguridad de la Espacialista para Cejas en Lumiere?"
+            titulo="¿Cuáles son las Principales Normas de Seguridad para Realizar tus Cejas en Lumiere?"
             extracto="Nos tomamos muy en serio la higiene y la esterilización de nuestros instrumentos. Nuestra especialista sigue reglas claras: 1. Utilizar siempre la desinfección adecuada..."
           />
           <ArticuloItem 

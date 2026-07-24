@@ -1,4 +1,4 @@
-import React from 'react';
+import { HashLink } from 'react-router-hash-link';
 
 export default function Introduccion() {
   return (
@@ -23,12 +23,12 @@ export default function Introduccion() {
           </p>
           <p className="font-serif text-[var(--color-abrow-dark)] text-base">
             INICIA:{' '}
-            <a href="#servicios" className="italic underline underline-offset-4">
+            <HashLink smooth to="/#servicios" className="italic underline underline-offset-4">
               Corrección de cejas
-            </a>{' '}
-            <a href="#servicios" className="italic underline underline-offset-4 ml-4">
+            </HashLink>{' '}
+            <HashLink smooth to="/#servicios" className="italic underline underline-offset-4 ml-4">
               Corrección de pestañas
-            </a>
+            </HashLink>
           </p>
         </div>
       </div>

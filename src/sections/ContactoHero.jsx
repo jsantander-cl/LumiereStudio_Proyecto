@@ -9,7 +9,9 @@ export default function ContactoHero() {
           Inicio
         </Link>
         <span className="mx-2">&gt;</span>
-        <span className="underline underline-offset-4 font-semibold text-white">Contacto</span>
+        <span className="underline underline-offset-4 font-semibold text-white">
+          Contacto
+        </span>
       </p>
     </section>
   );

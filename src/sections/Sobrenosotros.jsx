@@ -1,5 +1,3 @@
-import React from 'react';
-
 export default function Sobrenosotros() {
   return (
     <section id="sobre-nosotros" className="bg-[var(--color-abrow-nude)]/50 py-20 px-6 md:px-12 lg:px-24">
@@ -30,7 +28,7 @@ export default function Sobrenosotros() {
           </p>
 
           <button className="mt-4 border border-[var(--color-abrow-dark)] px-7 py-2.5 font-sans text-[11px] uppercase tracking-widest text-[var(--color-abrow-dark)] hover:bg-[var(--color-abrow-dark)] hover:text-white transition-all duration-300">
-              más información
+            MÁS INFORMACIÓN
           </button>
         </div>
 

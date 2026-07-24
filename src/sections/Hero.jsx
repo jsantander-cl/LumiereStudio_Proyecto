@@ -1,5 +1,3 @@
-import React from 'react';
-
 function Hero() {
   const redes = ['Instagram', 'Facebook', 'Twitter', 'Youtube'];
 
@@ -25,7 +23,7 @@ function Hero() {
             <h1 className="font-serif text-3xl md:text-5xl lg:text-6xl text-[var(--color-abrow-dark)] leading-[1.15]">
               Lumiere Studio : <span className="italic text-[var(--color-abrow-muted)] font-normal">El Arte</span>
               <br />
-              <span className="italic text-[var(--color-abrow-muted)] font-normal">de Trasformar</span> tu Mirada
+              <span className="italic text-[var(--color-abrow-muted)] font-normal">de Transformar</span> tu Mirada
             </h1>
 
             <div className="flex flex-wrap justify-center md:justify-start gap-6 mt-8">

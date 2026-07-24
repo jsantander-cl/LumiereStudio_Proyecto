@@ -1,5 +1,3 @@
-import React from 'react';
-
 const GiftCardItem = ({ price, description, features }) => (
   <div className="bg-white p-8 flex flex-col justify-between items-start shadow-sm hover:shadow-md transition-shadow duration-300">
     <div className="space-y-4 w-full">
@@ -13,8 +11,8 @@ const GiftCardItem = ({ price, description, features }) => (
       </p>
       
       <ul className="space-y-2 pt-2 border-t border-gray-100">
-        {features.map((item, idx) => (
-          <li key={idx} className="flex items-center space-x-2 text-xs font-sans text-gray-600">
+        {features.map((item) => (
+          <li key={item} className="flex items-center space-x-2 text-xs font-sans text-gray-600">
             <span className="text-[10px] text-[var(--color-abrow-dark)]">✦</span>
             <span>{item}</span>
           </li>
@@ -49,17 +47,17 @@ export default function TarjetasRegalo() {
           <GiftCardItem 
             price="$70.000"
             description="Un bonito regalo para una amiga en cualquier ocasión. Se puede usar varias veces al mes."
-            features={["1 Lifting Coreano;", "1 Laminacion de Cejas;", "1 Limpieza Facial."]}
+            features={["1 Lifting Coreano", "1 Laminación de Cejas", "1 Limpieza Facial"]}
           />
           <GiftCardItem 
             price="$150.000"
             description="Un regalo estupendo para tu amiga o pareja o familiar. El regalo incluye los siguientes servicios:"
-            features={["1 Microblading;", "1 lifting Coreano;", "1 Limpieza Facial."]}
+            features={["1 Microblading", "1 Lifting Coreano", "1 Limpieza Facial"]}
           />
           <GiftCardItem 
             price="$200.000"
             description="¡El destinatario se olvidará del maquillaje de cejas! La tarjeta de regalo incluye:"
-            features={["1 Microblading;", "3 lifting Coreano;", "2 Limpieza Facial."]}
+            features={["1 Microblading", "3 Lifting Coreano", "2 Limpieza Facial"]}
           />
         </div>
 
