@@ -13,7 +13,7 @@ function Header() {
   ];
 
   return (
-    <header className="sticky top-0 z-50 bg-[var(--color-abrow-nude)] border-b border-[var(--color-abrow-dark)]/5 px-6 py-5 md:px-12">
+    <header className="sticky top-0 z-50 bg-abrow-cream border-b border-[var(--color-abrow-dark)]/15 px-6 py-5 md:px-12">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         
         <Link to="/" className="font-serif text-2xl md:text-3xl text-[var(--color-abrow-dark)] tracking-wide">
