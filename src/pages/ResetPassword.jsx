@@ -2,94 +2,71 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 
-export default function AdminLogin() {
-  const [email, setEmail] = useState('')
+export default function ResetPassword() {
   const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
   const [error, setError] = useState('')
   const [mensaje, setMensaje] = useState('')
   const [cargando, setCargando] = useState(false)
   const navigate = useNavigate()
 
-  const handleLogin = async (e) => {
+  const handleUpdatePassword = async (e) => {
     e.preventDefault()
-    setCargando(true)
     setError('')
     setMensaje('')
 
-    const { error } = await supabase.auth.signInWithPassword({ email, password })
-
-    if (error) {
-      setError('Correo o contraseña incorrectos.')
-      setCargando(false)
-      return
-    }
-
-    navigate('/admin/reservas')
-  }
-
-  const handleForgotPassword = async () => {
-    if (!email) {
-      setError('Por favor, ingresa tu correo primero para enviarte el enlace de recuperación.')
+    if (password !== confirmPassword) {
+      setError('Las contraseñas no coinciden.')
       return
     }
 
     setCargando(true)
-    setError('')
-    setMensaje('')
 
-    const redirectUrl = `${window.location.origin}/reset-password`
-
-    const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: redirectUrl,
+    const { error } = await supabase.auth.updateUser({
+      password: password,
     })
 
     setCargando(false)
 
     if (error) {
-      setError('Error al enviar el correo: ' + error.message)
+      setError('Error al actualizar: ' + error.message)
     } else {
-      setMensaje('Se ha enviado un correo con instrucciones para restablecer tu contraseña.')
+      setMensaje('¡Contraseña actualizada con éxito! Redirigiendo al login...')
+      setTimeout(() => {
+        navigate('/admin')
+      }, 2500)
     }
   }
 
   return (
     <section className="min-h-[70vh] flex items-center justify-center px-6 py-16">
       <form
-        onSubmit={handleLogin}
+        onSubmit={handleUpdatePassword}
         className="w-full max-w-sm border border-[var(--color-abrow-dark)]/15 rounded-xl p-8"
       >
         <h1 className="font-serif text-2xl text-[var(--color-abrow-dark)] mb-6 text-center">
-          Panel de administración
+          Nueva Contraseña
         </h1>
 
         <div className="grid gap-4">
           <input
             required
-            type="email"
-            placeholder="Correo"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            type="password"
+            placeholder="Nueva contraseña"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            minLength={6}
             className="border border-[var(--color-abrow-dark)]/20 rounded-lg px-3 py-2 bg-white text-[var(--color-abrow-dark)]"
           />
           <input
             required
             type="password"
-            placeholder="Contraseña"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Confirmar nueva contraseña"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            minLength={6}
             className="border border-[var(--color-abrow-dark)]/20 rounded-lg px-3 py-2 bg-white text-[var(--color-abrow-dark)]"
           />
-        </div>
-
-        {/* Botón para solicitar recuperar contraseña */}
-        <div className="text-right mt-2">
-          <button
-            type="button"
-            onClick={handleForgotPassword}
-            className="text-xs text-[var(--color-abrow-dark)]/70 hover:underline hover:text-[var(--color-abrow-dark)]"
-          >
-            ¿Olvidaste tu contraseña?
-          </button>
         </div>
 
         {error && <p className="text-red-600 text-sm mt-3 text-center">{error}</p>}
@@ -100,7 +77,7 @@ export default function AdminLogin() {
           disabled={cargando}
           className="mt-6 w-full bg-[var(--color-abrow-dark)] text-white rounded-lg py-3 uppercase text-sm tracking-wide font-semibold disabled:opacity-50 hover:opacity-90 transition-opacity"
         >
-          {cargando ? 'Cargando...' : 'Ingresar'}
+          {cargando ? 'Guardando...' : 'Actualizar contraseña'}
         </button>
       </form>
     </section>

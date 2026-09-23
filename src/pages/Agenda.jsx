@@ -145,6 +145,11 @@ export default function Agenda() {
   const [error, setError] = useState('')
   const [reservaConfirmada, setReservaConfirmada] = useState(null)
 
+  // 1. Resetear el scroll al inicio al montar la página o al cambiar de paso
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }, [paso])
+
   useEffect(() => {
     supabase
       .from('servicios')
