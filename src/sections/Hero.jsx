@@ -12,7 +12,7 @@ function Hero() {
           {/* LOGO LUMIERE (Arriba en móvil gracias a order-first, a la derecha en desktop gracias a md:order-last) */}
           <div className="flex items-center justify-center order-first md:order-last w-[300px] md:w-[320px] lg:w-[400px] aspect-square pointer-events-none justify-self-center">
             <img 
-              src="/img/logosombra.png" 
+              src="/img/logosombra.webp" 
               alt="Lumiere Logo Sombra" 
               className="w-full h-full object-contain"
             />
@@ -45,7 +45,7 @@ function Hero() {
       {/* Parte Inferior: imagen a lo ancho completo */}
       <div className="w-full h-[420px] md:h-[600px]">
         <img
-          src="/img/hero.png"
+          src="/img/hero.webp"
           alt="Aplicación de maquillaje de cejas"
           className="w-full h-full object-cover object-center"
         />

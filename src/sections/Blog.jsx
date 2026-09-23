@@ -38,19 +38,19 @@ export default function Blog() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <ArticuloItem 
-            imagen="/img/BLOG 1.png"
+            imagen="/img/BLOG 1.webp"
             fechaCategoria="12 FEB 2026 | CONSEJOS"
             titulo="¿Cómo Definir la Forma y el Color Perfectos para tus Cejas?"
             extracto="Primero, mide la distancia entre el interior de tu ceja y la comisura externa de tu ojo para determinar la longitud ideal de tu ceja..."
           />
           <ArticuloItem 
-            imagen="/img/BLOG 2.png"
+            imagen="/img/BLOG 2.webp"
             fechaCategoria="02 MAR 2026 | SEGURIDAD"
             titulo="¿Cuáles son las Principales Normas de Seguridad para Realizar tus Cejas en Lumiere?"
             extracto="Nos tomamos muy en serio la higiene y la esterilización de nuestros instrumentos. Nuestra especialista sigue reglas claras: 1. Utilizar siempre la desinfección adecuada..."
           />
           <ArticuloItem 
-            imagen="/img/BLOG 3.png"
+            imagen="/img/BLOG 3.webp"
             fechaCategoria="10 MAR 2026 | TIPS"
             titulo="¿Qué es el Microblading y Por Qué es la Mejor Solución para tus Cejas?"
             extracto="El microblading es una técnica de tatuaje de cejas semipermanente que se utiliza para crear la apariencia de vellos. El microblading es una forma de tatuaje..."

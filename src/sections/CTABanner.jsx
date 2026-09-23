@@ -12,7 +12,7 @@ export default function CTABanner() {
           se deslizan por encima, revelándola u ocultándola progresivamente. */}
       <div
         className="absolute inset-0 -z-10 bg-fixed bg-cover bg-center"
-        style={{ backgroundImage: "url('/img/banner.png')" }}
+        style={{ backgroundImage: "url('/img/banner.webp')" }}
       />
       {/* Velo oscuro para legibilidad del texto */}
       <div className="absolute inset-0 -z-10 bg-black/50" />

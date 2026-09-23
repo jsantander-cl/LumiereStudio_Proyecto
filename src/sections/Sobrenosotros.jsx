@@ -4,13 +4,13 @@ export default function Sobrenosotros() {
   const [modalAbierto, setModalAbierto] = useState(false);
 
   return (
-    <section id="sobre-nosotros" className="bg-[var(--color-abrow-nude)]/50 py-20 px-6 md:px-12 lg:px-24">
+    <section className="bg-[var(--color-abrow-nude)]/50 py-20 px-6 md:px-12 lg:px-24">
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
         
         {/* Imagen del Bodegón de Productos */}
         <div className="flex justify-center">
           <img 
-            src="/img/puluk.png" 
+            src="/img/puluk.webp" 
             alt="Premium Products" 
             className="max-h-[380px] object-contain drop-shadow-sm" 
           />

@@ -21,7 +21,7 @@ const FilaTratamiento = ({ nombre, precio, desc }) => (
 
 export default function ServiciosPrecios() {
   return (
-    <section id="servicios" className="bg-white py-20 px-6 md:px-12 lg:px-24">
+    <section id="servicios" className="scroll-mt-20 bg-white py-20 px-6 md:px-12 lg:px-24">
       <div className="max-w-7xl mx-auto space-y-14">
         {/* Encabezado */}
         <div className="text-center space-y-4">
@@ -44,7 +44,7 @@ export default function ServiciosPrecios() {
         {/* 3 tarjetas: Gift Cards / Other Services / CTA */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="relative aspect-[3/4] overflow-hidden group">
-            <img src="/img/giftcardlumiere.png" alt="Gift Cards" className="w-full h-full object-cover" />
+            <img src="/img/giftcardlumiere.webp" alt="Gift Cards" className="w-full h-full object-cover" />
             <div className="absolute bottom-6 left-6 right-6 bg-white py-5 text-center">
               <h4 className="font-serif text-lg text-[var(--color-abrow-dark)]">Gift Cards</h4>
               <span className="font-sans text-[10px] tracking-widest text-[var(--color-abrow-muted)] uppercase">
@@ -54,7 +54,7 @@ export default function ServiciosPrecios() {
           </div>
 
           <div className="relative aspect-[3/4] overflow-hidden group">
-            <img src="/img/masinfo.png" alt="Other Services" className="w-full h-full object-cover" />
+            <img src="/img/masinfo.webp" alt="Other Services" className="w-full h-full object-cover" />
             <div className="absolute bottom-6 left-6 right-6 bg-white py-5 text-center">
               <h4 className="font-serif text-lg text-[var(--color-abrow-dark)]">Otros servicios</h4>
               <span className="font-sans text-[10px] tracking-widest text-[var(--color-abrow-muted)] uppercase">
@@ -65,7 +65,7 @@ export default function ServiciosPrecios() {
 
           <div className="bg-[var(--color-abrow-dark)] text-white aspect-[3/4] flex flex-col items-center justify-center text-center px-8 space-y-4">
             <div className="w-25">
-              <img src="/img/cejasblanca.png" alt="Cejas Perfectas" className="w-full h-full object-contain" />
+              <img src="/img/cejasblanca.webp" alt="Cejas Perfectas" className="w-full h-full object-contain" />
             </div>
             <h4 className="font-serif text-2xl leading-snug">
               ¡Descubre el Poder de unas <span className="italic">Cejas Perfectas!</span>

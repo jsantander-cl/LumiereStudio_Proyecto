@@ -28,7 +28,7 @@ const GiftCardItem = ({ price, description, features }) => (
 
 export default function TarjetasRegalo() {
   return (
-    <section id="gift-cards" className="bg-[var(--color-abrow-cream)] py-20 px-6 md:px-12 lg:px-24">
+    <section id="gift-cards" className="scroll-mt-20 bg-[var(--color-abrow-cream)] py-20 px-6 md:px-12 lg:px-24">
       <div className="max-w-7xl mx-auto space-y-12">
         
         {/* Encabezado */}

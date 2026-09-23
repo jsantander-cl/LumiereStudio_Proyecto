@@ -2,7 +2,7 @@ import { HashLink } from 'react-router-hash-link';
 
 export default function Introduccion() {
   return (
-    <section className="bg-[var(--color-abrow-nude)] py-20 px-6 md:px-12 lg:px-24 relative overflow-hidden">
+    <section id="sobre-nosotros" className="scroll-mt-20 bg-[var(--color-abrow-nude)] py-20 px-6 md:px-12 lg:px-24 relative overflow-hidden">
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10 relative z-10">
         <div className="space-y-4">
           <h2 className="font-serif text-3xl md:text-5xl text-[var(--color-abrow-dark)] leading-tight">

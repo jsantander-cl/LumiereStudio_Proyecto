@@ -54,7 +54,7 @@ export default function Beneficios() {
         {/* Video / Imagen destacada */}
         <div className="relative w-full aspect-[16/9] md:aspect-[21/9] overflow-hidden group cursor-pointer">
           <img
-            src="/img/videofalso.png"
+            src="/img/videofalso.webp"
             alt="Sesión de cejas en el estudio"
             className="w-full h-full object-cover"
           />

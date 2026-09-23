@@ -1,12 +1,12 @@
 import { useRef, useState, useEffect } from 'react';
 
 const imagenesOriginales = [
-  '/img/INSTA1.png',
-  '/img/INSTA2.png',
-  '/img/INSTA6.png',
-  '/img/INSTA4.png',
-  '/img/INSTA5.png',
-  '/img/ojoB.png',
+  '/img/INSTA1.webp',
+  '/img/INSTA2.webp',
+  '/img/INSTA6.webp',
+  '/img/INSTA4.webp',
+  '/img/INSTA5.webp',
+  '/img/ojoB.webp',
 ];
 
 export default function InstagramGaleria() {

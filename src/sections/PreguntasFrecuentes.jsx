@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 const preguntasIzquierda = [
   {
@@ -38,6 +38,7 @@ function ItemAcordeon({ item, abierto, onClick }) {
   return (
     <div className="border-b border-[var(--color-abrow-dark)]/10 py-5">
       <button
+        type="button"
         onClick={onClick}
         className="w-full flex items-center justify-between text-left gap-4"
       >
@@ -72,7 +73,13 @@ function ItemAcordeon({ item, abierto, onClick }) {
 }
 
 export default function PreguntasFrecuentes() {
-  const [abierto, setAbierto] = useState('izq-2');
+  // 1. Iniciar con el acordeón cerrado para evitar desplazamientos accidentales
+  const [abierto, setAbierto] = useState(null);
+
+  // 2. Forzar scroll al inicio cuando se monta el componente
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }, []);
 
   const alternar = (id) => setAbierto((actual) => (actual === id ? null : id));
 
@@ -83,37 +90,31 @@ export default function PreguntasFrecuentes() {
           ¿Aún tienes <span className="italic text-[var(--color-abrow-muted)]">preguntas?</span>
         </h2>
 
-        <div className="grid md:grid-cols-2 gap-x-16 mt-10">
-          <div>
-            <p className="font-sans text-xs tracking-widest uppercase text-[var(--color-abrow-muted)] mb-2">
-              Preguntas frecuentes
-            </p>
-            {preguntasIzquierda.map((item, i) => (
+        <p className="font-sans text-xs tracking-widest uppercase text-[var(--color-abrow-muted)] mb-2 mt-10">
+          Preguntas frecuentes
+        </p>
+        <p className="font-sans italic text-sm text-[var(--color-abrow-muted)] mb-6">
+          Nos esforzamos por brindar un servicio personalizado a cada uno de nuestros clientes. Si no
+          encontró la respuesta a su pregunta, contáctenos por el medio que le resulte más conveniente.
+        </p>
+
+        <div className="grid md:grid-cols-2 gap-x-16">
+          {preguntasIzquierda.map((item, i) => (
+            <div key={`fila-${i}`} className="contents">
               <ItemAcordeon
-                key={item.pregunta}
                 item={item}
                 abierto={abierto === `izq-${i}`}
                 onClick={() => alternar(`izq-${i}`)}
               />
-            ))}
-          </div>
-
-          <div>
-            <p className="font-sans italic text-sm text-[var(--color-abrow-muted)] mb-6 md:mt-7">
-              Nos esforzamos por brindar un servicio personalizado a cada uno de nuestros clientes. Si no
-              encontró la respuesta a su pregunta, contáctenos por el medio que le resulte más conveniente.
-            </p>
-            {preguntasDerecha.map((item, i) => (
               <ItemAcordeon
-                key={item.pregunta}
-                item={item}
+                item={preguntasDerecha[i]}
                 abierto={abierto === `der-${i}`}
                 onClick={() => alternar(`der-${i}`)}
               />
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
-      </div>
+      </div>  
     </section>
   );
 }

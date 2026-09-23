@@ -67,7 +67,7 @@ export default function ResultadosExcepcionales() {
       {/* Columna Imagen */}
       <div className="min-h-[360px] lg:min-h-[640px]">
         <img
-          src="/img/trabajando.png"
+          src="/img/trabajando.webp"
           alt="Artista trabajando en cejas"
           className="w-full h-full object-cover"
         />
