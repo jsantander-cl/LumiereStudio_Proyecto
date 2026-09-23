@@ -38,7 +38,7 @@ function Header() {
         </nav>
 
         <div className="hidden md:block">
-          <Link to="/contacto" className="inline-block border border-[var(--color-abrow-dark)] text-[var(--color-abrow-dark)] px-6 py-3 font-[var(--font-btn)] text-[13px] font-bold uppercase tracking-wide hover:bg-[var(--color-abrow-dark)] hover:text-white transition-all duration-300">
+          <Link to="/agenda" className="inline-block border border-[var(--color-abrow-dark)] text-[var(--color-abrow-dark)] px-6 py-3 font-[var(--font-btn)] text-[13px] font-bold uppercase tracking-wide hover:bg-[var(--color-abrow-dark)] hover:text-white transition-all duration-300">
             Reserva una cita
           </Link>
         </div>
@@ -71,7 +71,7 @@ function Header() {
           <Link to="/contacto" onClick={() => setMenuAbierto(false)}>
             Contacto
           </Link>
-          <Link to="/contacto" onClick={() => setMenuAbierto(false)} className="inline-block border border-[var(--color-abrow-dark)] text-[var(--color-abrow-dark)] px-6 py-3 text-xs font-sans font-semibold uppercase tracking-wider">
+          <Link to="/agenda" onClick={() => setMenuAbierto(false)} className="inline-block border border-[var(--color-abrow-dark)] text-[var(--color-abrow-dark)] px-6 py-3 text-xs font-sans font-semibold uppercase tracking-wider">
             Reserva una cita
           </Link>
         </nav>
