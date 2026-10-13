@@ -1,76 +1,85 @@
+import { useState } from 'react';
+
+const testimonios = [
+  {
+    texto: "Hoy fui a mi cita de microblading y estoy muy feliz con el resultado. La especialista fue muy profesional y me explicó todo el proceso. Mis cejas se ven naturales y definidas. ¡Definitivamente volveré!",
+    usuario: "@_PAZ.IS"
+  },
+  {
+    texto: "El servicio de lifting coreano superó completamente mis expectativas. Mis pestañas quedaron increíbles, con un rizo perfecto y súper naturales. El ambiente del estudio es muy acogedor y profesional.",
+    usuario: "@VALENTINA.M"
+  },
+  {
+    texto: "Excelente atención y cuidado en cada detalle. Me hice la laminación de cejas y el cambio fue inmediato pero suave. Además me asesoraron muy bien sobre los cuidados posteriores. 100% recomendado.",
+    usuario: "@CAMILA_ST"
+  }
+];
+
 export default function Galeria() {
+  const [indiceActual, setIndiceActual] = useState(0);
+
+  const anteriorTestimonio = () => {
+    setIndiceActual((prev) => (prev === 0 ? testimonios.length - 1 : prev - 1));
+  };
+
+  const siguienteTestimonio = () => {
+    setIndiceActual((prev) => (prev === testimonios.length - 1 ? 0 : prev + 1));
+  };
+
   return (
-    <section id="galeria" className="scroll-mt-20 bg-[var(--color-abrow-darkbg)] text-white py-20 px-6 md:px-12 lg:px-24 relative z-20">
-      <div className="max-w-7xl mx-auto space-y-16">
+    <section className="bg-[var(--color-abrow-darkbg2)] text-white py-16 px-6 md:px-12 lg:px-24 border-t border-b border-white/5">
+      <div className="max-w-4xl mx-auto flex flex-col items-center text-center space-y-6">
         
-        {/* Encabezado */}
-        <div className="text-center space-y-3 max-w-2xl mx-auto">
-          <h2 className="font-serif text-3xl md:text-4xl text-white">
-            Las Últimas <span className="italic text-[var(--color-abrow-muted)] font-normal">Técnicas</span> de Diseño de los Expertos.
-          </h2>
-          <span className="block font-sans text-[10px] tracking-[0.2em] text-[var(--color-abrow-muted)] uppercase font-semibold">
-            Works by our artists
-          </span>
-          <p className="font-sans text-xs text-gray-300 leading-relaxed pt-2">
-            En LUMIERE, nuestra especialista se dedica a crear cejas y pestañas hermosas y de aspecto natural. Desarrollando su propio estilo y enfoque para realzar tu belleza natural. Nuestra especialista se especializa en técnicas modernas para dar forma, rellenar y definir las cejas perfectas y pestañas curvas.
-          </p>
-        </div>
+        {/* Comillas decorativas */}
+        <span className="font-serif text-5xl text-white/30 leading-none select-none">
+          “
+        </span>
 
-        {/* Mosaico de Imágenes */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-          {/* Lado Izquierdo: Cuadrícula 2x2 */}
-          <div className="grid grid-cols-2 gap-4">
-            <img src="/img/galeria 11.webp" alt="Trabajo 1" className="w-full aspect-square object-cover" />
-            <img src="/img/galeria 2.webp" alt="Trabajo 2" className="w-full aspect-square object-cover" />
-            <img src="/img/tania.webp" alt="Trabajo 3" className="w-full aspect-square object-cover" />
-            <img src="/img/galeria 4.webp" alt="Trabajo 4" className="w-full aspect-square object-cover" />
-          </div>
-
-          {/* Lado Derecho: Imagen Alta */}
-          <div className="w-full h-full min-h-[350px]">
-            <img src="/img/galeria 5.webp" alt="Trabajo Destacado" className="w-full h-full object-cover" />
-          </div>
-        </div>
-
-        {/* Divisor Fino */}
-        <div className="border-t border-white/10 my-12" />
-
-        {/* Carrusel de Testimonios */}
-        <div className="max-w-3xl mx-auto text-center space-y-6 relative px-8 md:px-16">
+        {/* Contenido del Testimonio Dinámico */}
+        <div className="relative w-full px-8 md:px-16 min-h-[120px] flex flex-col items-center justify-center">
+          {/* Botón Flecha Izquierda */}
           <button
+            onClick={anteriorTestimonio}
             aria-label="Testimonio anterior"
-            className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 text-white/60 hover:text-white"
+            className="absolute left-0 top-1/2 -translate-y-1/2 text-white/50 hover:text-white text-2xl transition-colors cursor-pointer p-2"
           >
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-6 h-6">
-              <path d="M15 18l-6-6 6-6" />
-            </svg>
+            ‹
           </button>
 
-          <div className="font-serif text-5xl text-[var(--color-abrow-muted)] opacity-40 leading-none">“</div>
-
-          <p className="font-serif italic text-lg md:text-xl text-white leading-relaxed">
-            " Hoy fui a mi cita de microblading y estoy muy feliz con el resultado. La especialista fue muy profesional y me explicó todo el proceso. Mis cejas se ven naturales y definidas. ¡Definitivamente volveré! "
-          </p>
-
-          <span className="block font-sans text-[10px] tracking-[0.2em] text-[var(--color-abrow-muted)] uppercase font-semibold">
-            @_paz.is
-          </span>
-
-          {/* Dots de Navegación */}
-          <div className="flex justify-center space-x-2 pt-4">
-            <span className="w-1.5 h-1.5 bg-white rounded-full"></span>
-            <span className="w-1.5 h-1.5 bg-white/30 rounded-full"></span>
-            <span className="w-1.5 h-1.5 bg-white/30 rounded-full"></span>
+          {/* Texto y Usuario */}
+          <div className="space-y-4 animate-[fadeIn_0.3s_ease-in-out]">
+            <p className="font-serif italic text-base md:text-lg leading-relaxed text-white/90 max-w-2xl">
+              "{testimonios[indiceActual].texto}"
+            </p>
+            <span className="block font-sans text-xs tracking-widest text-white/60 uppercase font-medium">
+              {testimonios[indiceActual].usuario}
+            </span>
           </div>
 
+          {/* Botón Flecha Derecha */}
           <button
-            aria-label="Testimonio siguiente"
-            className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 text-white/60 hover:text-white"
+            onClick={siguienteTestimonio}
+            aria-label="Siguiente testimonio"
+            className="absolute right-0 top-1/2 -translate-y-1/2 text-white/50 hover:text-white text-2xl transition-colors cursor-pointer p-2"
           >
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-6 h-6">
-              <path d="M9 6l6 6-6 6" />
-            </svg>
+            ›
           </button>
+        </div>
+
+        {/* Puntos de Navegación (Paginadores) */}
+        <div className="flex items-center gap-2.5 pt-2">
+          {testimonios.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => setIndiceActual(index)}
+              aria-label={`Ir al testimonio ${index + 1}`}
+              className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
+                indiceActual === index
+                  ? 'w-6 bg-white'
+                  : 'w-2 bg-white/30 hover:bg-white/60'
+              }`}
+            />
+          ))}
         </div>
 
       </div>

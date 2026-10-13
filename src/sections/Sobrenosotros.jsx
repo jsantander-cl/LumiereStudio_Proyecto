@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 export default function Sobrenosotros() {
   const [modalAbierto, setModalAbierto] = useState(false);
@@ -31,13 +32,22 @@ export default function Sobrenosotros() {
             En nuestro estudio, las clientas pueden adquirir cosméticos profesionales para realzar y dar forma a sus cejas en casa. Nuestra selección incluye lápices, geles y polvos para cejas, así como otras herramientas como pinzas y pinceles para cejas.
           </p>
 
-          {/* Botón con disparador de Modal */}
-          <button 
-            onClick={() => setModalAbierto(true)}
-            className="mt-4 border border-[var(--color-abrow-dark)] px-7 py-2.5 font-sans text-[11px] uppercase tracking-widest text-[var(--color-abrow-dark)] hover:bg-[var(--color-abrow-dark)] hover:text-white transition-all duration-300 cursor-pointer"
-          >
-            MÁS INFORMACIÓN
-          </button>
+          {/* Botones de acción */}
+          <div className="flex flex-wrap items-center gap-4 mt-4">
+            <button 
+              onClick={() => setModalAbierto(true)}
+              className="border border-[var(--color-abrow-dark)] px-7 py-2.5 font-sans text-[11px] uppercase tracking-widest text-[var(--color-abrow-dark)] hover:bg-[var(--color-abrow-dark)] hover:text-white transition-all duration-300 cursor-pointer"
+            >
+              MÁS INFORMACIÓN
+            </button>
+
+            <Link 
+              to="/checkout?producto=S%C3%A9rum%20Puluk%20Lash%20Booster&precio=$25.000&tipo=producto"
+              className="bg-[var(--color-abrow-dark)] border border-[var(--color-abrow-dark)] px-7 py-2.5 font-sans text-[11px] uppercase tracking-widest text-white hover:opacity-90 transition-all duration-300 inline-block"
+            >
+              COMPRAR
+            </Link>
+          </div>
         </div>
       </div>
 
@@ -50,7 +60,7 @@ export default function Sobrenosotros() {
           {/* Contenedor del reproductor */}
           <div 
             className="relative w-full max-w-3xl aspect-video bg-black shadow-2xl rounded-sm overflow-hidden"
-            onClick={(e) => e.stopPropagation()} // Evita que se cierre al hacer click dentro del video
+            onClick={(e) => e.stopPropagation()}
           >
             {/* Botón de cierre superior */}
             <button

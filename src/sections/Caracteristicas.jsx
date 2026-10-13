@@ -91,9 +91,14 @@ export default function Caracteristicas() {
             La forma y el color de las cejas cambian significativamente la apariencia general de una persona y la forma en que los demás la perceiben. ¡Compruébalo tú mismo!
           </p>
 
-          <button className="mt-4 border border-[var(--color-abrow-dark)] px-7 py-2.5 font-sans text-[11px] uppercase tracking-widest text-[var(--color-abrow-dark)] hover:bg-[var(--color-abrow-dark)] hover:text-white transition-all duration-300">
+          <a 
+            href="https://www.instagram.com/p/DYGb_easwVy/" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="mt-4 border border-[var(--color-abrow-dark)] px-7 py-2.5 font-sans text-[11px] uppercase tracking-widest text-[var(--color-abrow-dark)] hover:bg-[var(--color-abrow-dark)] hover:text-white transition-all duration-300 inline-block text-center cursor-pointer"
+          >
             VER MÁS
-          </button>
+          </a>
         </div>
 
         {/* Columna Sliders */}

@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 const GiftCardItem = ({ price, description, features }) => (
   <div className="bg-white p-8 flex flex-col justify-between items-start shadow-sm hover:shadow-md transition-shadow duration-300">
     <div className="space-y-4 w-full">
@@ -20,9 +22,12 @@ const GiftCardItem = ({ price, description, features }) => (
       </ul>
     </div>
 
-    <button className="mt-8 w-full bg-[var(--color-abrow-dark)] text-white py-3 font-sans text-[10px] uppercase tracking-widest hover:bg-opacity-90 transition-all">
+    <Link 
+      to={`/checkout?producto=${encodeURIComponent(`Gift Card ${price}`)}&precio=${encodeURIComponent(price)}&tipo=giftcard`}
+      className="mt-8 w-full bg-[var(--color-abrow-dark)] text-white py-3 font-sans text-[10px] uppercase tracking-widest text-center hover:opacity-90 transition-all block"
+    >
       COMPRAR
-    </button>
+    </Link>
   </div>
 );
 

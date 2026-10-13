@@ -1,0 +1,116 @@
+C:\Users\HP PRO BOOK\Desktop\FRONTEND\PROYECTOS\LumiereStudio_Proyecto
+├── eslint.config.js
+├── estructura.txt
+├── index.html
+├── node_modules
+|  ├── @eslint
+|  ├── @supabase
+|  ├── @tailwindcss
+|  ├── @types
+|  ├── @vitejs
+├── package-lock.json
+├── package.json
+├── pnpm-lock.yaml
+├── public
+|  ├── favicon.svg
+|  ├── icons.svg
+|  ├── img
+|  |  ├── banner.webp
+|  |  ├── BLOG 1.webp
+|  |  ├── BLOG 2.webp
+|  |  ├── BLOG 3.webp
+|  |  ├── cejasblanca.webp
+|  |  ├── ChatGPT Image 20 jul 2026, 11_33_05 p.m..webp
+|  |  ├── curso.webp
+|  |  ├── curso2.webp
+|  |  ├── galeria 11.webp
+|  |  ├── galeria 2.webp
+|  |  ├── galeria 4.webp
+|  |  ├── galeria 5.webp
+|  |  ├── galeria1.webp
+|  |  ├── giftcardlumiere.webp
+|  |  ├── hero.webp
+|  |  ├── INSTA1.webp
+|  |  ├── INSTA2.webp
+|  |  ├── INSTA3.webp
+|  |  ├── INSTA4.webp
+|  |  ├── INSTA5.webp
+|  |  ├── INSTA6.webp
+|  |  ├── logosombra.webp
+|  |  ├── masinfo.webp
+|  |  ├── ojoA.webp
+|  |  ├── ojoB.webp
+|  |  ├── ojoC.webp
+|  |  ├── ojoD.webp
+|  |  ├── puluk.webp
+|  |  ├── SERVICIO2.webp
+|  |  ├── tania.webp
+|  |  ├── trabajando.webp
+|  |  └── videofalso.webp
+|  └── svg
+|     ├── 001-hair-salon.svg
+|     ├── 002-eyebrow-pencil.svg
+|     ├── 005-candidate.svg
+|     ├── 007-appointment-1.svg
+|     ├── 011-gift-1.svg
+|     ├── 015-love-yourself.svg
+|     ├── 016-beauty-salon.svg
+|     └── 017-makeup.svg
+├── README.md
+├── src
+|  ├── App.jsx
+|  ├── assets
+|  |  ├── hero.png
+|  |  ├── react.svg
+|  |  └── vite.svg
+|  ├── index.css
+|  ├── layouts
+|  |  ├── Footer.jsx
+|  |  └── Header.jsx
+|  ├── lib
+|  |  ├── agendaUtils.js
+|  |  └── supabaseClient.js
+|  ├── main.jsx
+|  ├── pages
+|  |  ├── AdminLogin.jsx
+|  |  ├── AdminReservas.jsx
+|  |  ├── Agenda.jsx
+|  |  ├── Checkout.jsx
+|  |  ├── Contacto.jsx
+|  |  ├── Home.jsx
+|  |  ├── InscripcionMasterClass.jsx
+|  |  └── ResetPassword.jsx
+|  └── sections
+|     ├── BannerTransicion.jsx
+|     ├── Beneficios.jsx
+|     ├── Blog.jsx
+|     ├── Caracteristicas.jsx
+|     ├── ContactoFormulario.jsx
+|     ├── Contadores.jsx
+|     ├── CTABanner.jsx
+|     ├── Galeria.jsx
+|     ├── Hero.jsx
+|     ├── InstagramGaleria.jsx
+|     ├── Introduccion.jsx
+|     ├── Partners.jsx
+|     ├── PreguntasFrecuentes.jsx
+|     ├── ProgrameTratamiento.jsx
+|     ├── ResultadosExcepcionales.jsx
+|     ├── Servicios.jsx
+|     ├── ServiciosPrecios.jsx
+|     ├── Sobrenosotros.jsx
+|     └── TarjetasRegalo.jsx
+├── supabase
+|  ├── config.toml
+|  └── functions
+|     ├── cancelar-evento-calendario
+|     |  ├── deno.json
+|     |  └── index.ts
+|     └── crear-evento-calendario
+|        ├── deno.json
+|        └── index.ts
+├── vercel.json
+└── vite.config.js
+
+directory: 19 file: 93 symboliclink: 17
+

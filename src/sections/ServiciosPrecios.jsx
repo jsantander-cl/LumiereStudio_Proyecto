@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { HashLink } from 'react-router-hash-link';
 
 const tratamientos = [
   { nombre: 'Perfilado de cejas', precio: '$10.000', desc: 'Mejora la forma o la apariencia de tus cejas.' },
@@ -41,28 +42,48 @@ export default function ServiciosPrecios() {
           ))}
         </div>
 
-        {/* 3 tarjetas: Gift Cards / Other Services / CTA */}
+        {/* 3 tarjetas: Gift Cards / Master Classes / CTA */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="relative aspect-[3/4] overflow-hidden group">
-            <img src="/img/giftcardlumiere.webp" alt="Gift Cards" className="w-full h-full object-cover" />
-            <div className="absolute bottom-6 left-6 right-6 bg-white py-5 text-center">
+          
+          {/* Tarjeta 1: Gift Cards -> Redirecciona a #gift-cards */}
+          <HashLink 
+            smooth 
+            to="/#gift-cards" 
+            className="relative aspect-[3/4] overflow-hidden group block cursor-pointer"
+          >
+            <img 
+              src="/img/giftcardlumiere.webp" 
+              alt="Gift Cards" 
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
+            />
+            <div className="absolute bottom-6 left-6 right-6 bg-white py-5 text-center shadow-sm">
               <h4 className="font-serif text-lg text-[var(--color-abrow-dark)]">Gift Cards</h4>
-              <span className="font-sans text-[10px] tracking-widest text-[var(--color-abrow-muted)] uppercase">
+              <span className="font-sans text-[10px] tracking-widest text-[var(--color-abrow-muted)] uppercase block mt-1">
                 MÁS INFORMACIÓN
               </span>
             </div>
-          </div>
+          </HashLink>
 
-          <div className="relative aspect-[3/4] overflow-hidden group">
-            <img src="/img/masinfo.webp" alt="Other Services" className="w-full h-full object-cover" />
-            <div className="absolute bottom-6 left-6 right-6 bg-white py-5 text-center">
+          {/* Tarjeta 2: Otros Servicios / Master Classes -> Redirecciona a #master-classes */}
+          <HashLink 
+            smooth 
+            to="/#master-classes" 
+            className="relative aspect-[3/4] overflow-hidden group block cursor-pointer"
+          >
+            <img 
+              src="/img/masinfo.webp" 
+              alt="Otros Servicios" 
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
+            />
+            <div className="absolute bottom-6 left-6 right-6 bg-white py-5 text-center shadow-sm">
               <h4 className="font-serif text-lg text-[var(--color-abrow-dark)]">Otros servicios</h4>
-              <span className="font-sans text-[10px] tracking-widest text-[var(--color-abrow-muted)] uppercase">
+              <span className="font-sans text-[10px] tracking-widest text-[var(--color-abrow-muted)] uppercase block mt-1">
                 MÁS INFORMACIÓN
               </span>
             </div>
-          </div>
+          </HashLink>
 
+          {/* Tarjeta 3: CTA Reserva */}
           <div className="bg-[var(--color-abrow-dark)] text-white aspect-[3/4] flex flex-col items-center justify-center text-center px-8 space-y-4">
             <div className="w-25">
               <img src="/img/cejasblanca.webp" alt="Cejas Perfectas" className="w-full h-full object-contain" />
@@ -78,6 +99,7 @@ export default function ServiciosPrecios() {
               Reserva ahora
             </Link>
           </div>
+
         </div>
       </div>
     </section>
