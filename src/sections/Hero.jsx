@@ -1,10 +1,15 @@
 function Hero() {
-  const redes = ['Instagram', 'Facebook', 'Twitter', 'Youtube'];
+  const redes = [
+    { nombre: 'Instagram', url: 'https://www.instagram.com/lumiere.antofagasta/' },
+    { nombre: 'Facebook', url: 'https://web.facebook.com/profile.php?id=61574360982174' },
+    { nombre: 'Tiktok', url: 'https://www.tiktok.com/@lumiere.antofagasta' },
+    { nombre: 'Youtube', url: 'https://www.youtube.com/@lumiereestudio' },
+  ];
 
   return (
     <section className="flex flex-col w-full select-none">
-      {/* Sección Hero con video ocupando toda la pantalla en mobile y diseño responsivo en desktop */}
-      <div className="relative w-full min-h-[85vh] md:min-h-0 py-16 md:py-28 px-6 md:px-12 lg:px-24 flex items-center justify-center overflow-hidden bg-black">
+      {/* Sección Hero con video a pantalla completa y padding superior para el Header flotante */}
+      <div className="relative w-full min-h-[90vh] md:min-h-0 pt-36 pb-16 md:pt-44 md:pb-28 px-6 md:px-12 lg:px-24 flex items-center justify-center overflow-hidden bg-black">
         
         {/* Video de fondo a pantalla completa */}
         <div className="absolute inset-0 w-full h-full z-0 overflow-hidden">
@@ -18,14 +23,14 @@ function Hero() {
             <source src="/video/1024(1).mp4" type="video/mp4" />
             Tu navegador no soporta videos HTML5.
           </video>
-          {/* Capa de contraste sutil para asegurar perfecta visibilidad de los textos blancos */}
+          {/* Capa de contraste sutil para lectura perfecta */}
           <div className="absolute inset-0 bg-black/35 pointer-events-none" />
         </div>
 
         {/* Contenido Grid superpuesto sobre el video */}
         <div className="relative z-10 mx-auto max-w-7xl w-full grid grid-cols-1 md:grid-cols-[1fr_auto] items-center gap-8 md:gap-10">
           
-          {/* Bloque de Textos y Redes con la estructura exacta solicitada */}
+          {/* Bloque de Textos y Redes */}
           <div className="max-w-2xl text-center md:text-left order-2 md:order-1">
             <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-white leading-[1.2] md:leading-[1.15] drop-shadow-md">
               Lumiere Studio:
@@ -40,11 +45,13 @@ function Hero() {
             <div className="flex flex-wrap justify-center md:justify-start gap-6 mt-6 md:mt-8">
               {redes.map((red) => (
                 <a
-                  key={red}
-                  href="#"
+                  key={red.nombre}
+                  href={red.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="font-sans text-[11px] tracking-widest uppercase underline underline-offset-4 text-white/90 hover:text-white transition-colors drop-shadow"
                 >
-                  {red}
+                  {red.nombre}
                 </a>
               ))}
             </div>

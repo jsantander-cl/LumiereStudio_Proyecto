@@ -93,7 +93,7 @@ export default function ServiciosPrecios() {
             </h4>
             <p className="font-sans text-xs text-white/70">¡Reserve su cita hoy mismo!</p>
             <Link
-              to="/contacto"
+              to="/agenda"
               className="bg-white text-[var(--color-abrow-dark)] px-6 py-3 font-sans text-[10px] uppercase tracking-widest hover:bg-white/90 transition-all"
             >
               Reserva ahora

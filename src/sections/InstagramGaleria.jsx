@@ -77,7 +77,7 @@ export default function InstagramGaleria() {
   };
 
   return (
-    <section className="bg-[var(--color-abrow-cream)] py-10 px-0 relative select-none w-full overflow-hidden">
+    <section id="galeria-insta" className="scroll-mt-24 bg-[var(--color-abrow-cream)] py-10 px-0 relative select-none w-full overflow-hidden">
       <div className="max-w-[1920px] mx-auto relative flex items-center">
         
         {/* Botón Anterior */}

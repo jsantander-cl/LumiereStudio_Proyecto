@@ -25,7 +25,7 @@ export default function CTABanner() {
           </h3>
           
           <Link
-            to="/contacto"
+            to="/agenda"
             className="inline-block font-sans text-[11px] tracking-widest uppercase underline underline-offset-4 text-[var(--color-abrow-dark)]"
           >
             Reservar una cita

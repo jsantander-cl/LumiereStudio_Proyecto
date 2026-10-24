@@ -1,9 +1,18 @@
 import { useSearchParams, useNavigate, Link } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export default function InscripcionMasterClass() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+
+  // Forzar que la página siempre cargue arriba del todo al abrirse
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'instant'
+    });
+  }, []);
 
   const titulo = searchParams.get('titulo') || 'Master Class de Belleza';
   const precio = searchParams.get('precio') || '$100.000';
@@ -35,7 +44,7 @@ export default function InscripcionMasterClass() {
           </p>
           <button 
             onClick={() => navigate('/')} 
-            className="w-full bg-[var(--color-abrow-dark)] text-white py-3 font-sans text-xs uppercase tracking-widest mt-4 hover:opacity-95 transition-opacity"
+            className="w-full bg-[var(--color-abrow-dark)] text-white py-3 font-sans text-xs uppercase tracking-widest mt-4 hover:opacity-95 transition-opacity cursor-pointer"
           >
             Volver al Inicio
           </button>

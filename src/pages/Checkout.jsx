@@ -1,9 +1,18 @@
 import { useSearchParams, useNavigate, Link } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export default function Checkout() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+
+  // Forzar que la página siempre cargue arriba del todo
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'instant'
+    });
+  }, []);
 
   const producto = searchParams.get('producto') || 'Sérum Puluk Lash Booster';
   const precio = searchParams.get('precio') || '$25.000';
@@ -35,7 +44,7 @@ export default function Checkout() {
           </p>
           <button 
             onClick={() => navigate('/')} 
-            className="w-full bg-[var(--color-abrow-dark)] text-white py-3 font-sans text-xs uppercase tracking-widest mt-4"
+            className="w-full bg-[var(--color-abrow-dark)] text-white py-3 font-sans text-xs uppercase tracking-widest mt-4 cursor-pointer"
           >
             Volver al Inicio
           </button>
@@ -135,7 +144,7 @@ export default function Checkout() {
 
             <button 
               type="submit" 
-              className="w-full bg-[var(--color-abrow-dark)] text-white py-3.5 font-sans text-xs uppercase tracking-widest hover:opacity-95 transition-opacity mt-6"
+              className="w-full bg-[var(--color-abrow-dark)] text-white py-3.5 font-sans text-xs uppercase tracking-widest hover:opacity-95 transition-opacity mt-6 cursor-pointer"
             >
               PAGAR AHORA
             </button>

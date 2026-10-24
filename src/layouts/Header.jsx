@@ -1,81 +1,108 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { HashLink } from 'react-router-hash-link';
 
 function Header() {
-  const [menuAbierto, setMenuAbierto] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
-  const enlaces = [
-    { label: 'Sobre Nosotros', href: '/#sobre-nosotros' },
-    { label: 'Galería', href: '/#galeria' },
-    { label: 'Servicios', href: '/#servicios' },
-    { label: 'Tarjetas de Regalo', href: '/#gift-cards' },
-  ];
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 40) {
+        setScrolled(true);
+      } else {
+        setScrolled(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Función de desplazamiento suave personalizada compensando la barra fija
+  const scrollWithOffset = (el) => {
+    const yCoordinate = el.getBoundingClientRect().top + window.pageYOffset;
+    const yOffset = -80; 
+    window.scrollTo({
+      top: yCoordinate + yOffset,
+      behavior: 'smooth'
+    });
+  };
 
   return (
-    <header className="sticky top-0 z-50 bg-abrow-cream border-b border-[var(--color-abrow-dark)]/15 px-6 py-5 md:px-12">
+    <header 
+      className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 py-4 sm:py-5 px-6 md:px-12 lg:px-24 select-none ${
+        scrolled 
+          ? 'bg-[#3D1D1C]/90 backdrop-blur-md shadow-lg py-3 sm:py-4' 
+          : 'bg-transparent'
+      }`}
+    >
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         
-        <Link to="/" className="font-serif text-2xl md:text-3xl text-[var(--color-abrow-dark)] tracking-wide">
+        {/* LOGO TEXTO */}
+        <Link 
+          to="/" 
+          className="font-serif text-xl sm:text-2xl text-white tracking-wide hover:opacity-90 transition-opacity"
+        >
           Lumiere
         </Link>
 
-        {/* MENÚ DE ESCRITORIO */}
-        <nav className="hidden md:flex items-center gap-8 font-sans italic font-bold text-[15px] text-[var(--color-abrow-muted)]/80">
-          {enlaces.map((enlace) => (
-            <HashLink 
-              smooth
-              key={enlace.label} 
-              to={enlace.href} 
-              className="hover:text-[var(--color-abrow-dark)] transition-colors"
-            >
-              {enlace.label}
-            </HashLink>
-          ))}
-          <Link to="/contacto" className="hover:text-[var(--color-abrow-dark)] transition-colors">
+        {/* NAVEGACIÓN DESKTOP CON NUEVO ORDEN Y SCROLL SUAVE */}
+        <nav className="hidden lg:flex items-center gap-8">
+          <HashLink 
+            smooth 
+            to="/#sobre-nosotros" 
+            scroll={(el) => scrollWithOffset(el)}
+            className="font-sans text-xs tracking-widest uppercase text-white/90 hover:text-white transition-colors"
+          >
+            Sobre Nosotros
+          </HashLink>
+
+          <HashLink 
+            smooth 
+            to="/#servicios" 
+            scroll={(el) => scrollWithOffset(el)}
+            className="font-sans text-xs tracking-widest uppercase text-white/90 hover:text-white transition-colors"
+          >
+            Servicios
+          </HashLink>
+
+          <HashLink 
+            smooth 
+            to="/#gift-cards" 
+            scroll={(el) => scrollWithOffset(el)}
+            className="font-sans text-xs tracking-widest uppercase text-white/90 hover:text-white transition-colors"
+          >
+            Tarjetas de Regalo
+          </HashLink>
+
+          <HashLink 
+            smooth 
+            to="/#galeria-insta" 
+            scroll={(el) => scrollWithOffset(el)}
+            className="font-sans text-xs tracking-widest uppercase text-white/90 hover:text-white transition-colors"
+          >
+            Galería
+          </HashLink>
+
+          <Link 
+            to="/contacto" 
+            className="font-sans text-xs tracking-widest uppercase text-white/90 hover:text-white transition-colors"
+          >
             Contacto
           </Link>
         </nav>
 
-        <div className="hidden md:block">
-          <Link to="/agenda" className="inline-block border border-[var(--color-abrow-dark)] text-[var(--color-abrow-dark)] px-6 py-3 font-[var(--font-btn)] text-[13px] font-bold uppercase tracking-wide hover:bg-[var(--color-abrow-dark)] hover:text-white transition-all duration-300">
-            Reserva una cita
+        {/* BOTÓN RESERVA */}
+        <div>
+          <Link
+            to="/agenda"
+            className="hidden sm:inline-block border border-white/80 text-white font-sans text-xs uppercase tracking-widest px-6 py-2.5 hover:bg-white hover:text-black transition-all duration-300"
+          >
+            Reserva una Cita
           </Link>
         </div>
 
-        {/* BOTÓN MENÚ MÓVIL */}
-        <button 
-          className="md:hidden text-[var(--color-abrow-dark)]" 
-          onClick={() => setMenuAbierto(!menuAbierto)} 
-          aria-label="Abrir menú"
-        >
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-          </svg>
-        </button>
       </div>
-
-      {/* MENÚ DESPLEGABLE MÓVIL */}
-      {menuAbierto && (
-        <nav className="md:hidden flex flex-col items-start gap-4 mt-6 font-serif italic text-base text-[var(--color-abrow-muted)]">
-          {enlaces.map((enlace) => (
-            <HashLink 
-              smooth
-              key={enlace.label} 
-              to={enlace.href} 
-              onClick={() => setMenuAbierto(false)}
-            >
-              {enlace.label}
-            </HashLink>
-          ))}
-          <Link to="/contacto" onClick={() => setMenuAbierto(false)}>
-            Contacto
-          </Link>
-          <Link to="/agenda" onClick={() => setMenuAbierto(false)} className="inline-block border border-[var(--color-abrow-dark)] text-[var(--color-abrow-dark)] px-6 py-3 text-xs font-sans font-semibold uppercase tracking-wider">
-            Reserva una cita
-          </Link>
-        </nav>
-      )}
     </header>
   );
 }
