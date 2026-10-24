@@ -25,12 +25,16 @@ function Hero() {
         {/* Contenido Grid superpuesto sobre el video */}
         <div className="relative z-10 mx-auto max-w-7xl w-full grid grid-cols-1 md:grid-cols-[1fr_auto] items-center gap-8 md:gap-10">
           
-          {/* Bloque de Textos y Redes */}
+          {/* Bloque de Textos y Redes con la estructura exacta solicitada */}
           <div className="max-w-2xl text-center md:text-left order-2 md:order-1">
             <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-white leading-[1.2] md:leading-[1.15] drop-shadow-md">
-              Lumiere Studio : <span className="italic text-[#f5e6e0] font-normal">El Arte</span>
+              Lumiere Studio:
               <br />
-              <span className="italic text-[#f5e6e0] font-normal">de Transformar</span> tu Mirada
+              <span className="italic text-[#f5e6e0] font-normal">El Arte</span>
+              <br />
+              <span className="italic text-[#f5e6e0] font-normal">de Transformar tu</span>
+              <br />
+              Mirada
             </h1>
 
             <div className="flex flex-wrap justify-center md:justify-start gap-6 mt-6 md:mt-8">
@@ -49,7 +53,7 @@ function Hero() {
           {/* LOGO LUMIERE */}
           <div className="flex items-center justify-center order-1 md:order-2 w-[220px] sm:w-[260px] md:w-[320px] lg:w-[400px] aspect-square pointer-events-none justify-self-center">
             <img 
-              src="/img/logosombra.webp" 
+              src="/img/logolumiere.png" 
               alt="Lumiere Logo Sombra" 
               className="w-full h-full object-contain drop-shadow-xl"
             />
