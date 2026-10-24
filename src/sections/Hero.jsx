@@ -2,36 +2,43 @@ function Hero() {
   const redes = ['Instagram', 'Facebook', 'Twitter', 'Youtube'];
 
   return (
-    <section className="bg-[var(--color-abrow-nude)] flex flex-col w-full select-none">
-      {/* Parte Superior: título, redes sociales y logo decorativo */}
-      <div className="relative w-full py-12 md:py-28 px-6 md:px-12 lg:px-24 overflow-hidden">
+    <section className="flex flex-col w-full select-none">
+      {/* Sección Hero con video ocupando toda la pantalla en mobile y diseño responsivo en desktop */}
+      <div className="relative w-full min-h-[85vh] md:min-h-0 py-16 md:py-28 px-6 md:px-12 lg:px-24 flex items-center justify-center overflow-hidden bg-black">
         
-        {/* Contenedor Grid responsivo */}
-        <div className="mx-auto max-w-7xl grid grid-cols-1 md:grid-cols-[auto_1fr] items-center gap-8 md:gap-10">
-          
-          {/* LOGO LUMIERE (Arriba en móvil gracias a order-first, a la derecha en desktop gracias a md:order-last) */}
-          <div className="flex items-center justify-center order-first md:order-last w-[300px] md:w-[320px] lg:w-[400px] aspect-square pointer-events-none justify-self-center">
-            <img 
-              src="/img/logosombra.webp" 
-              alt="Lumiere Logo Sombra" 
-              className="w-full h-full object-contain"
-            />
-          </div>
+        {/* Video de fondo a pantalla completa */}
+        <div className="absolute inset-0 w-full h-full z-0 overflow-hidden">
+          <video
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="w-full h-full object-cover object-center scale-105"
+          >
+            <source src="/video/1024(1).mp4" type="video/mp4" />
+            Tu navegador no soporta videos HTML5.
+          </video>
+          {/* Capa de contraste sutil para asegurar perfecta visibilidad de los textos blancos */}
+          <div className="absolute inset-0 bg-black/35 pointer-events-none" />
+        </div>
 
+        {/* Contenido Grid superpuesto sobre el video */}
+        <div className="relative z-10 mx-auto max-w-7xl w-full grid grid-cols-1 md:grid-cols-[1fr_auto] items-center gap-8 md:gap-10">
+          
           {/* Bloque de Textos y Redes */}
-          <div className="relative z-10 max-w-2xl text-center md:text-left">
-            <h1 className="font-serif text-3xl md:text-5xl lg:text-6xl text-[var(--color-abrow-dark)] leading-[1.15]">
-              Lumiere Studio : <span className="italic text-[var(--color-abrow-muted)] font-normal">El Arte</span>
+          <div className="max-w-2xl text-center md:text-left order-2 md:order-1">
+            <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-white leading-[1.2] md:leading-[1.15] drop-shadow-md">
+              Lumiere Studio : <span className="italic text-[#f5e6e0] font-normal">El Arte</span>
               <br />
-              <span className="italic text-[var(--color-abrow-muted)] font-normal">de Transformar</span> tu Mirada
+              <span className="italic text-[#f5e6e0] font-normal">de Transformar</span> tu Mirada
             </h1>
 
-            <div className="flex flex-wrap justify-center md:justify-start gap-6 mt-8">
+            <div className="flex flex-wrap justify-center md:justify-start gap-6 mt-6 md:mt-8">
               {redes.map((red) => (
                 <a
                   key={red}
                   href="#"
-                  className="font-sans text-[11px] tracking-widest uppercase underline underline-offset-4 text-[var(--color-abrow-dark)]/80 hover:text-[var(--color-abrow-dark)] transition-colors"
+                  className="font-sans text-[11px] tracking-widest uppercase underline underline-offset-4 text-white/90 hover:text-white transition-colors drop-shadow"
                 >
                   {red}
                 </a>
@@ -39,10 +46,19 @@ function Hero() {
             </div>
           </div>
 
+          {/* LOGO LUMIERE */}
+          <div className="flex items-center justify-center order-1 md:order-2 w-[220px] sm:w-[260px] md:w-[320px] lg:w-[400px] aspect-square pointer-events-none justify-self-center">
+            <img 
+              src="/img/logosombra.webp" 
+              alt="Lumiere Logo Sombra" 
+              className="w-full h-full object-contain drop-shadow-xl"
+            />
+          </div>
+
         </div>
       </div>
 
-      {/* Parte Inferior: imagen a lo ancho completo */}
+      {/* Parte Inferior: Imagen original (hero.webp) */}
       <div className="w-full h-[420px] md:h-[600px]">
         <img
           src="/img/hero.webp"
