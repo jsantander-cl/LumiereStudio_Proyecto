@@ -5,7 +5,6 @@ const FilaClase = ({ imagen, precio, fecha, titulo, descripcion, inverso, dispon
     <div className="w-full lg:w-1/2">
       <img src={imagen} alt={titulo} className="w-full h-full object-cover min-h-[300px] lg:min-h-[380px]" />
     </div>
-    
     <div className="w-full lg:w-1/2 bg-[var(--color-abrow-nude)]/40 flex flex-col justify-center items-start p-8 md:p-14 space-y-4">
       <span className="font-sans text-xs text-[var(--color-abrow-muted)] font-medium">
         {precio} | <span className="italic">{fecha}</span>
@@ -34,7 +33,7 @@ const FilaClase = ({ imagen, precio, fecha, titulo, descripcion, inverso, dispon
 
 export default function Servicios() {
   return (
-    <section id="master-classes" className="scroll-mt-20 bg-white py-20 px-6 md:px-12 lg:px-24">
+    <section id="master-classes" className="scroll-mt-20 bg-white py-5 md:py-20 px-6 md:px-12 lg:px-24 select-none">
       <div className="max-w-7xl mx-auto space-y-12">
         
         {/* Encabezado */}

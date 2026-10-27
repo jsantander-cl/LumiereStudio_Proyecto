@@ -61,47 +61,17 @@ export default function Footer() {
           </Link>
         </div>
 
-        {/* Columnas del Footer */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 text-sm">
+        {/* Contenedor principal con orden adaptable (Flex en mobile, Grid en desktop) */}
+        <div className="flex flex-col md:grid md:grid-cols-3 gap-12 text-sm">
           
-          {/* Horario de atención */}
-          <div className="space-y-3">
-            <h5 className="font-serif text-lg text-[var(--color-abrow-dark)]">
-              Horario de atención
-            </h5>
-            <div className="w-8 h-[2px] bg-[var(--color-abrow-dark)]" />
-            <p className="font-sans text-xs text-[var(--color-abrow-muted)] leading-relaxed">
-              Lunes a Viernes: 09:00 - 20:00
-              <br />
-              Sábado: 09:00 - 18:00
-              <br />
-              Domingo: Cerrado
-            </p>
-          </div>
-
-          {/* Descripción central y enlaces rápidos */}
-          <div className="flex flex-col items-center text-center space-y-6">
+          {/* 1. Bloque Central (Descripción y Redes) -> Primero en mobile */}
+          <div className="flex flex-col items-center text-center space-y-6 order-1 md:order-2">
             <p className="font-sans text-xs text-[var(--color-abrow-muted)] max-w-xs leading-relaxed">
               Somos un acogedor estudio de belleza en la ciudad de Antofagasta. Transformamos tu imagen cambiando tu mirada.
             </p>
 
-            <ul className="flex flex-wrap justify-center gap-x-6 gap-y-2 font-sans text-xs text-[var(--color-abrow-muted)]">
-              {enlaces.map((enlace) => (
-                <li key={enlace.label}>
-                  <HashLink smooth to={enlace.href} className="hover:text-[var(--color-abrow-dark)] transition-colors">
-                    {enlace.label}
-                  </HashLink>
-                </li>
-              ))}
-              <li>
-                <Link to="/contacto" className="hover:text-[var(--color-abrow-dark)] transition-colors">
-                  Contacto
-                </Link>
-              </li>
-            </ul>
-
             {/* Redes Sociales interactivas */}
-            <div className="flex items-center gap-5 pt-2">
+            <div className="flex items-center gap-5 pt-1">
               {redes.map((red) => (
                 <a
                   key={red.nombre}
@@ -115,10 +85,41 @@ export default function Footer() {
                 </a>
               ))}
             </div>
+
+            {/* Enlaces de navegación rápida (visibles en mobile debajo de las redes) */}
+            <ul className="flex flex-wrap justify-center gap-x-6 gap-y-2 font-sans text-xs text-[var(--color-abrow-muted)] pt-4 md:hidden">
+              {enlaces.map((enlace) => (
+                <li key={enlace.label}>
+                  <HashLink smooth to={enlace.href} className="hover:text-[var(--color-abrow-dark)] transition-colors">
+                    {enlace.label}
+                  </HashLink>
+                </li>
+              ))}
+              <li>
+                <Link to="/contacto" className="hover:text-[var(--color-abrow-dark)] transition-colors">
+                  Contacto
+                </Link>
+              </li>
+            </ul>
           </div>
 
-          {/* Información de contacto */}
-          <div className="space-y-3 text-left md:text-right">
+          {/* 2. Horario de atención (Centrado en mobile, izquierda en desktop) */}
+          <div className="space-y-3 flex flex-col items-center text-center md:items-start md:text-left order-2 md:order-1">
+            <h5 className="font-serif text-lg text-[var(--color-abrow-dark)]">
+              Horario de atención
+            </h5>
+            <div className="w-8 h-[2px] bg-[var(--color-abrow-dark)]" />
+            <p className="font-sans text-xs text-[var(--color-abrow-muted)] leading-relaxed">
+              Lunes a Viernes: 09:00 - 20:00
+              <br />
+              Sábado: 09:00 - 18:00
+              <br />
+              Domingo: Cerrado
+            </p>
+          </div>
+
+          {/* 3. Información de contacto (Centrado en mobile, derecha en desktop) */}
+          <div className="space-y-3 flex flex-col items-center text-center md:items-end md:text-right order-3 md:order-3">
             <h5 className="font-serif text-lg text-[var(--color-abrow-dark)]">
               Contacto
             </h5>
@@ -134,10 +135,29 @@ export default function Footer() {
 
         </div>
 
-        {/* Copyright inferior */}
-        <div className="border-t border-[var(--color-abrow-dark)]/10 pt-6 flex flex-col sm:flex-row items-center justify-between text-xs font-sans text-[var(--color-abrow-muted)]">
-          <p>© {new Date().getFullYear()} Lumiere Studio. Todos los derechos reservados.</p>
-          <p className="mt-2 sm:mt-0">Antofagasta, Chile</p>
+        {/* Enlaces de navegación visibles solo en Desktop en su columna central original */}
+        <div className="hidden md:flex flex-col items-center space-y-4">
+          <ul className="flex flex-wrap justify-center gap-x-8 font-sans text-xs text-[var(--color-abrow-muted)]">
+            {enlaces.map((enlace) => (
+              <li key={enlace.label}>
+                <HashLink smooth to={enlace.href} className="hover:text-[var(--color-abrow-dark)] transition-colors">
+                  {enlace.label}
+                </HashLink>
+              </li>
+            ))}
+            <li>
+              <Link to="/contacto" className="hover:text-[var(--color-abrow-dark)] transition-colors">
+                Contacto
+              </Link>
+            </li>
+          </ul>
+        </div>
+
+        {/* Copyright inferior en 3 líneas centradas */}
+        <div className="border-t border-[var(--color-abrow-dark)]/10 pt-6 flex flex-col items-center justify-center text-center text-xs font-sans text-[var(--color-abrow-muted)] space-y-1.5">
+          <p>© {new Date().getFullYear()} Lumiere Studio.</p>
+          <p>Todos los derechos reservados.</p>
+          <p>Antofagasta, Chile</p>
         </div>
 
       </div>

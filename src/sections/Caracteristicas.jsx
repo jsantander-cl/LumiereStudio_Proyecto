@@ -73,7 +73,7 @@ const SliderComparador = ({ imgBefore, imgAfter, titulo, especialista }) => {
 
 export default function Caracteristicas() {
   return (
-    <section className="bg-[var(--color-abrow-cream)] py-20 px-6 md:px-12 lg:px-24">
+    <section className="bg-[var(--color-abrow-cream)] py-5 md:py-20 px-6 md:px-12 lg:px-24 select-none">
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-12 items-center">
         
         {/* Columna Texto */}
@@ -95,7 +95,7 @@ export default function Caracteristicas() {
             href="https://www.instagram.com/p/DYGb_easwVy/" 
             target="_blank" 
             rel="noopener noreferrer"
-            className="mt-4 border border-[var(--color-abrow-dark)] px-7 py-2.5 font-sans text-[11px] uppercase tracking-widest text-[var(--color-abrow-dark)] hover:bg-[var(--color-abrow-dark)] hover:text-white transition-all duration-300 inline-block text-center cursor-pointer"
+            className="mt-4 border border-[var(--color-abrow-dark)] px-7 py-2.5 font-sans text-[11px] uppercase tracking-widest text-[var(--color-abrow-dark)] hover:bg-[var(--color-abrow-dark)] hover:text-white transition-all duration-300 inline-block text-center cursor-pointer shadow-sm"
           >
             VER MÁS
           </a>

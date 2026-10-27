@@ -22,7 +22,7 @@ const FilaTratamiento = ({ nombre, precio, desc }) => (
 
 export default function ServiciosPrecios() {
   return (
-    <section id="servicios" className="scroll-mt-20 bg-white py-20 px-6 md:px-12 lg:px-24">
+    <section id="servicios" className="scroll-mt-20 bg-white py-5 px-6 md:px-12 lg:px-24">
       <div className="max-w-7xl mx-auto space-y-14">
         {/* Encabezado */}
         <div className="text-center space-y-4">

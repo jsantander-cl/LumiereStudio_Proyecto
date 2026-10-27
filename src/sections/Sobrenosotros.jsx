@@ -22,7 +22,7 @@ export default function Sobrenosotros() {
   }, [modalAbierto]);
 
   return (
-    <section className="bg-[var(--color-abrow-nude)]/50 py-20 px-6 md:px-12 lg:px-24 select-none">
+    <section className="bg-[var(--color-abrow-nude)]/50 py-5 md:py-20 px-6 md:px-12 lg:px-24 select-none">
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
         
         {/* Imagen del Bodegón de Productos */}

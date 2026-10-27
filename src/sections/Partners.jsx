@@ -1,77 +1,97 @@
-import { useState } from 'react';
+import { useRef, useEffect } from 'react';
 
-const marcas = [
-  'Lash Colors', 
-  'DLUX Professional', 
-  'Lomansa', 
-  'Perma Blend', 
-  'TKTX', 
-  'ZENA', 
+const marcasOriginales = [
+  'Lash Colors',
+  'DLUX Professional',
+  'Lomansa',
+  'Perma Blend',
+  'TKTX',
+  'ZENA',
   'PULUK'
 ];
 
 export default function Partners() {
-  const [indiceActual, setIndiceActual] = useState(0);
+  const contenedorRef = useRef(null);
   
-  // Definimos cuántas marcas queremos ver fijas al mismo tiempo en pantalla
-  const visiblesEnEscritorio = 5;
+  // Triplicamos el array para lograr el efecto de bucle infinito sin saltos
+  const marcas = [...marcasOriginales, ...marcasOriginales, ...marcasOriginales];
 
-  const manejarAnterior = () => {
-    setIndiceActual((prev) => (prev === 0 ? marcas.length - 1 : prev - 1));
-  };
-
-  const manejarSiguiente = () => {
-    setIndiceActual((prev) => (prev === marcas.length - 1 ? 0 : prev + 1));
-  };
-
-  // Esta función organiza el orden del array dinámicamente para que la tira nunca desaparezca
-  const obtenerMarcasVisibles = () => {
-    const resultado = [];
-    for (let i = 0; i < visiblesEnEscritorio; i++) {
-      const idx = (indiceActual + i) % marcas.length;
-      resultado.push(marcas[idx]);
+  // Posicionar inicialmente en el centro exacto al cargar
+  useEffect(() => {
+    const contenedor = contenedorRef.current;
+    if (contenedor) {
+      const tercioAncho = contenedor.scrollWidth / 3;
+      contenedor.scrollLeft = tercioAncho;
     }
-    return resultado;
+  }, []);
+
+  // Lógica de bucle infinito (margen de holgura para ambas direcciones)
+  const manejarScrollInfinito = () => {
+    const contenedor = contenedorRef.current;
+    if (!contenedor) return;
+
+    const tercioAncho = contenedor.scrollWidth / 3;
+
+    if (contenedor.scrollLeft <= 10) {
+      contenedor.scrollLeft = tercioAncho;
+    } else if (contenedor.scrollLeft >= (tercioAncho * 2) - 10) {
+      contenedor.scrollLeft = tercioAncho;
+    }
+  };
+
+  const manejarScroll = (direccion) => {
+    const contenedor = contenedorRef.current;
+    if (!contenedor) return;
+    const desplazamiento = direccion === 'izquierda' ? -250 : 250;
+    contenedor.scrollBy({ left: desplazamiento, behavior: 'smooth' });
   };
 
   return (
-    <section className="bg-white py-16 px-6 md:px-12 lg:px-24 select-none w-full">
-      <div className="max-w-7xl mx-auto text-center space-y-10">
-        <p className="font-sans text-sm text-[var(--color-abrow-muted)]">
+    <section className="bg-white py-10 md:py-14 px-6 md:px-12 lg:px-24 select-none w-full overflow-hidden">
+      <div className="max-w-7xl mx-auto text-center space-y-6">
+        <p className="font-sans text-xs md:text-sm text-[var(--color-abrow-muted)] max-w-xl mx-auto leading-relaxed">
           Trabajamos con las mejores <span className="italic underline underline-offset-4">marcas</span> del mercado para ofrecer a nuestros clientes los mejores productos.
         </p>
 
-        <div className="flex items-center justify-between gap-4 w-full">
-          {/* Botón Anterior */}
-          <button
-            onClick={manejarAnterior}
+        <div className="relative flex items-center justify-center w-full">
+          {/* Botón Izquierda */}
+          <button 
+            onClick={() => manejarScroll('izquierda')}
             aria-label="Anterior"
-            className="text-[var(--color-abrow-muted)] hover:text-[var(--color-abrow-dark)] transition-colors p-2 flex-shrink-0 cursor-pointer"
+            className="absolute left-0 z-10 bg-white/90 hover:bg-white text-[var(--color-abrow-muted)] hover:text-[var(--color-abrow-dark)] transition-colors p-2 shadow-sm rounded-full cursor-pointer -ml-2 md:-ml-4"
           >
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-5 h-5">
               <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
             </svg>
           </button>
 
-          {/* Fila Fija y Estable con Grid Nativo */}
-          <div className="w-full grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6 items-center justify-items-center">
-            {obtenerMarcasVisibles().map((marca, idx) => (
+          {/* Tira Horizontal Continua e Infinita */}
+          <div 
+            ref={contenedorRef}
+            onScroll={manejarScrollInfinito}
+            className="w-full flex items-center gap-10 md:gap-16 overflow-x-auto scrollbar-none scroll-smooth px-8 py-1 whitespace-nowrap"
+            style={{ 
+              scrollbarWidth: 'none', 
+              WebkitOverflowScrolling: 'touch' 
+            }}
+          >
+            {marcas.map((marca, idx) => (
               <div 
-                key={`${marca}-${idx}`} 
-                className="w-full text-center animate-fade-in duration-300"
+                key={`${marca}-${idx}`}
+                className="flex-shrink-0 text-center"
               >
-                <span className="font-serif italic text-base md:text-lg text-[var(--color-abrow-muted)]/70 hover:text-[var(--color-abrow-dark)] transition-colors block truncate">
+                <span className="font-serif italic text-base md:text-xl text-[var(--color-abrow-muted)]/70 hover:text-[var(--color-abrow-dark)] transition-colors">
                   {marca}
                 </span>
               </div>
             ))}
           </div>
 
-          {/* Botón Siguiente */}
-          <button
-            onClick={manejarSiguiente}
+          {/* Botón Derecha */}
+          <button 
+            onClick={() => manejarScroll('derecha')}
             aria-label="Siguiente"
-            className="text-[var(--color-abrow-muted)] hover:text-[var(--color-abrow-dark)] transition-colors p-2 flex-shrink-0 cursor-pointer"
+            className="absolute right-0 z-10 bg-white/90 hover:bg-white text-[var(--color-abrow-muted)] hover:text-[var(--color-abrow-dark)] transition-colors p-2 shadow-sm rounded-full cursor-pointer -mr-2 md:-mr-4"
           >
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-5 h-5">
               <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
