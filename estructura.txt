@@ -1,6 +1,5 @@
 C:\Users\HP PRO BOOK\Desktop\FRONTEND\PROYECTOS\LumiereStudio_Proyecto
 ├── eslint.config.js
-├── estructura.txt
 ├── index.html
 ├── node_modules
 |  ├── @eslint
@@ -36,6 +35,7 @@ C:\Users\HP PRO BOOK\Desktop\FRONTEND\PROYECTOS\LumiereStudio_Proyecto
 |  |  ├── INSTA4.webp
 |  |  ├── INSTA5.webp
 |  |  ├── INSTA6.webp
+|  |  ├── logolumiere.png
 |  |  ├── logosombra.webp
 |  |  ├── masinfo.webp
 |  |  ├── ojoA.webp
@@ -47,15 +47,17 @@ C:\Users\HP PRO BOOK\Desktop\FRONTEND\PROYECTOS\LumiereStudio_Proyecto
 |  |  ├── tania.webp
 |  |  ├── trabajando.webp
 |  |  └── videofalso.webp
-|  └── svg
-|     ├── 001-hair-salon.svg
-|     ├── 002-eyebrow-pencil.svg
-|     ├── 005-candidate.svg
-|     ├── 007-appointment-1.svg
-|     ├── 011-gift-1.svg
-|     ├── 015-love-yourself.svg
-|     ├── 016-beauty-salon.svg
-|     └── 017-makeup.svg
+|  ├── svg
+|  |  ├── 001-hair-salon.svg
+|  |  ├── 002-eyebrow-pencil.svg
+|  |  ├── 005-candidate.svg
+|  |  ├── 007-appointment-1.svg
+|  |  ├── 011-gift-1.svg
+|  |  ├── 015-love-yourself.svg
+|  |  ├── 016-beauty-salon.svg
+|  |  └── 017-makeup.svg
+|  └── video
+|     └── 1024(1).mp4
 ├── README.md
 ├── src
 |  ├── App.jsx
@@ -112,5 +114,5 @@ C:\Users\HP PRO BOOK\Desktop\FRONTEND\PROYECTOS\LumiereStudio_Proyecto
 ├── vercel.json
 └── vite.config.js
 
-directory: 19 file: 93 symboliclink: 17
+directory: 20 file: 94 symboliclink: 17
 

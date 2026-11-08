@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { HashLink } from 'react-router-hash-link';
 
 function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [menuAbierto, setMenuAbierto] = useState(false);
+  const location = useLocation();
 
+  // El useEffect siempre debe ejecutarse primero antes de cualquier return condicional
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 40) {
@@ -18,6 +20,11 @@ function Header() {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  // Si no está en la página principal ("/"), ocultamos el Header sin romper las reglas de Hooks
+  if (location.pathname !== '/') {
+    return null;
+  }
 
   // Función de desplazamiento suave personalizada compensando la barra fija
   const scrollWithOffset = (el) => {
@@ -32,10 +39,10 @@ function Header() {
 
   return (
     <header 
-      className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 py-4 sm:py-5 px-6 md:px-12 lg:px-24 select-none ${
+      className={`fixed top-0 left-0 w-full z-50 py-4 sm:py-5 px-6 md:px-12 lg:px-24 select-none transition-colors duration-300 ${
         scrolled 
-          ? 'bg-[#3D1D1C]/90 backdrop-blur-md shadow-lg py-3 sm:py-4' 
-          : 'bg-[#3D1D1C]/80 backdrop-blur-xs'
+          ? 'bg-[#3D1D1C]/95 backdrop-blur-md shadow-lg py-3 sm:py-4' 
+          : 'bg-transparent backdrop-blur-none shadow-none border-none'
       }`}
     >
       <div className="max-w-7xl mx-auto flex items-center justify-between">
