@@ -21,6 +21,7 @@ function Hero() {
               muted
               loop
               playsInline
+              onCanPlayThrough={() => window.dispatchEvent(new Event('lumiere-video-ready'))}
               className="w-full h-full object-cover object-center scale-105"
             >
               <source src="/video/1024(2).mp4" type="video/mp4" />
@@ -36,6 +37,7 @@ function Hero() {
               muted
               loop
               playsInline
+              onCanPlayThrough={() => window.dispatchEvent(new Event('lumiere-video-ready'))}
               className="w-full h-full object-cover object-center scale-105"
             >
               <source src="/video/1024(1).mp4" type="video/mp4" />

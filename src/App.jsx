@@ -9,10 +9,12 @@ import AdminReservas from './pages/AdminReservas';
 import ResetPassword from './pages/ResetPassword';
 import Checkout from './pages/Checkout';
 import InscripcionMasterClass from './pages/InscripcionMasterClass';
+import CookieConsent from './components/CookieConsent';
 
 export default function App() {
   return (
     <div className="bg-[var(--color-abrow-cream)] min-h-screen text-[var(--color-abrow-dark)]">
+      <CookieConsent />
       <Header />
       <main>
         <Routes>
