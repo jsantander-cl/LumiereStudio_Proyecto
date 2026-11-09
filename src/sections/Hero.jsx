@@ -14,7 +14,23 @@ function Hero() {
         {/* CAPA 1: VÍDEO PRINCIPAL A PANTALLA COMPLETA */}
         <div className="relative md:sticky top-0 w-full h-screen pt-24 pb-8 md:pt-44 md:pb-28 px-6 md:px-12 lg:px-24 flex flex-col md:flex-row items-center justify-between overflow-hidden bg-black z-0">
           
-          <div className="absolute inset-0 w-full h-full z-0 overflow-hidden pointer-events-none">
+          {/* VÍDEO MOBILE EXCLUSIVO (1024(2).mp4) */}
+          <div className="absolute inset-0 w-full h-full z-0 overflow-hidden pointer-events-none block md:hidden">
+            <video
+              autoPlay
+              muted
+              loop
+              playsInline
+              className="w-full h-full object-cover object-center scale-105"
+            >
+              <source src="/video/1024(2).mp4" type="video/mp4" />
+              Tu navegador no soporta videos HTML5.
+            </video>
+            <div className="absolute inset-0 bg-black/40 pointer-events-none" />
+          </div>
+
+          {/* VÍDEO DESKTOP EXCLUSIVO (1024(1).mp4) */}
+          <div className="absolute inset-0 w-full h-full z-0 overflow-hidden pointer-events-none hidden md:block">
             <video
               autoPlay
               muted
@@ -72,16 +88,16 @@ function Hero() {
 
           </div>
 
-          {/* BLOQUE INFERIOR MOBILE: Redes Sociales abajo y Mouse */}
+          {/* BLOQUE INFERIOR MOBILE: Redes Sociales en Box responsivo horizontal y Mouse */}
           <div className="relative z-10 w-full flex flex-col items-center gap-3 pb-2 md:hidden">
-            <div className="flex flex-wrap justify-center gap-4">
+            <div className="flex flex-row justify-between items-center w-full max-w-sm px-2">
               {redes.map((red) => (
                 <a
                   key={red.nombre}
                   href={red.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="font-sans text-[13px] tracking-widest uppercase underline underline-offset-4 text-white/90 hover:text-white transition-colors drop-shadow"
+                  className="font-sans text-[10px] sm:text-[11px] tracking-wider uppercase underline underline-offset-4 text-white/90 hover:text-white transition-colors drop-shadow whitespace-nowrap px-1"
                 >
                   {red.nombre}
                 </a>
