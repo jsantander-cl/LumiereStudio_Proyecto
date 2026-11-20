@@ -1,26 +1,73 @@
-import { Link } from 'react-router-dom';
-import { HashLink } from 'react-router-hash-link';
+import { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
+import { HashLink } from 'react-router-hash-link'
+import { supabase } from '../lib/supabaseClient'
 
-const tratamientos = [
-  { nombre: 'Perfilado de cejas', precio: '$10.000', desc: 'Mejora la forma o la apariencia de tus cejas.' },
-  { nombre: 'Microblading', precio: '$120.000', desc: '¡Olvídate del maquillaje durante 18 a 30 semanas con el microblading!' },
-  { nombre: 'Limpieza Facial', precio: '$20.000', desc: 'Limpia y exfolia tu piel para dejarla suave y radiante.' },
-  { nombre: 'Lifting Coreano', precio: '$35.000', desc: 'Eleva, alarga, fortalece y nutre tus pestañas desde la raíz.' },
-  { nombre: 'Laminación de cejas', precio: '$25.000', desc: 'Te da unas cejas con apariencia más poblada y corrige su forma natural.' },
-  { nombre: 'Corrección de cejas para hombres', precio: '$20.000', desc: 'Consigue una mejor forma para tus cejas o cambia su aspecto.' },
-];
+// Orden por defecto por nombre en caso de que el campo 'orden' en Supabase no esté configurado
+const ORDEN_DESEADO = [
+  'perfilado de cejas',
+  'microblading',
+  'limpieza facial',
+  'lifting coreano',
+  'laminación de cejas',
+  'laminacion de cejas',
+  'corrección de cejas para hombres',
+  'correccion de cejas para hombres',
+]
 
 const FilaTratamiento = ({ nombre, precio, desc }) => (
   <div className="flex flex-col gap-1">
     <div className="flex items-baseline justify-between border-b border-[var(--color-abrow-dark)]/15 pb-2">
       <h4 className="font-serif text-lg text-[var(--color-abrow-dark)]">{nombre}</h4>
-      <span className="font-serif italic text-xl text-[var(--color-abrow-dark)]">{precio}</span>
+      <span className="font-serif italic text-xl text-[var(--color-abrow-dark)]">
+        {typeof precio === 'number' ? `$${precio.toLocaleString('es-CL')}` : precio}
+      </span>
     </div>
     <p className="font-sans text-xs text-[var(--color-abrow-muted)]">{desc}</p>
   </div>
-);
+)
 
 export default function ServiciosPrecios() {
+  const [tratamientos, setTratamientos] = useState([])
+  const [cargando, setCargando] = useState(true)
+
+  useEffect(() => {
+    async function obtenerServicios() {
+      const { data, error } = await supabase
+        .from('servicios')
+        .select('*')
+        .neq('activo', false)
+        .order('orden', { ascending: true }) // Intenta ordenar por el campo orden de Supabase
+
+      if (!error && data) {
+        // Copiamos la data para aplicar ordenamiento dinámico
+        const ordenados = [...data].sort((a, b) => {
+          // Si ambos tienen el campo 'orden' definido y son distintos, usamos ese valor
+          if (a.orden !== undefined && b.orden !== undefined && a.orden !== b.orden) {
+            return a.orden - b.orden
+          }
+          // Fallback al orden por nombre de la imagen de diseño
+          const idxA = ORDEN_DESEADO.indexOf(a.nombre.toLowerCase().trim())
+          const idxB = ORDEN_DESEADO.indexOf(b.nombre.toLowerCase().trim())
+          const posA = idxA !== -1 ? idxA : 99
+          const posB = idxB !== -1 ? idxB : 99
+          return posA - posB
+        })
+
+        const formateados = ordenados.map((s) => ({
+          id: s.id,
+          nombre: s.nombre,
+          precio: s.precio ? `$${s.precio.toLocaleString('es-CL')}` : '$0',
+          desc: s.descripcion || '',
+        }))
+        setTratamientos(formateados)
+      }
+      setCargando(false)
+    }
+
+    obtenerServicios()
+  }, [])
+
   return (
     <section id="servicios" className="scroll-mt-20 bg-white py-5 px-6 md:px-12 lg:px-24">
       <div className="max-w-7xl mx-auto space-y-14">
@@ -35,12 +82,18 @@ export default function ServiciosPrecios() {
           </span>
         </div>
 
-        {/* Grid de precios */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-8 max-w-5xl mx-auto">
-          {tratamientos.map((t) => (
-            <FilaTratamiento key={t.nombre} {...t} />
-          ))}
-        </div>
+        {/* Grid de precios dinámico conectado a Supabase */}
+        {cargando ? (
+          <p className="text-center text-xs text-[var(--color-abrow-muted)] py-8 font-sans">
+            Cargando tratamientos...
+          </p>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-8 max-w-5xl mx-auto">
+            {tratamientos.map((t) => (
+              <FilaTratamiento key={t.id || t.nombre} {...t} />
+            ))}
+          </div>
+        )}
 
         {/* 3 tarjetas: Gift Cards / Master Classes / CTA */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -103,5 +156,5 @@ export default function ServiciosPrecios() {
         </div>
       </div>
     </section>
-  );
+  )
 }

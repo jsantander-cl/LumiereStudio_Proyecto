@@ -39,7 +39,7 @@ function toISO(date) {
 }
 
 /** Mini-calendario propio: navegación de mes, días pasados atenuados. */
-function Calendario({ fechaSeleccionada, onSeleccionar, minFecha, maxFecha }) {
+function Calendario({ fechaSeleccionada, onSeleccionar, minFecha, maxFecha, diasBloqueadosCompletos = [] }) {
   const inicial = fechaSeleccionada
     ? new Date(fechaSeleccionada + 'T00:00:00')
     : new Date(minFecha + 'T00:00:00')
@@ -104,7 +104,8 @@ function Calendario({ fechaSeleccionada, onSeleccionar, minFecha, maxFecha }) {
         {dias.map((dia, i) => {
           if (!dia) return <span key={i} />
           const iso = toISO(dia)
-          const fueraDeRango = dia < min || dia > max
+          const esBloqueadoCompleto = diasBloqueadosCompletos.includes(iso)
+          const fueraDeRango = dia < min || dia > max || esBloqueadoCompleto
           const seleccionado = iso === fechaSeleccionada
 
           return (
@@ -117,7 +118,7 @@ function Calendario({ fechaSeleccionada, onSeleccionar, minFecha, maxFecha }) {
                 seleccionado
                   ? 'bg-[var(--color-abrow-dark)] text-white font-semibold'
                   : fueraDeRango
-                  ? 'text-[var(--color-abrow-muted)]/30 cursor-not-allowed'
+                  ? 'text-[var(--color-abrow-muted)]/30 cursor-not-allowed line-through'
                   : 'text-[var(--color-abrow-dark)] hover:bg-[var(--color-abrow-nude)]'
               }`}
             >
@@ -140,6 +141,7 @@ export default function Agenda() {
   const [horarios, setHorarios] = useState([])
   const [horarioSeleccionado, setHorarioSeleccionado] = useState(null)
   const [cargandoHorarios, setCargandoHorarios] = useState(false)
+  const [bloqueos, setBloqueos] = useState([])
   const [datosCliente, setDatosCliente] = useState({ nombre: '', email: '', telefono: '', notas: '' })
   const [enviando, setEnviando] = useState(false)
   const [error, setError] = useState('')
@@ -165,16 +167,51 @@ export default function Agenda() {
       .finally(() => setCargandoServicios(false))
   }, [])
 
+  // Cargar todos los bloqueos vigentes de Supabase
+  useEffect(() => {
+    supabase
+      .from('bloqueos_agenda')
+      .select('*')
+      .then(({ data }) => {
+        setBloqueos(data || [])
+      })
+  }, [])
+
+  // Cargar horarios disponibles filtrando bloqueos de días y horas
   useEffect(() => {
     if (!fecha || !servicioSeleccionado) return
     setCargandoHorarios(true)
     setError('')
     setHorarioSeleccionado(null)
+
     obtenerHorariosDisponibles(fecha, servicioSeleccionado.duracion_minutos)
-      .then(setHorarios)
+      .then((horariosObtenidos) => {
+        // Filtrar horarios que se encuentren dentro de un rango bloqueado
+        const bloqueosDelDia = bloqueos.filter((b) => b.fecha === fecha)
+        
+        const horariosFiltrados = horariosObtenidos.filter((h) => {
+          const horaInicioSlot = h.hora_inicio
+
+          return !bloqueosDelDia.some((b) => {
+            // Si es día completo
+            if (b.tipo === 'dia_completo' || (!b.hora_inicio && !b.hora_fin)) {
+              return true
+            }
+            // Si es rango de horas
+            if (b.hora_inicio && b.hora_fin) {
+              const hInicioBloqueo = b.hora_inicio.slice(0, 5)
+              const hFinBloqueo = b.hora_fin.slice(0, 5)
+              return horaInicioSlot >= hInicioBloqueo && horaInicioSlot < hFinBloqueo
+            }
+            return false
+          })
+        })
+
+        setHorarios(horariosFiltrados)
+      })
       .catch(() => setError('No pudimos cargar los horarios. Intenta de nuevo.'))
       .finally(() => setCargandoHorarios(false))
-  }, [fecha, servicioSeleccionado])
+  }, [fecha, servicioSeleccionado, bloqueos])
 
   const elegirServicio = (servicio) => {
     setServicioSeleccionado(servicio)
@@ -213,6 +250,13 @@ export default function Agenda() {
 
   const hoy = new Date().toISOString().split('T')[0]
   const maxFecha = new Date(Date.now() + 60 * 86400000).toISOString().split('T')[0]
+
+  // Lista de días bloqueados de forma completa para desactivarlos en el Calendario
+  const diasBloqueadosCompletos = useMemo(() => {
+    return bloqueos
+      .filter((b) => b.tipo === 'dia_completo' || (!b.hora_inicio && !b.hora_fin))
+      .map((b) => b.fecha)
+  }, [bloqueos])
 
   const horariosManana = horarios.filter((h) => h.hora_inicio < '13:00')
   const horariosTarde = horarios.filter((h) => h.hora_inicio >= '13:00')
@@ -327,6 +371,7 @@ export default function Agenda() {
             onSeleccionar={setFecha}
             minFecha={hoy}
             maxFecha={maxFecha}
+            diasBloqueadosCompletos={diasBloqueadosCompletos}
           />
 
           {/* Modal de horarios, se abre al elegir un día */}

@@ -1,30 +1,34 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
-
-const ESTADO_COLOR = {
-  pendiente: 'bg-yellow-100 text-yellow-800',
-  confirmada: 'bg-green-100 text-green-800',
-  pagada: 'bg-blue-100 text-blue-800',
-  cancelada: 'bg-red-100 text-red-800',
-  completada: 'bg-gray-100 text-gray-600',
-}
+import AdminKpis from '../components/admin/AdminKpis'
+import GestorBloqueos from '../components/admin/GestorBloqueos'
+import GestorServicios from '../components/admin/GestorServicios'
+import GestorGastos from '../components/admin/GestorGastos'
+import GestorGiftCards from '../components/admin/GestorGiftCards'
+import TablaReservas from '../components/admin/TablaReservas'
+import ModalCliente from '../components/admin/ModalCliente'
+import ReporteFinanciero from '../components/admin/ReporteFinanciero'
 
 export default function AdminReservas() {
   const [sesionLista, setSesionLista] = useState(false)
   const [reservas, setReservas] = useState([])
-  const [servicios, setServicios] = useState({})
+  const [servicios, setServicios] = useState([])
+  const [bloqueos, setBloqueos] = useState([])
+  const [gastos, setGastos] = useState([])
+  const [giftCards, setGiftCards] = useState([])
   const [cargando, setCargando] = useState(true)
   const [error, setError] = useState('')
-  const [cancelandoId, setCancelandoId] = useState(null)
+  
+  const [filtroEstado, setFiltroEstado] = useState('todas')
+  const [busqueda, setBusqueda] = useState('')
+  const [clienteSeleccionado, setClienteSeleccionado] = useState(null)
+
   const navigate = useNavigate()
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
-      if (!session) {
-        navigate('/admin')
-        return
-      }
+      if (!session) return navigate('/admin')
       setSesionLista(true)
     })
   }, [navigate])
@@ -38,146 +42,180 @@ export default function AdminReservas() {
     setCargando(true)
     setError('')
 
-    const [{ data: reservasData, error: errR }, { data: serviciosData, error: errS }] =
-      await Promise.all([
-        supabase
-          .from('reservas')
-          .select('*')
-          .order('fecha', { ascending: true })
-          .order('hora_inicio', { ascending: true }),
-        supabase.from('servicios').select('id, nombre'),
-      ])
+    const [
+      { data: rData, error: errR },
+      { data: sData, error: errS },
+      { data: bData },
+      { data: gData },
+      { data: gcData }
+    ] = await Promise.all([
+      supabase.from('reservas').select('*').order('fecha', { ascending: false }).order('hora_inicio', { ascending: false }),
+      supabase.from('servicios').select('*').order('orden', { ascending: true }),
+      supabase.from('bloqueos_agenda').select('*').order('fecha', { ascending: false }),
+      supabase.from('gastos').select('*').order('fecha', { ascending: false }),
+      supabase.from('gift_cards').select('*').order('created_at', { ascending: false }),
+    ])
 
     if (errR || errS) {
-      setError('No se pudieron cargar las reservas.')
+      setError('Error al cargar datos desde Supabase.')
       setCargando(false)
       return
     }
 
-    const mapaServicios = {}
-    serviciosData.forEach((s) => (mapaServicios[s.id] = s.nombre))
+    const mPrecios = {}
+    if (sData) {
+      sData.forEach((s) => {
+        mPrecios[s.id] = s.precio || 0
+      })
+    }
 
-    setServicios(mapaServicios)
-    setReservas(reservasData)
+    setServicios(sData || [])
+    setReservas((rData || []).map((r) => ({ ...r, valor: r.valor ?? (mPrecios[r.servicio_id] || 0) })))
+    setBloqueos(bData || [])
+    setGastos(gData || [])
+    setGiftCards(gcData || [])
     setCargando(false)
   }
 
-  async function cancelarReserva(reserva) {
-    if (!confirm(`¿Cancelar la reserva de ${reserva.cliente_nombre}?`)) return
+  const mapaServiciosNombres = useMemo(() => {
+    const mapa = {}
+    servicios.forEach((s) => {
+      mapa[s.id] = s.nombre
+    })
+    return mapa
+  }, [servicios])
 
-    setCancelandoId(reserva.id)
-
-    // Si tiene evento en Google Calendar, lo eliminamos también
-    let calendarError = null
-    if (reserva.google_event_id) {
-      const { error: errCal } = await supabase.functions.invoke('cancelar-evento-calendario', {
-        body: { google_event_id: reserva.google_event_id },
-      })
-      calendarError = errCal
-    }
-
-    const { error } = await supabase
-      .from('reservas')
-      .update({ estado: 'cancelada' })
-      .eq('id', reserva.id)
-
-    if (error) {
-      alert('No se pudo cancelar la reserva. Intenta de nuevo.')
-    } else {
-      setReservas((prev) =>
-        prev.map((r) => (r.id === reserva.id ? { ...r, estado: 'cancelada' } : r))
-      )
-      if (calendarError) {
-        alert(
-          'La reserva se canceló, pero no pudimos eliminar el evento de Google Calendar automáticamente. Bórralo manualmente por esta vez.'
-        )
-      }
-    }
-
-    setCancelandoId(null)
+  async function cambiarEstado(id, nuevoEstado) {
+    const { error } = await supabase.from('reservas').update({ estado: nuevoEstado }).eq('id', id)
+    if (!error) setReservas((prev) => prev.map((r) => (r.id === id ? { ...r, estado: nuevoEstado } : r)))
   }
 
-  async function cerrarSesion() {
-    await supabase.auth.signOut()
-    navigate('/admin')
+  async function cancelarReserva(r) {
+    if (!confirm(`¿Cancelar la reserva de ${r.cliente_nombre}?`)) return
+    if (r.google_event_id) {
+      await supabase.functions.invoke('cancelar-evento-calendario', { body: { google_event_id: r.google_event_id } }).catch(() => {})
+    }
+    const { error } = await supabase.from('reservas').update({ estado: 'cancelada' }).eq('id', r.id)
+    if (!error) setReservas((prev) => prev.map((item) => (item.id === r.id ? { ...item, estado: 'cancelada' } : item)))
   }
+
+  const kpis = useMemo(() => {
+    const ahora = new Date()
+    const mesStr = `${ahora.getFullYear()}-${String(ahora.getMonth() + 1).padStart(2, '0')}`
+    const confirmadas = reservas.filter((r) => r.estado === 'confirmada' || r.estado === 'pagada')
+    
+    return {
+      total: reservas.length,
+      confirmadas: confirmadas.length,
+      canceladas: reservas.filter((r) => r.estado === 'cancelada').length,
+      pendientes: reservas.filter((r) => r.estado === 'pendiente').length,
+      ingresosMesActual: confirmadas.reduce((acc, r) => (r.fecha?.startsWith(mesStr) ? acc + (Number(r.valor) || 0) : acc), 0),
+    }
+  }, [reservas])
+
+  const reservasFiltradas = useMemo(() => {
+    return reservas.filter((r) => {
+      const matchEstado = filtroEstado === 'todas' || r.estado === filtroEstado
+      const q = busqueda.toLowerCase()
+      const matchBusqueda =
+        (r.cliente_nombre || '').toLowerCase().includes(q) ||
+        (r.cliente_email || '').toLowerCase().includes(q) ||
+        (mapaServiciosNombres[r.servicio_id] || '').toLowerCase().includes(q)
+      return matchEstado && matchBusqueda
+    })
+  }, [reservas, filtroEstado, busqueda, mapaServiciosNombres])
 
   if (!sesionLista) return null
 
   return (
-    <section className="max-w-5xl mx-auto px-6 py-12">
-      <div className="flex items-center justify-between mb-8">
-        <h1 className="font-serif text-3xl text-[var(--color-abrow-dark)]">Reservas</h1>
-        <button
-          onClick={cerrarSesion}
-          className="text-sm text-[var(--color-abrow-muted)] hover:text-[var(--color-abrow-dark)]"
-        >
-          Cerrar sesión
-        </button>
+    <div className="min-h-screen bg-[#FDFBF9] text-[#2D1A19] p-6 sm:p-10 font-sans">
+      <div className="max-w-7xl mx-auto space-y-8">
+        {/* HEADER */}
+        <div className="flex justify-between items-center border-b border-[#EBE3DE] pb-6">
+          <div>
+            <h1 className="font-serif text-3xl sm:text-4xl text-[#3D1D1C]">
+              Dashboard de Reservas
+            </h1>
+            <p className="text-xs sm:text-sm text-[#7A6260] mt-1">
+              Lumiere Studio Management
+            </p>
+          </div>
+          <button
+            onClick={() =>
+              supabase.auth.signOut().then(() => navigate('/admin'))
+            }
+            className="text-xs border border-rose-200 text-rose-700 px-4 py-2 rounded-full"
+          >
+            Cerrar sesión
+          </button>
+        </div>
+
+        {/* METRICAS + INFORME PDF */}
+        <AdminKpis
+          kpis={kpis}
+          reservas={reservas}
+          gastos={gastos}
+          servicios={mapaServiciosNombres}
+        />
+
+        {/* FILA 1: BLOQUEOS DE AGENDA Y CATÁLOGO DE SERVICIOS */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <GestorBloqueos bloqueos={bloqueos} setBloqueos={setBloqueos} />
+          <GestorServicios servicios={servicios} setServicios={setServicios} />
+        </div>
+
+        {/* FILA 2: GESTIÓN DE GIFT CARDS */}
+        <div>
+          <GestorGiftCards
+            giftCards={giftCards}
+            setGiftCards={setGiftCards}
+            servicios={servicios}
+          />
+        </div>
+
+        {/* FILA 3: REGISTRO DE GASTOS */}
+        <div>
+          <GestorGastos gastos={gastos} setGastos={setGastos} />
+        </div>
+
+        {/* REPORTE FINANCIERO */}
+        <ReporteFinanciero
+          reservas={reservas}
+          servicios={mapaServiciosNombres}
+        />
+
+        {/* TABLA PRINCIPAL */}
+        {!cargando && (
+          <TablaReservas
+            reservasFiltradas={reservasFiltradas}
+            servicios={mapaServiciosNombres}
+            filtroEstado={filtroEstado}
+            setFiltroEstado={setFiltroEstado}
+            busqueda={busqueda}
+            setBusqueda={setBusqueda}
+            setReservas={setReservas}
+            onSeleccionarCliente={(r) => setClienteSeleccionado(r)}
+            onCancelarReserva={cancelarReserva}
+            onCambiarEstado={cambiarEstado}
+          />
+        )}
       </div>
 
-      {cargando && <p className="text-[var(--color-abrow-muted)]">Cargando reservas...</p>}
-      {error && <p className="text-red-600 text-sm">{error}</p>}
-
-      {!cargando && !error && reservas.length === 0 && (
-        <p className="text-[var(--color-abrow-muted)]">No hay reservas todavía.</p>
-      )}
-
-      {!cargando && reservas.length > 0 && (
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm border-collapse">
-            <thead>
-              <tr className="border-b border-[var(--color-abrow-dark)]/15 text-left text-[var(--color-abrow-muted)]">
-                <th className="py-2 pr-4">Fecha</th>
-                <th className="py-2 pr-4">Hora</th>
-                <th className="py-2 pr-4">Servicio</th>
-                <th className="py-2 pr-4">Cliente</th>
-                <th className="py-2 pr-4">Contacto</th>
-                <th className="py-2 pr-4">Estado</th>
-                <th className="py-2 pr-4"></th>
-              </tr>
-            </thead>
-            <tbody>
-              {reservas.map((r) => (
-                <tr key={r.id} className="border-b border-[var(--color-abrow-dark)]/5">
-                  <td className="py-3 pr-4 text-[var(--color-abrow-dark)]">{r.fecha}</td>
-                  <td className="py-3 pr-4 text-[var(--color-abrow-dark)]">
-                    {r.hora_inicio?.slice(0, 5)}
-                  </td>
-                  <td className="py-3 pr-4 text-[var(--color-abrow-dark)]">
-                    {servicios[r.servicio_id] || '—'}
-                  </td>
-                  <td className="py-3 pr-4 text-[var(--color-abrow-dark)]">{r.cliente_nombre}</td>
-                  <td className="py-3 pr-4 text-[var(--color-abrow-muted)]">
-                    <div>{r.cliente_email}</div>
-                    <div>{r.cliente_telefono}</div>
-                  </td>
-                  <td className="py-3 pr-4">
-                    <span
-                      className={`px-2 py-1 rounded-full text-xs font-medium ${
-                        ESTADO_COLOR[r.estado] || 'bg-gray-100 text-gray-600'
-                      }`}
-                    >
-                      {r.estado}
-                    </span>
-                  </td>
-                  <td className="py-3 pr-4">
-                    {r.estado !== 'cancelada' && (
-                      <button
-                        onClick={() => cancelarReserva(r)}
-                        disabled={cancelandoId === r.id}
-                        className="text-red-600 hover:underline text-xs disabled:opacity-50"
-                      >
-                        {cancelandoId === r.id ? 'Cancelando...' : 'Cancelar'}
-                      </button>
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
-    </section>
+      <ModalCliente
+        cliente={clienteSeleccionado}
+        historial={reservas.filter(
+          (r) => r.cliente_email === clienteSeleccionado?.cliente_email
+        )}
+        servicios={mapaServiciosNombres}
+        onClose={() => setClienteSeleccionado(null)}
+        onActualizarReserva={(id, camposActualizados) => {
+          setReservas((prev) =>
+            prev.map((r) =>
+              r.id === id ? { ...r, ...camposActualizados } : r
+            )
+          )
+        }}
+      />
+    </div>
   )
 }

@@ -8,7 +8,7 @@ function Hero() {
 
   return (
     <section className="relative flex flex-col w-full select-none bg-[#3D1D1C]">
-      {/* CONTENEDOR WRAPPER */}
+      {/* CONTENEDOR WRAPPER (Parallax solo activo en Desktop con md:h-[200vh]) */}
       <div className="relative w-full md:h-[200vh]">
         
         {/* CAPA 1: VÍDEO PRINCIPAL A PANTALLA COMPLETA */}
@@ -129,13 +129,23 @@ function Hero() {
 
         </div>
 
-        {/* CAPA 2: IMAGEN INFERIOR (Solo visible en Desktop con efecto parallax) */}
+        {/* CAPA 2: IMAGEN INFERIOR (Desktop Parallax con Nombre y Especialidad en la esquina inferior derecha) */}
         <div className="hidden md:block absolute bottom-0 left-0 z-20 w-full h-screen overflow-hidden shadow-[0_-30px_60px_rgba(0,0,0,0.9)] bg-[#3D1D1C]">
           <img
             src="/img/hero.webp"
             alt="Aplicación de maquillaje de cejas"
             className="w-full h-full object-cover object-center"
           />
+          
+          {/* Nombre y Especialista en Estética (Esquina Inferior Derecha con Animación) */}
+          <div className="absolute bottom-12 right-12 z-30 text-right pointer-events-none animate-fade-in duration-1000">
+            <h3 className="font-serif text-2xl lg:text-3xl text-white tracking-wide font-normal drop-shadow-md">
+              Dianella Tapia
+            </h3>
+            <p className="font-sans text-xs lg:text-sm uppercase tracking-[0.25em] text-white/80 mt-1 font-light drop-shadow">
+              Especialista en Estética
+            </p>
+          </div>
         </div>
 
       </div>
