@@ -1,38 +1,51 @@
 import { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 
 function CookieConsent() {
+  const location = useLocation();
+  const isHome = location.pathname === '/';
+
   const [consentState, setConsentState] = useState(null); // 'accepted', 'rejected' o null
-  const [isVideoReady, setIsVideoReady] = useState(false);
+  const [isVideoReady, setIsVideoReady] = useState(!isHome);
   const [isDismissed, setIsDismissed] = useState(false);
 
   useEffect(() => {
     const consent = localStorage.getItem('lumiere_cookie_consent');
     if (consent) {
       setConsentState(consent);
-      setAcceptedState(true);
     }
   }, []);
+
+  // Si salimos de Home o entramos directo a otra ruta (/regalo, /agenda, etc.), no esperar el video
+  useEffect(() => {
+    if (!isHome) {
+      setIsVideoReady(true);
+      return;
+    }
+
+    const handleVideoLoaded = () => {
+      setIsVideoReady(true);
+    };
+
+    window.addEventListener('lumiere-video-ready', handleVideoLoaded);
+
+    // Respaldo de seguridad: liberar pantalla tras 3.5s si el video demora o falla
+    const fallbackTimer = setTimeout(() => {
+      setIsVideoReady(true);
+    }, 3500);
+
+    return () => {
+      window.removeEventListener('lumiere-video-ready', handleVideoLoaded);
+      clearTimeout(fallbackTimer);
+    };
+  }, [isHome]);
 
   const handleAction = (status) => {
     localStorage.setItem('lumiere_cookie_consent', status);
     setConsentState(status);
   };
 
-  const [acceptedState, setAcceptedState] = useState(false);
-  // Si rechaza, consideramos listo el flujo para ocultar el modal de inmediato
   const isReady = consentState === 'rejected' || (consentState === 'accepted' && isVideoReady);
-
-  useEffect(() => {
-    const handleVideoLoaded = () => {
-      setIsVideoReady(true);
-    };
-
-    window.addEventListener('lumiere-video-ready', handleVideoLoaded);
-    return () => {
-      window.removeEventListener('lumiere-video-ready', handleVideoLoaded);
-    };
-  }, []);
-
   const shouldHide = consentState !== null && isReady;
 
   if (isDismissed) return null;
@@ -46,8 +59,8 @@ function CookieConsent() {
         if (shouldHide) setIsDismissed(true);
       }}
     >
-      {/* SPINNER DE CARGA (Solo aparece si acepta y el video del Hero sigue cargando) */}
-      {consentState === 'accepted' && !isVideoReady && (
+      {/* SPINNER DE CARGA (Solo aparece en Home si acepta y el video del Hero sigue cargando) */}
+      {isHome && consentState === 'accepted' && !isVideoReady && (
         <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/30 backdrop-blur-md text-white select-none z-10">
           <div className="relative w-16 h-16 flex items-center justify-center">
             <div className="absolute inset-0 rounded-full border border-white/10" />

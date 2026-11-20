@@ -12,6 +12,7 @@ import InscripcionMasterClass from './pages/InscripcionMasterClass';
 import GiftCardReveal from './pages/GiftCardReveal';
 import CookieConsent from './components/CookieConsent';
 
+
 export default function App() {
   const location = useLocation();
 
