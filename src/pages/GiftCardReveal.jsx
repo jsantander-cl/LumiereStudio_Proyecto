@@ -2,74 +2,6 @@ import { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 
-// Ilustración SVG animada según el tipo de tratamiento contratado (adaptable a móvil)
-function AnimacionServicio({ nombreServicio = '' }) {
-  const nombre = nombreServicio.toLowerCase()
-
-  if (nombre.includes('lifting') || nombre.includes('pestaña')) {
-    return (
-      <div className="flex flex-col items-center justify-center">
-        <svg viewBox="0 0 200 75" className="w-28 h-9 sm:w-36 sm:h-14 overflow-visible">
-          <defs>
-            <linearGradient id="cobreGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#B88A72" />
-              <stop offset="50%" stopColor="#E6C786" />
-              <stop offset="100%" stopColor="#8C5E48" />
-            </linearGradient>
-          </defs>
-          <path d="M 25 48 Q 100 12 175 48" fill="none" stroke="url(#cobreGrad)" strokeWidth="2.2" strokeLinecap="round" />
-          <path d="M 45 36 Q 38 18 28 15" fill="none" stroke="url(#cobreGrad)" strokeWidth="1.6" strokeLinecap="round" />
-          <path d="M 68 27 Q 63 8 55 4" fill="none" stroke="url(#cobreGrad)" strokeWidth="1.8" strokeLinecap="round" />
-          <path d="M 95 22 Q 95 4 92 1" fill="none" stroke="url(#cobreGrad)" strokeWidth="2" strokeLinecap="round" />
-          <path d="M 122 24 Q 127 6 134 2" fill="none" stroke="url(#cobreGrad)" strokeWidth="1.8" strokeLinecap="round" />
-          <path d="M 148 32 Q 157 15 167 12" fill="none" stroke="url(#cobreGrad)" strokeWidth="1.6" strokeLinecap="round" />
-          <text x="15" y="26" fill="#B88A72" fontSize="12" className="animate-pulse">✦</text>
-          <text x="175" y="22" fill="#B88A72" fontSize="14" className="animate-pulse">✦</text>
-        </svg>
-      </div>
-    )
-  }
-
-  if (nombre.includes('facial') || nombre.includes('limpieza') || nombre.includes('piel')) {
-    return (
-      <div className="flex flex-col items-center justify-center">
-        <svg viewBox="0 0 200 75" className="w-28 h-9 sm:w-36 sm:h-14 overflow-visible">
-          <defs>
-            <linearGradient id="cobreGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#B88A72" />
-              <stop offset="50%" stopColor="#E6C786" />
-              <stop offset="100%" stopColor="#8C5E48" />
-            </linearGradient>
-          </defs>
-          <path d="M 20 38 Q 60 15 100 38 T 180 38" fill="none" stroke="url(#cobreGrad)" strokeWidth="2" strokeLinecap="round" />
-          <path d="M 35 52 Q 70 33 105 52 T 165 52" fill="none" stroke="url(#cobreGrad)" strokeWidth="1.4" strokeLinecap="round" opacity="0.7" />
-          <circle cx="70" cy="18" r="3" fill="none" stroke="#B88A72" strokeWidth="1.2" className="animate-bounce" />
-          <circle cx="130" cy="15" r="4" fill="none" stroke="#B88A72" strokeWidth="1.2" className="animate-pulse" />
-          <text x="95" y="18" fill="#B88A72" fontSize="13">✦</text>
-        </svg>
-      </div>
-    )
-  }
-
-  return (
-    <div className="flex flex-col items-center justify-center">
-      <svg viewBox="0 0 220 75" className="w-32 h-9 sm:w-40 sm:h-14 overflow-visible">
-        <defs>
-          <linearGradient id="cobreGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#B88A72" />
-            <stop offset="50%" stopColor="#E6C786" />
-            <stop offset="100%" stopColor="#8C5E48" />
-          </linearGradient>
-        </defs>
-        <path d="M 25 48 Q 85 14 135 18 Q 170 22 195 44 Q 165 30 132 28 Q 82 26 25 48 Z" fill="url(#cobreGrad)" opacity="0.92" />
-        <path d="M 18 54 Q 88 8 140 13 Q 176 18 202 46" fill="none" stroke="#3D1D1C" strokeWidth="1" strokeDasharray="3 3" opacity="0.45" />
-        <text x="134" y="11" fill="#B88A72" fontSize="14" className="animate-pulse">✦</text>
-        <text x="35" y="27" fill="#B88A72" fontSize="10" className="animate-pulse">✦</text>
-      </svg>
-    </div>
-  )
-}
-
 // Parte delantera exacta de la Gift Card Lumiere usando tus archivos SVG reales + efecto Foil
 function FrenteTarjetaLumiere({ brilloPos }) {
   const foilOffset = brilloPos.activo ? brilloPos.x : 32
@@ -200,6 +132,195 @@ function FrenteTarjetaLumiere({ brilloPos }) {
             />
             <span className="h-[1px] flex-1 bg-[#5C3A30]/55" />
           </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// Formatea fecha YYYY-MM-DD (o ISO) a dd-mm-aaaa
+function formatearFechaDDMMAAAA(fechaStr) {
+  if (!fechaStr) return 'Válida 3 meses'
+  const soloFecha = String(fechaStr).split('T')[0]
+  const partes = soloFecha.split('-')
+  if (partes.length === 3 && partes[0].length === 4) {
+    return `${partes[2]}-${partes[1]}-${partes[0]}`
+  }
+  return fechaStr
+}
+
+// Cara trasera exacta (sin remitente arriba a la derecha y fecha dd-mm-aaaa)
+function ReversoTarjetaLumiere({ giftCard }) {
+  return (
+    <div
+      style={{
+        backfaceVisibility: 'hidden',
+        WebkitBackfaceVisibility: 'hidden',
+        transform: 'rotateY(180deg)',
+      }}
+      className="absolute inset-0 w-full h-full rounded-[22px] sm:rounded-[26px] bg-[#FAF4EE] text-[#3D1D1C] px-4 py-3 sm:px-8 sm:py-5 shadow-[0_30px_70px_rgba(0,0,0,0.9),0_0_25px_rgba(184,138,114,0.25)] border-[1.5px] border-[#C9A088] flex flex-col justify-between overflow-hidden select-none"
+    >
+      {/* ONDA DE ACUARELA ESQUINA SUPERIOR IZQUIERDA */}
+      <svg
+        viewBox="0 0 320 200"
+        preserveAspectRatio="none"
+        className="absolute top-0 left-0 w-[44%] h-[36%] pointer-events-none z-0"
+        aria-hidden="true"
+      >
+        <path
+          d="M 0 0 L 295 0 C 235 48, 175 64, 118 76 C 65 88, 28 122, 0 172 Z"
+          fill="#EFE0D3"
+          opacity="0.72"
+        />
+        <path
+          d="M 0 155 C 32 104, 88 76, 172 68"
+          fill="none"
+          stroke="#DFC4B0"
+          strokeWidth="2.2"
+          opacity="0.85"
+        />
+        <path
+          d="M 0 185 C 40 124, 102 88, 204 64"
+          fill="none"
+          stroke="#D7B69E"
+          strokeWidth="1.6"
+          opacity="0.75"
+        />
+      </svg>
+
+      {/* ONDA DE ACUARELA ESQUINA INFERIOR DERECHA */}
+      <svg
+        viewBox="0 0 320 200"
+        preserveAspectRatio="none"
+        className="absolute bottom-0 right-0 w-[48%] h-[44%] pointer-events-none z-0"
+        aria-hidden="true"
+      >
+        <path
+          d="M 320 200 L 18 200 C 82 168, 146 154, 198 118 C 246 84, 282 54, 320 32 Z"
+          fill="#EFE0D3"
+          opacity="0.76"
+        />
+        <path
+          d="M 320 58 C 272 86, 224 128, 152 162"
+          fill="none"
+          stroke="#DFC4B0"
+          strokeWidth="2.2"
+          opacity="0.8"
+        />
+      </svg>
+
+      {/* RAMA BOTÁNICA SUPERIOR DERECHA (Archivo real: /svg/hojasGiftcard.svg) */}
+      <img
+        src="/svg/hojasGiftcard.svg"
+        alt=""
+        aria-hidden="true"
+        className="absolute -top-1 -right-1 w-[43%] h-auto object-contain pointer-events-none z-10"
+      />
+
+      {/* RAMA BOTÁNICA LATERAL IZQUIERDA (Archivo real: /svg/hoja2.svg) */}
+      <img
+        src="/svg/hoja2.svg"
+        alt=""
+        aria-hidden="true"
+        className="absolute bottom-[13%] -left-1 w-[21%] sm:w-[22%] h-auto object-contain pointer-events-none z-10"
+      />
+
+      {/* ==================== ENCABEZADO: PARA (SIN TEXTO SOBRE LA HOJA DERECHA) ==================== */}
+      <div className="relative z-20 flex justify-between items-end border-b border-[#B88A72]/65 pb-1.5 sm:pb-2.5 pt-1 sm:pt-2">
+        <div className="text-left min-w-0 max-w-[65%]">
+          <span
+            style={{ fontFamily: "'Montserrat', sans-serif" }}
+            className="text-[7px] sm:text-[9px] uppercase tracking-[0.26em] text-[#7A4A3B] font-semibold block leading-none mb-1"
+          >
+            PARA
+          </span>
+          <span
+            style={{ fontFamily: "'Playfair Display', serif" }}
+            className="text-[13px] sm:text-[19px] text-[#3B2019] font-normal leading-tight block truncate"
+          >
+            {giftCard.destinatario}
+          </span>
+        </div>
+      </div>
+
+      {/* ==================== CENTRO: ESTRELLA + EXPERIENCIA REGALO + SERVICIO ==================== */}
+      <div className="relative z-20 flex flex-col items-center justify-center text-center my-auto px-6 sm:px-10">
+        {/* Líneas laterales + Estrella de 4 puntas cobriza */}
+        <div className="flex items-center justify-center gap-3 w-full max-w-[165px] sm:max-w-[220px] mb-1 sm:mb-2">
+          <span className="h-[1px] flex-1 bg-[#B88A72]/75" />
+          <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0">
+            <path
+              d="M12 1 L14.6 9.4 L23 12 L14.6 14.6 L12 23 L9.4 14.6 L1 12 L9.4 9.4 Z"
+              fill="#9E6248"
+            />
+          </svg>
+          <span className="h-[1px] flex-1 bg-[#B88A72]/75" />
+        </div>
+
+        {/* Subtítulo: EXPERIENCIA REGALO */}
+        <span
+          style={{ fontFamily: "'Montserrat', sans-serif" }}
+          className="text-[7px] sm:text-[9.5px] uppercase tracking-[0.3em] text-[#5C3A30] font-medium block leading-none"
+        >
+          EXPERIENCIA REGALO
+        </span>
+
+        {/* Nombre del servicio en tipografía editorial */}
+        <h3
+          style={{ fontFamily: "'Playfair Display', serif" }}
+          className="text-[19px] sm:text-[29px] text-[#8E5641] font-normal leading-tight mt-0.5 sm:mt-1 line-clamp-1"
+        >
+          {giftCard.servicio_nombre}
+        </h3>
+
+        {/* Mensaje con líneas laterales */}
+        {giftCard.mensaje && (
+          <div className="flex items-center justify-center gap-2.5 w-full max-w-[215px] sm:max-w-[295px] mt-1 sm:mt-1.5">
+            <span className="h-[1px] flex-1 bg-[#B88A72]/65" />
+            <p
+              style={{ fontFamily: "'Playfair Display', serif" }}
+              className="italic text-[10px] sm:text-[13.5px] text-[#3B2019] truncate max-w-[140px] sm:max-w-[200px] leading-tight"
+            >
+              “{giftCard.mensaje}”
+            </p>
+            <span className="h-[1px] flex-1 bg-[#B88A72]/65" />
+          </div>
+        )}
+      </div>
+
+      {/* ==================== PIE: CÁPSULA CÓDIGO DE CANJE | VIGENCIA (dd-mm-aaaa) ==================== */}
+      <div className="relative z-20 flex items-center justify-between bg-[#FAF4EE]/85 backdrop-blur-[2px] rounded-full px-3.5 sm:px-6 py-1.5 sm:py-2.5 border border-[#C59B82]">
+        <div className="text-left">
+          <span
+            style={{ fontFamily: "'Montserrat', sans-serif" }}
+            className="text-[6.5px] sm:text-[8.5px] uppercase tracking-[0.22em] text-[#5C3A30] font-medium block leading-none mb-0.5 sm:mb-1"
+          >
+            CÓDIGO DE CANJE
+          </span>
+          <span
+            style={{ fontFamily: "'Montserrat', sans-serif" }}
+            className="text-[11px] sm:text-[15px] font-semibold tracking-[0.24em] text-[#3B2019] leading-none block"
+          >
+            {giftCard.codigo}
+          </span>
+        </div>
+
+        {/* Separador vertical central */}
+        <div className="h-5 sm:h-7 w-[1px] bg-[#C59B82]/75 mx-2" />
+
+        <div className="text-right">
+          <span
+            style={{ fontFamily: "'Montserrat', sans-serif" }}
+            className="text-[6.5px] sm:text-[8.5px] uppercase tracking-[0.22em] text-[#5C3A30] font-medium block leading-none mb-0.5 sm:mb-1"
+          >
+            VIGENCIA
+          </span>
+          <span
+            style={{ fontFamily: "'Montserrat', sans-serif" }}
+            className="text-[10.5px] sm:text-[14px] font-normal tracking-[0.06em] text-[#3B2019] leading-none block"
+          >
+            {formatearFechaDDMMAAAA(giftCard.fecha_vencimiento)}
+          </span>
         </div>
       </div>
     </div>
@@ -401,7 +522,7 @@ export default function GiftCardReveal() {
     <div className="min-h-[100dvh] bg-[#140D0C] text-[#FAF6F2] flex flex-col items-center justify-center p-4 sm:p-8 relative overflow-hidden font-sans select-none">
       {/* Animaciones personalizadas de revelación y guardado en reversa */}
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Playfair+Display:wght@600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap');
 
         @keyframes revelarTarjeta3D {
           0% {
@@ -728,74 +849,8 @@ export default function GiftCardReveal() {
                 {/* ==================== CARA FRONTAL (DISEÑO EXACTO TARJETA LUMIERE + FOIL) ==================== */}
                 <FrenteTarjetaLumiere brilloPos={brilloPos} />
 
-                {/* ==================== CARA TRASERA (REVERSO 180° RESPONSIVO) ==================== */}
-                <div
-                  style={{
-                    backfaceVisibility: 'hidden',
-                    WebkitBackfaceVisibility: 'hidden',
-                    transform: 'rotateY(180deg)',
-                  }}
-                  className="absolute inset-0 w-full h-full rounded-[22px] sm:rounded-[26px] bg-gradient-to-br from-[#FAF6F2] via-[#F4ECE5] to-[#EAE0D7] text-[#3D1D1C] p-3.5 sm:p-6 shadow-[0_30px_70px_rgba(0,0,0,0.9),0_0_25px_rgba(184,138,114,0.25)] border-[1.5px] border-[#B88A72] flex flex-col justify-between overflow-hidden"
-                >
-                  {/* Marco interno fino cobrizo */}
-                  <div className="absolute inset-2 sm:inset-2.5 rounded-[15px] sm:rounded-[16px] border border-[#B88A72]/40 pointer-events-none" />
-
-                  {/* Encabezado: Para y De parte de */}
-                  <div className="relative z-10 flex justify-between items-start border-b border-[#B88A72]/30 pb-1 sm:pb-2 gap-2">
-                    <div className="text-left min-w-0">
-                      <span className="text-[7px] sm:text-[8px] uppercase tracking-[0.2em] text-[#8C5E48] font-bold block leading-none mb-0.5">
-                        Para
-                      </span>
-                      <span className="font-serif text-sm sm:text-lg text-[#3D1D1C] font-medium leading-tight block truncate">
-                        {giftCard.destinatario}
-                      </span>
-                    </div>
-                    <div className="text-right min-w-0">
-                      <span className="text-[7px] sm:text-[8px] uppercase tracking-[0.2em] text-[#8C5E48] font-bold block leading-none mb-0.5">
-                        De parte de
-                      </span>
-                      <span className="font-serif italic text-xs sm:text-base text-[#3D1D1C] leading-tight block truncate">
-                        {giftCard.remitente}
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Centro: Servicio contratado + Animación temática */}
-                  <div className="relative z-10 text-center my-auto py-0.5">
-                    <AnimacionServicio nombreServicio={giftCard.servicio_nombre} />
-                    <span className="text-[7px] sm:text-[8px] uppercase tracking-[0.22em] text-[#7A6260] block leading-none mt-0.5">
-                      Experiencia Regalo
-                    </span>
-                    <h3 className="font-serif text-base sm:text-xl text-[#3D1D1C] font-semibold leading-tight mt-0.5">
-                      {giftCard.servicio_nombre}
-                    </h3>
-                    {giftCard.mensaje && (
-                      <p className="font-serif italic text-[10px] sm:text-[11px] text-[#5C3A30] line-clamp-1 sm:line-clamp-2 mt-0.5 px-2 leading-tight">
-                        “{giftCard.mensaje}”
-                      </p>
-                    )}
-                  </div>
-
-                  {/* Pie: Código Único + Fecha de vencimiento */}
-                  <div className="relative z-10 flex items-center justify-between bg-white/85 rounded-lg sm:rounded-xl px-2.5 sm:px-3 py-1 sm:py-1.5 border border-[#B88A72]/35">
-                    <div className="text-left">
-                      <span className="text-[6.5px] sm:text-[7px] uppercase tracking-widest text-[#7A6260] block leading-none mb-0.5">
-                        Código de Canje
-                      </span>
-                      <span className="font-mono text-[11px] sm:text-sm font-bold tracking-[0.18em] text-[#3D1D1C] leading-none block">
-                        {giftCard.codigo}
-                      </span>
-                    </div>
-                    <div className="text-right">
-                      <span className="text-[6.5px] sm:text-[7px] uppercase tracking-widest text-[#7A6260] block leading-none mb-0.5">
-                        Vigencia
-                      </span>
-                      <span className="text-[9.5px] sm:text-[10px] font-medium text-[#3D1D1C] leading-none block">
-                        {giftCard.fecha_vencimiento || 'Válida 3 meses'}
-                      </span>
-                    </div>
-                  </div>
-                </div>
+                {/* ==================== CARA TRASERA (NUEVO DISEÑO BOTÁNICO CON ONDAS) ==================== */}
+                <ReversoTarjetaLumiere giftCard={giftCard} />
               </div>
             </div>
 
