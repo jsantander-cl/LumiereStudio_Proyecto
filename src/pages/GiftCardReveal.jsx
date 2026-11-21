@@ -336,7 +336,7 @@ export default function GiftCardReveal() {
   const [errorMsg, setErrorMsg] = useState('')
 
   // Fases coreografiadas del sobre:
-  // 'cerrado' | 'girandoSello' | 'abriendoListones' | 'cerrandoListones' | 'cerrandoSello'
+  // 'cerrado' | 'girandoSello' | 'abriendoListones' | 'preparandoCierre' | 'cerrandoListones' | 'cerrandoSello'
   const [faseSobre, setFaseSobre] = useState('cerrado')
   const [guardandoTarjeta, setGuardandoTarjeta] = useState(false)
 
@@ -347,7 +347,7 @@ export default function GiftCardReveal() {
 
   const canvasRef = useRef(null)
 
-  // Partículas ambientales doradas en Canvas
+  // Partículas ambientales doradas en Canvas (95 partículas con brillo reforzado)
   useEffect(() => {
     const canvas = canvasRef.current
     if (!canvas) return
@@ -361,13 +361,13 @@ export default function GiftCardReveal() {
     resize()
     window.addEventListener('resize', resize)
 
-    const particles = Array.from({ length: 45 }, () => ({
+    const particles = Array.from({ length: 95 }, () => ({
       x: Math.random() * canvas.width,
       y: Math.random() * canvas.height,
-      size: Math.random() * 2.2 + 0.6,
+      size: Math.random() * 2.4 + 0.8,
       speedX: (Math.random() - 0.5) * 0.35,
       speedY: -Math.random() * 0.45 - 0.12,
-      alpha: Math.random() * 0.7 + 0.2,
+      alpha: Math.random() * 0.75 + 0.25,
       pulse: Math.random() * 0.03 + 0.01,
     }))
 
@@ -385,7 +385,16 @@ export default function GiftCardReveal() {
         if (p.x < 0) p.x = canvas.width
         if (p.x > canvas.width) p.x = 0
 
-        ctx.fillStyle = `rgba(230, 199, 134, ${Math.max(0.08, Math.min(0.85, p.alpha))})`
+        const currentAlpha = Math.max(0.18, Math.min(1, p.alpha))
+
+        // Halo exterior suave para dar brillo sin perder rendimiento
+        ctx.fillStyle = `rgba(245, 215, 145, ${currentAlpha * 0.25})`
+        ctx.beginPath()
+        ctx.arc(p.x, p.y, p.size * 2.4, 0, Math.PI * 2)
+        ctx.fill()
+
+        // Núcleo brillante dorado
+        ctx.fillStyle = `rgba(250, 224, 160, ${currentAlpha})`
         ctx.beginPath()
         ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2)
         ctx.fill()
@@ -467,7 +476,7 @@ export default function GiftCardReveal() {
   }
 
   // CIERRE EN REVERSA:
-  // Paso 1: La tarjeta se guarda hacia el sobre -> Paso 2: Se cierran listones bordó -> Paso 3: Sello gira -360°
+  // Paso 1: La tarjeta se guarda -> Paso 2: Aparece el sobre abierto y se cierran los lazos -> Paso 3: Sello gira -> Paso 4: Aparecen textos
   function handleCerrarSobreReversa() {
     if (guardandoTarjeta) return
     setGuardandoTarjeta(true)
@@ -475,17 +484,25 @@ export default function GiftCardReveal() {
     // Espera a que termine la animación de guardado de la tarjeta (550ms)
     setTimeout(() => {
       setRotada(false)
-      setFaseSobre('cerrandoListones')
+      // Inicia con listones abiertos y textos ocultos para que se vea el cierre limpio de los lazos
+      setFaseSobre('preparandoCierre')
       setEtapa('sobre')
       setGuardandoTarjeta(false)
 
-      // Luego de cerrarse los listones y solapa (650ms), el sello gira -360° para quedar cerrado
-      setTimeout(() => {
-        setFaseSobre('cerrandoSello')
-        setTimeout(() => {
-          setFaseSobre('cerrado')
-        }, 580)
-      }, 650)
+      // En el siguiente frame activa la animación de cierre de los listones y solapa
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          setFaseSobre('cerrandoListones')
+
+          // Luego de cerrarse los listones y solapa (700ms), aparece y gira el sello dorado
+          setTimeout(() => {
+            setFaseSobre('cerrandoSello')
+            setTimeout(() => {
+              setFaseSobre('cerrado')
+            }, 580)
+          }, 700)
+        })
+      })
     }, 550)
   }
 
@@ -514,12 +531,20 @@ export default function GiftCardReveal() {
   }
 
   // Estados derivados para controlar visualmente el sobre en apertura y reversa
-  const listonesAbiertos = faseSobre === 'abriendoListones' || faseSobre === 'cerrandoListones'
+  const listonesAbiertos = faseSobre === 'abriendoListones' || faseSobre === 'preparandoCierre'
   const selloGirando360 = faseSobre === 'girandoSello'
-  const selloOculto = faseSobre === 'abriendoListones' || faseSobre === 'cerrandoListones'
+  const selloOculto =
+    faseSobre === 'abriendoListones' ||
+    faseSobre === 'preparandoCierre' ||
+    faseSobre === 'cerrandoListones'
+  const ocultandoTextosSobre =
+    faseSobre === 'abriendoListones' ||
+    faseSobre === 'preparandoCierre' ||
+    faseSobre === 'cerrandoListones' ||
+    faseSobre === 'cerrandoSello'
 
   return (
-    <div className="min-h-screen sm:min-h-[100dvh] bg-[#140D0C] text-[#FAF6F2] flex flex-col items-center justify-start sm:justify-center pt-6 pb-8 px-4 sm:p-8 relative overflow-x-hidden font-sans select-none">
+    <div className="min-h-screen sm:min-h-[100dvh] bg-[#140D0C] text-[#FAF6F2] flex flex-col items-center justify-start sm:justify-center pt-14 pb-8 px-4 sm:p-8 relative overflow-x-hidden font-sans select-none">
       {/* Animaciones personalizadas de revelación y guardado en reversa */}
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap');
@@ -582,12 +607,15 @@ export default function GiftCardReveal() {
       <div className="fixed inset-0 pointer-events-none bg-[radial-gradient(circle_at_50%_35%,rgba(184,138,114,0.18)_0%,rgba(29,18,17,0.85)_55%,rgba(16,10,9,1)_95%)] z-0" />
 
       {/* Canvas de polvo dorado flotante */}
-      <canvas ref={canvasRef} className="fixed inset-0 w-full h-full pointer-events-none z-0 opacity-75" />
+      <canvas
+        ref={canvasRef}
+        className="fixed inset-0 w-full h-full pointer-events-none z-[1] opacity-75"
+      />
 
       {/* CONTENEDOR PRINCIPAL */}
       <div className="w-full max-w-[460px] md:max-w-[520px] relative z-10 flex flex-col items-center">
         {/* CINTA SUPERIOR DE MARCA */}
-        <div className="w-full flex items-center justify-between mb-4 sm:mb-6 px-1">
+        <div className="w-full flex items-center justify-between mb-7 sm:mb-6 px-1">
           <div className="flex items-center gap-2">
             <span className="w-1.5 h-1.5 rounded-full bg-[#E6C786] shadow-[0_0_8px_rgba(230,199,134,0.9)]" />
             <span className="text-[10px] uppercase tracking-[0.28em] text-[#D0C5B5]">
@@ -608,7 +636,7 @@ export default function GiftCardReveal() {
         {/* ETAPA 1: INGRESO DE CÓDIGO SECRETO (EL CANDADO DEL SOBRE)             */}
         {/* ===================================================================== */}
         {etapa === 'codigo' && (
-          <div className="w-full bg-[#FAF6F2] text-[#3D1D1C] rounded-[28px] p-7 sm:p-10 shadow-[0_24px_60px_rgba(0,0,0,0.85)] border border-[#B88A72]/60 relative overflow-hidden transition-all duration-500">
+          <div className="w-full mt-2 sm:mt-0 bg-[#FAF6F2] text-[#3D1D1C] rounded-[28px] p-7 sm:p-10 shadow-[0_24px_60px_rgba(0,0,0,0.85)] border border-[#B88A72]/60 relative overflow-hidden transition-all duration-500">
             <div className="absolute inset-3 rounded-[20px] border border-[#B88A72]/35 pointer-events-none" />
 
             <div className="text-center space-y-2 mb-6 sm:mb-7 relative z-10">
@@ -668,13 +696,20 @@ export default function GiftCardReveal() {
         {/* ===================================================================== */}
         {etapa === 'sobre' && giftCard && (
           <div
-            className={`w-full flex flex-col items-center space-y-5 sm:space-y-6 transition-all duration-700 ${
+            className={`w-full pt-2 sm:pt-0 flex flex-col items-center space-y-5 sm:space-y-6 transition-all duration-700 ${
               faseSobre === 'abriendoListones'
                 ? 'scale-105 opacity-0 translate-y-4'
                 : 'opacity-100 scale-100 translate-y-0'
             }`}
           >
-            <div className="text-center space-y-1">
+            {/* TÍTULO DEL SOBRE: oculto mientras se cierran los lazos en reversa */}
+            <div
+              className={`text-center space-y-1 transition-all duration-500 ${
+                ocultandoTextosSobre
+                  ? 'opacity-0 -translate-y-2 pointer-events-none'
+                  : 'opacity-100 translate-y-0'
+              }`}
+            >
               <h2 className="font-serif text-3xl text-[#FAF6F2] italic">
                 Un Obsequio Reservado
               </h2>
@@ -726,18 +761,13 @@ export default function GiftCardReveal() {
                 <div className="h-full w-[1px] bg-gradient-to-b from-[#E6C786]/65 via-[#E6C786]/35 to-transparent" />
               </div>
 
-              {/* Detalles superiores sobre el papel blanco hueso */}
+              {/* Detalles superiores sobre el papel blanco hueso (sin cápsula de código) */}
               <div className="relative z-20 flex justify-between items-start w-full pointer-events-none">
                 <div className="flex flex-col">
                   <span className="text-[9px] tracking-[0.22em] text-[#5C2026] uppercase font-bold">
                     Lumiere Studio
                   </span>
                   <span className="text-[10px] text-[#7A6260]">Edición Exclusiva</span>
-                </div>
-                <div className="px-2.5 py-1 rounded-full bg-[#3D161A]/10 border border-[#5C2026]/25 backdrop-blur-sm">
-                  <span className="font-mono text-[10px] text-[#4A1B20] font-semibold tracking-wider">
-                    {giftCard.codigo}
-                  </span>
                 </div>
               </div>
 
@@ -786,8 +816,14 @@ export default function GiftCardReveal() {
               </div>
             </div>
 
-            {/* Botón Principal Dorado */}
-            <div className="w-full space-y-2 text-center pt-1">
+            {/* Botón Principal Dorado: aparece solo cuando termina la animación de cierre */}
+            <div
+              className={`w-full space-y-2 text-center pt-1 transition-all duration-500 ${
+                ocultandoTextosSobre
+                  ? 'opacity-0 translate-y-2 pointer-events-none'
+                  : 'opacity-100 translate-y-0'
+              }`}
+            >
               <button
                 type="button"
                 onClick={handleDesatarSobre}
@@ -809,7 +845,7 @@ export default function GiftCardReveal() {
         {/* ETAPA 3: TARJETA FÍSICA RECREADA CON ANIMACIÓN DE EMERGENCIA + 180°   */}
         {/* ===================================================================== */}
         {etapa === 'revelada' && giftCard && (
-          <div className="w-full space-y-4 sm:space-y-5">
+          <div className="w-full pt-2 sm:pt-0 space-y-4 sm:space-y-5">
             <div
               className={`text-center space-y-0.5 transition-opacity duration-300 ${
                 guardandoTarjeta ? 'opacity-0' : 'animate-controles-entrada'
@@ -913,10 +949,14 @@ export default function GiftCardReveal() {
         )}
       </div>
 
-      {/* Enlace discreto para volver a la web */}
+      {/* Enlace discreto para volver a la web: oculto durante el cierre del sobre */}
       <Link
         to="/"
-        className="mt-6 sm:mt-8 text-[10px] text-[#FAF6F2]/50 hover:text-[#FAF6F2] tracking-[0.25em] uppercase transition-colors z-10"
+        className={`mt-6 sm:mt-8 text-[10px] text-[#FAF6F2]/50 hover:text-[#FAF6F2] tracking-[0.25em] uppercase transition-all duration-300 z-10 ${
+          guardandoTarjeta || (etapa === 'sobre' && ocultandoTextosSobre)
+            ? 'opacity-0 pointer-events-none'
+            : 'opacity-100'
+        }`}
       >
         ← Volver a Lumiere Studio
       </Link>
