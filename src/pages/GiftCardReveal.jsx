@@ -2,26 +2,15 @@ import { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 
-// Parte delantera exacta de la Gift Card Lumiere usando tus archivos SVG reales + efecto Foil
-function FrenteTarjetaLumiere({ brilloPos }) {
-  const foilOffset = brilloPos.activo ? brilloPos.x : 32
-
+// Parte delantera exacta de la Gift Card Lumiere con Foil Dorado automático en Logo, Letras y Ornamentos
+function FrenteTarjetaLumiere() {
   return (
     <div
       style={{ backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden' }}
-      className="absolute inset-0 w-full h-full rounded-[22px] sm:rounded-[26px] bg-gradient-to-br from-[#F7F1EC] via-[#F3EAE2] to-[#ECE1D8] text-[#4A2C24] shadow-[0_30px_70px_rgba(0,0,0,0.9),0_0_25px_rgba(184,138,114,0.25)] border-[1.5px] border-[#C9A088] overflow-hidden select-none"
+      className="absolute inset-0 w-full h-full rounded-[22px] sm:rounded-[26px] bg-gradient-to-br from-[#F7F1EC] via-[#F3EAE2] to-[#ECE1D8] text-[#4A2C24] shadow-[0_30px_70px_rgba(0,0,0,0.9),0_0_25px_rgba(212,175,90,0.22)] border-[1.5px] border-[#D4B475] overflow-hidden select-none"
     >
-      {/* Destello Foil especular limpio que barre la tarjeta al aparecer, mover o girar */}
-      <div
-        className="absolute inset-0 pointer-events-none transition-all duration-700 ease-out z-20"
-        style={{
-          opacity: brilloPos.activo ? 0.85 : 0.25,
-          background: `linear-gradient(115deg, transparent ${foilOffset - 28}%, rgba(255, 250, 245, 0.92) ${foilOffset}%, rgba(214, 165, 138, 0.4) ${foilOffset + 14}%, transparent ${foilOffset + 38}%)`,
-        }}
-      />
-
       {/* LÍNEA DIVISORIA VERTICAL CENTRAL */}
-      <div className="absolute top-[13%] bottom-[13%] left-[44%] w-[1px] bg-gradient-to-b from-transparent via-[#8C5E48]/60 to-transparent pointer-events-none z-10" />
+      <div className="absolute top-[13%] bottom-[13%] left-[44%] w-[1px] bg-gradient-to-b from-transparent via-[#A88238]/55 to-transparent pointer-events-none z-10" />
 
       {/* RAMA BOTÁNICA SUPERIOR DERECHA (Archivo real: /svg/hojasGiftcard.svg) */}
       <img
@@ -33,12 +22,17 @@ function FrenteTarjetaLumiere({ brilloPos }) {
 
       {/* CONTENIDO PRINCIPAL DIVIDIDO EN 2 COLUMNAS */}
       <div className="relative z-10 w-full h-full grid grid-cols-12 items-center px-3 sm:px-5">
-        {/* ================= MITAD IZQUIERDA: LOGO SVG CON EFECTO FOIL COBRIZO ================= */}
-        <div className="col-span-5 flex items-center justify-center pr-1">
+        {/* ================= MITAD IZQUIERDA: LOGO SVG EN FOIL DORADO AUTOMÁTICO ================= */}
+        <div
+          className="col-span-5 flex items-center justify-center pr-1"
+          style={{
+            filter:
+              'drop-shadow(0px -0.6px 0px rgba(72, 48, 10, 0.42)) drop-shadow(0px 1px 0px rgba(255, 255, 255, 0.85))',
+          }}
+        >
           <div
-            className="w-full max-w-[165px] aspect-[0.88/1] transition-all duration-500"
+            className="w-full max-w-[165px] aspect-[0.88/1] foil-gold-surface"
             style={{
-              backgroundImage: `linear-gradient(125deg, #4A2B22 0%, #8C5847 ${Math.max(10, foilOffset - 22)}%, #E6BBA4 ${foilOffset}%, #7A4B3C ${Math.min(90, foilOffset + 22)}%, #3B2019 100%)`,
               WebkitMaskImage: "url('/svg/LogoLumiereSVG2.svg')",
               maskImage: "url('/svg/LogoLumiereSVG2.svg')",
               WebkitMaskSize: 'contain',
@@ -52,7 +46,7 @@ function FrenteTarjetaLumiere({ brilloPos }) {
           />
         </div>
 
-        {/* ================= MITAD DERECHA: GIFT CARD (MÁS ANCHA, GRUESA Y ACHATADA) ================= */}
+        {/* ================= MITAD DERECHA: GIFT CARD EN FOIL DORADO ESTAMPADO ================= */}
         <div className="col-span-7 flex flex-col items-center justify-center pl-2 pt-7 text-center">
           {/* Bloque tipográfico GIFT + CARD */}
           <div className="flex flex-col items-center leading-none">
@@ -60,12 +54,10 @@ function FrenteTarjetaLumiere({ brilloPos }) {
             <span
               style={{
                 fontFamily: "'Montserrat', sans-serif",
-                backgroundImage: `linear-gradient(110deg, #8C5847 0%, #E7BFA9 ${foilOffset}%, #5A3328 100%)`,
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                filter: 'drop-shadow(0px 1px 0px rgba(255,255,255,0.65))',
+                filter:
+                  'drop-shadow(0px -0.6px 0px rgba(72, 48, 10, 0.5)) drop-shadow(0px 1px 0px rgba(255, 255, 255, 0.85))',
               }}
-              className="text-[14px] sm:text-[17px] tracking-[0.5em] uppercase font-semibold ml-3 -mb-1 sm:-mb-1.5 z-10 transition-all duration-500"
+              className="text-[14px] sm:text-[17px] tracking-[0.5em] uppercase font-semibold ml-3 -mb-1 sm:-mb-1.5 z-10 foil-gold-text"
             >
               GIFT
             </span>
@@ -75,49 +67,66 @@ function FrenteTarjetaLumiere({ brilloPos }) {
               style={{
                 fontFamily: "'Playfair Display', serif",
                 transform: 'scaleX(1.16) scaleY(0.92)',
-                backgroundImage: `linear-gradient(115deg, #7A4A3B 0%, #C6927A ${Math.max(8, foilOffset - 18)}%, #F4D5C3 ${foilOffset}%, #6B3E31 ${Math.min(92, foilOffset + 20)}%, #381D16 100%)`,
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                filter: 'drop-shadow(0px 1px 0px rgba(255,255,255,0.7))',
+                filter:
+                  'drop-shadow(0px -0.8px 0px rgba(68, 45, 8, 0.55)) drop-shadow(0px 1.2px 0px rgba(255, 255, 255, 0.9))',
               }}
-              className="flex items-baseline justify-center font-bold tracking-[0.03em] leading-[0.88] origin-center transition-all duration-500"
+              className="flex items-baseline justify-center font-bold tracking-[0.03em] leading-[0.88] origin-center foil-gold-text"
             >
               <span className="text-[54px] sm:text-[68px] mr-[1px]">C</span>
               <span className="text-[44px] sm:text-[55px]">ARD</span>
             </h2>
           </div>
 
-          {/* ORNAMENTO CALIGRÁFICO CURVO EN FORMA DE OLA + ESTRELLA CENTRAL ✦ */}
-          <div className="w-full max-w-[235px] flex items-center justify-center my-2">
+          {/* ORNAMENTO CALIGRÁFICO CURVO EN FORMA DE OLA + ESTRELLA CENTRAL ✦ EN ORO */}
+          <div
+            className="w-full max-w-[235px] flex items-center justify-center my-2"
+            style={{
+              filter:
+                'drop-shadow(0px -0.5px 0px rgba(72, 48, 10, 0.45)) drop-shadow(0px 0.8px 0px rgba(255, 255, 255, 0.8))',
+            }}
+          >
             <svg viewBox="0 0 360 32" className="w-full h-5 overflow-visible">
+              <defs>
+                <linearGradient id="lumiereGoldFoil" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stopColor="#7C591A" />
+                  <stop offset="28%" stopColor="#C99E3E" />
+                  <stop offset="50%" stopColor="#F4DC94" />
+                  <stop offset="72%" stopColor="#B88B2E" />
+                  <stop offset="100%" stopColor="#6E4E14" />
+                </linearGradient>
+              </defs>
               <path
                 d="M 4 25 C 32 4, 72 8, 108 17 C 134 23, 152 21, 166 13 C 151 19, 134 20, 109 14 C 72 5, 32 2, 4 25 Z"
-                fill="#4A2B22"
+                fill="url(#lumiereGoldFoil)"
               />
               <path
                 d="M 180 3 L 182.4 13.2 L 191 15.5 L 182.4 17.8 L 180 28 L 177.6 17.8 L 169 15.5 L 177.6 13.2 Z"
-                fill="#3D1D1C"
+                fill="url(#lumiereGoldFoil)"
               />
               <path
                 d="M 356 23 C 328 3, 288 7, 252 16 C 226 22, 208 20, 194 12 C 209 18, 226 19, 251 13 C 288 4, 328 1, 356 23 Z"
-                fill="#4A2B22"
+                fill="url(#lumiereGoldFoil)"
               />
             </svg>
           </div>
 
-          {/* Lema: BELLEZA QUE ILUMINA */}
+          {/* Lema: BELLEZA QUE ILUMINA en Foil Dorado */}
           <p
-            style={{ fontFamily: "'Montserrat', sans-serif" }}
-            className="text-[8.5px] sm:text-[10px] tracking-[0.34em] uppercase text-[#5C3A30] font-medium"
+            style={{
+              fontFamily: "'Montserrat', sans-serif",
+              filter:
+                'drop-shadow(0px -0.5px 0px rgba(72, 48, 10, 0.45)) drop-shadow(0px 0.8px 0px rgba(255, 255, 255, 0.8))',
+            }}
+            className="text-[8.5px] sm:text-[10px] tracking-[0.34em] uppercase font-semibold foil-gold-text"
           >
             BELLEZA QUE ILUMINA
           </p>
 
-          {/* Líneas laterales + Corazón real (w-8 h-8) */}
+{/* Líneas laterales + Corazón en Foil Dorado Estampado */}
           <div className="flex items-center justify-center gap-3 mt-1.5 w-full max-w-[175px]">
-            <span className="h-[1px] flex-1 bg-[#5C3A30]/55" />
+            <span className="h-[1px] flex-1 bg-[#A88238]/60" />
             <div
-              className="w-8 h-8 shrink-0 bg-[#3D1D1C]"
+              className="w-8 h-8 shrink-0 foil-gold-surface"
               style={{
                 WebkitMaskImage: "url('/svg/corazon%20giftcard.svg')",
                 maskImage: "url('/svg/corazon%20giftcard.svg')",
@@ -127,10 +136,12 @@ function FrenteTarjetaLumiere({ brilloPos }) {
                 maskRepeat: 'no-repeat',
                 WebkitMaskPosition: 'center',
                 maskPosition: 'center',
+                filter:
+                  'drop-shadow(0px -0.5px 0px rgba(72, 48, 10, 0.45)) drop-shadow(0px 0.8px 0px rgba(255, 255, 255, 0.8))',
               }}
               aria-hidden="true"
             />
-            <span className="h-[1px] flex-1 bg-[#5C3A30]/55" />
+            <span className="h-[1px] flex-1 bg-[#A88238]/60" />
           </div>
         </div>
       </div>
@@ -340,14 +351,13 @@ export default function GiftCardReveal() {
   const [faseSobre, setFaseSobre] = useState('cerrado')
   const [guardandoTarjeta, setGuardandoTarjeta] = useState(false)
 
-  // Estados para la rotación 180° y brillo Foil
+  // Estado para la rotación 180° y copiado
   const [rotada, setRotada] = useState(false)
-  const [brilloPos, setBrilloPos] = useState({ x: 32, y: 50, activo: false })
   const [copiado, setCopiado] = useState(false)
 
   const canvasRef = useRef(null)
 
-  // Partículas ambientales doradas en Canvas (95 partículas con brillo reforzado)
+  // Partículas ambientales doradas en Canvas (95 partículas con brillo reforzado y opacity-75)
   useEffect(() => {
     const canvas = canvasRef.current
     if (!canvas) return
@@ -387,7 +397,7 @@ export default function GiftCardReveal() {
 
         const currentAlpha = Math.max(0.18, Math.min(1, p.alpha))
 
-        // Halo exterior suave para dar brillo sin perder rendimiento
+        // Halo exterior suave
         ctx.fillStyle = `rgba(245, 215, 145, ${currentAlpha * 0.25})`
         ctx.beginPath()
         ctx.arc(p.x, p.y, p.size * 2.4, 0, Math.PI * 2)
@@ -464,13 +474,6 @@ export default function GiftCardReveal() {
         setGuardandoTarjeta(false)
         setEtapa('revelada')
         setFaseSobre('cerrado')
-
-        // Destello automático que recorre la tarjeta apenas termina de emerger
-        setTimeout(() => {
-          setBrilloPos({ x: 15, y: 50, activo: true })
-          setTimeout(() => setBrilloPos({ x: 85, y: 50, activo: true }), 260)
-          setTimeout(() => setBrilloPos({ x: 35, y: 50, activo: false }), 950)
-        }, 450)
       }, 750)
     }, 580)
   }
@@ -484,7 +487,6 @@ export default function GiftCardReveal() {
     // Espera a que termine la animación de guardado de la tarjeta (550ms)
     setTimeout(() => {
       setRotada(false)
-      // Inicia con listones abiertos y textos ocultos para que se vea el cierre limpio de los lazos
       setFaseSobre('preparandoCierre')
       setEtapa('sobre')
       setGuardandoTarjeta(false)
@@ -504,23 +506,6 @@ export default function GiftCardReveal() {
         })
       })
     }, 550)
-  }
-
-  // Efecto de destello foil al mover el mouse o dedo sobre la tarjeta
-  function handleMovimientoTarjeta(e) {
-    const rect = e.currentTarget.getBoundingClientRect()
-    const clientX = e.touches ? e.touches[0].clientX : e.clientX
-    const clientY = e.touches ? e.touches[0].clientY : e.clientY
-    const x = ((clientX - rect.left) / rect.width) * 100
-    const y = ((clientY - rect.top) / rect.height) * 100
-    setBrilloPos({ x, y, activo: true })
-  }
-
-  // Al presionar el botón rotar, también hace un barrido de luz foil
-  function handleRotarConBrillo() {
-    setBrilloPos({ x: rotada ? 20 : 80, y: 50, activo: true })
-    setRotada((prev) => !prev)
-    setTimeout(() => setBrilloPos((p) => ({ ...p, activo: false })), 750)
   }
 
   function handleCopiarCodigo() {
@@ -545,9 +530,56 @@ export default function GiftCardReveal() {
 
   return (
     <div className="min-h-screen sm:min-h-[100dvh] bg-[#140D0C] text-[#FAF6F2] flex flex-col items-center justify-start sm:justify-center pt-14 pb-8 px-4 sm:p-8 relative overflow-x-hidden font-sans select-none">
-      {/* Animaciones personalizadas de revelación y guardado en reversa */}
+     {/* Animaciones personalizadas de revelación, guardado y Foil Dorado Estampado Automático */}
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap');
+
+        @keyframes foilMetallicSweep {
+          0%, 15% {
+            background-position: 100% 50%;
+          }
+          60%, 100% {
+            background-position: 0% 50%;
+          }
+        }
+
+        .foil-gold-surface {
+          background-image: linear-gradient(
+            115deg,
+            #8C6720 0%,
+            #9E7627 25%,
+            #C4993E 38%,
+            #E9CE7D 46%,
+            #FFF7D6 50%,
+            #E9CE7D 54%,
+            #C4993E 62%,
+            #9E7627 75%,
+            #8C6720 100%
+          );
+          background-size: 320% 100%;
+          animation: foilMetallicSweep 5.2s ease-in-out infinite;
+        }
+
+        .foil-gold-text {
+          background-image: linear-gradient(
+            115deg,
+            #8C6720 0%,
+            #9E7627 25%,
+            #C4993E 38%,
+            #E9CE7D 46%,
+            #FFF7D6 50%,
+            #E9CE7D 54%,
+            #C4993E 62%,
+            #9E7627 75%,
+            #8C6720 100%
+          );
+          background-size: 320% 100%;
+          -webkit-background-clip: text;
+          background-clip: text;
+          -webkit-text-fill-color: transparent;
+          color: transparent;
+          animation: foilMetallicSweep 5.2s ease-in-out infinite;
+        }
 
         @keyframes revelarTarjeta3D {
           0% {
@@ -606,7 +638,7 @@ export default function GiftCardReveal() {
       {/* Resplandor ambiental central */}
       <div className="fixed inset-0 pointer-events-none bg-[radial-gradient(circle_at_50%_35%,rgba(184,138,114,0.18)_0%,rgba(29,18,17,0.85)_55%,rgba(16,10,9,1)_95%)] z-0" />
 
-      {/* Canvas de polvo dorado flotante */}
+      {/* Canvas de polvo dorado flotante (opacity-75) */}
       <canvas
         ref={canvasRef}
         className="fixed inset-0 w-full h-full pointer-events-none z-[1] opacity-75"
@@ -866,26 +898,23 @@ export default function GiftCardReveal() {
               className={`relative w-full [perspective:1500px] ${
                 guardandoTarjeta ? 'animate-guardar-tarjeta' : 'animate-revelar-tarjeta'
               }`}
-              onMouseMove={handleMovimientoTarjeta}
-              onTouchMove={handleMovimientoTarjeta}
-              onMouseLeave={() => setBrilloPos((p) => ({ ...p, activo: false }))}
             >
-              {/* Halo cobrizo detrás de la tarjeta */}
-              <div className="absolute -inset-3 bg-gradient-to-tr from-[#B88A72]/25 via-[#E6C786]/15 to-transparent rounded-3xl blur-2xl pointer-events-none" />
+              {/* Halo dorado detrás de la tarjeta */}
+              <div className="absolute -inset-3 bg-gradient-to-tr from-[#D4B475]/25 via-[#E6C786]/15 to-transparent rounded-3xl blur-2xl pointer-events-none" />
 
               {/* CONTENEDOR ROTABLE 180° */}
               <div
-                onClick={handleRotarConBrillo}
+                onClick={() => setRotada((prev) => !prev)}
                 style={{
                   transform: rotada ? 'rotateY(180deg)' : 'rotateY(0deg)',
                   transformStyle: 'preserve-3d',
                 }}
                 className="relative w-full aspect-[1.586/1] transition-transform duration-700 ease-out cursor-pointer"
               >
-                {/* ==================== CARA FRONTAL (DISEÑO EXACTO TARJETA LUMIERE + FOIL) ==================== */}
-                <FrenteTarjetaLumiere brilloPos={brilloPos} />
+                {/* ==================== CARA FRONTAL (FOIL DORADO AUTOMÁTICO) ==================== */}
+                <FrenteTarjetaLumiere />
 
-                {/* ==================== CARA TRASERA (NUEVO DISEÑO BOTÁNICO CON ONDAS) ==================== */}
+                {/* ==================== CARA TRASERA (DISEÑO BOTÁNICO CON ONDAS) ==================== */}
                 <ReversoTarjetaLumiere giftCard={giftCard} />
               </div>
             </div>
@@ -898,7 +927,7 @@ export default function GiftCardReveal() {
             >
               <button
                 type="button"
-                onClick={handleRotarConBrillo}
+                onClick={() => setRotada((prev) => !prev)}
                 className="flex items-center justify-center gap-2 py-3 px-4 rounded-2xl bg-[#261716] hover:bg-[#34201F] border border-[#B88A72]/50 text-[#FAF6F2] transition-all active:scale-95 cursor-pointer shadow-md"
               >
                 <span
