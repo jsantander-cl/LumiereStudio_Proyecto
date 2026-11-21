@@ -2,14 +2,14 @@ import { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 
-// Ilustración SVG animada según el tipo de tratamiento contratado (para el reverso)
+// Ilustración SVG animada según el tipo de tratamiento contratado (adaptable a móvil)
 function AnimacionServicio({ nombreServicio = '' }) {
   const nombre = nombreServicio.toLowerCase()
 
   if (nombre.includes('lifting') || nombre.includes('pestaña')) {
     return (
-      <div className="flex flex-col items-center justify-center py-0.5">
-        <svg viewBox="0 0 200 75" className="w-36 h-14 overflow-visible">
+      <div className="flex flex-col items-center justify-center">
+        <svg viewBox="0 0 200 75" className="w-28 h-9 sm:w-36 sm:h-14 overflow-visible">
           <defs>
             <linearGradient id="cobreGrad" x1="0%" y1="0%" x2="100%" y2="0%">
               <stop offset="0%" stopColor="#B88A72" />
@@ -32,8 +32,8 @@ function AnimacionServicio({ nombreServicio = '' }) {
 
   if (nombre.includes('facial') || nombre.includes('limpieza') || nombre.includes('piel')) {
     return (
-      <div className="flex flex-col items-center justify-center py-0.5">
-        <svg viewBox="0 0 200 75" className="w-36 h-14 overflow-visible">
+      <div className="flex flex-col items-center justify-center">
+        <svg viewBox="0 0 200 75" className="w-28 h-9 sm:w-36 sm:h-14 overflow-visible">
           <defs>
             <linearGradient id="cobreGrad" x1="0%" y1="0%" x2="100%" y2="0%">
               <stop offset="0%" stopColor="#B88A72" />
@@ -52,8 +52,8 @@ function AnimacionServicio({ nombreServicio = '' }) {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center py-0.5">
-      <svg viewBox="0 0 220 75" className="w-40 h-14 overflow-visible">
+    <div className="flex flex-col items-center justify-center">
+      <svg viewBox="0 0 220 75" className="w-32 h-9 sm:w-40 sm:h-14 overflow-visible">
         <defs>
           <linearGradient id="cobreGrad" x1="0%" y1="0%" x2="100%" y2="0%">
             <stop offset="0%" stopColor="#B88A72" />
@@ -124,7 +124,7 @@ function FrenteTarjetaLumiere({ brilloPos }) {
         <div className="col-span-7 flex flex-col items-center justify-center pl-2 pt-7 text-center">
           {/* Bloque tipográfico GIFT + CARD */}
           <div className="flex flex-col items-center leading-none">
-            {/* GIFT: más abajo (cerca de CARD) y más hacia la izquierda */}
+            {/* GIFT */}
             <span
               style={{
                 fontFamily: "'Montserrat', sans-serif",
@@ -138,7 +138,7 @@ function FrenteTarjetaLumiere({ brilloPos }) {
               GIFT
             </span>
 
-            {/* CARD: mayor volumen/grosor + escala horizontal para efecto achatado */}
+            {/* CARD */}
             <h2
               style={{
                 fontFamily: "'Playfair Display', serif",
@@ -213,7 +213,11 @@ export default function GiftCardReveal() {
   const [giftCard, setGiftCard] = useState(null)
   const [buscando, setBuscando] = useState(false)
   const [errorMsg, setErrorMsg] = useState('')
-  const [desatandoSobre, setDesatandoSobre] = useState(false)
+
+  // Fases coreografiadas del sobre:
+  // 'cerrado' | 'girandoSello' | 'abriendoListones' | 'cerrandoListones' | 'cerrandoSello'
+  const [faseSobre, setFaseSobre] = useState('cerrado')
+  const [guardandoTarjeta, setGuardandoTarjeta] = useState(false)
 
   // Estados para la rotación 180° y brillo Foil
   const [rotada, setRotada] = useState(false)
@@ -310,26 +314,58 @@ export default function GiftCardReveal() {
 
     setGiftCard(data)
     setBuscando(false)
+    setFaseSobre('cerrado')
     setEtapa('sobre')
   }
 
-  // Secuencia animada: Romper sello -> Desatar cintas -> Emerger tarjeta -> Barrido Foil automático
+  // APERTURA EN 2 PASOS:
+  // Paso 1: Sello dorado gira 360° -> Paso 2: Se abren listones bordó y solapa -> Paso 3: Emerge tarjeta 3D
   function handleDesatarSobre() {
-    if (desatandoSobre) return
-    setDesatandoSobre(true)
+    if (faseSobre !== 'cerrado') return
+    setFaseSobre('girandoSello')
 
+    // Al terminar el giro 360° del botón (580ms), se abren los listones bordó y la solapa
+    setTimeout(() => {
+      setFaseSobre('abriendoListones')
+
+      // Al terminar de abrirse los listones (750ms después), emerge la tarjeta
+      setTimeout(() => {
+        setRotada(false)
+        setGuardandoTarjeta(false)
+        setEtapa('revelada')
+        setFaseSobre('cerrado')
+
+        // Destello automático que recorre la tarjeta apenas termina de emerger
+        setTimeout(() => {
+          setBrilloPos({ x: 15, y: 50, activo: true })
+          setTimeout(() => setBrilloPos({ x: 85, y: 50, activo: true }), 260)
+          setTimeout(() => setBrilloPos({ x: 35, y: 50, activo: false }), 950)
+        }, 450)
+      }, 750)
+    }, 580)
+  }
+
+  // CIERRE EN REVERSA:
+  // Paso 1: La tarjeta se guarda hacia el sobre -> Paso 2: Se cierran listones bordó -> Paso 3: Sello gira -360°
+  function handleCerrarSobreReversa() {
+    if (guardandoTarjeta) return
+    setGuardandoTarjeta(true)
+
+    // Espera a que termine la animación de guardado de la tarjeta (550ms)
     setTimeout(() => {
       setRotada(false)
-      setEtapa('revelada')
-      setDesatandoSobre(false)
+      setFaseSobre('cerrandoListones')
+      setEtapa('sobre')
+      setGuardandoTarjeta(false)
 
-      // Destello automático que recorre la tarjeta apenas termina de emerger
+      // Luego de cerrarse los listones y solapa (650ms), el sello gira -360° para quedar cerrado
       setTimeout(() => {
-        setBrilloPos({ x: 15, y: 50, activo: true })
-        setTimeout(() => setBrilloPos({ x: 85, y: 50, activo: true }), 260)
-        setTimeout(() => setBrilloPos({ x: 35, y: 50, activo: false }), 950)
-      }, 450)
-    }, 800)
+        setFaseSobre('cerrandoSello')
+        setTimeout(() => {
+          setFaseSobre('cerrado')
+        }, 580)
+      }, 650)
+    }, 550)
   }
 
   // Efecto de destello foil al mover el mouse o dedo sobre la tarjeta
@@ -356,9 +392,14 @@ export default function GiftCardReveal() {
     setTimeout(() => setCopiado(false), 2200)
   }
 
+  // Estados derivados para controlar visualmente el sobre en apertura y reversa
+  const listonesAbiertos = faseSobre === 'abriendoListones' || faseSobre === 'cerrandoListones'
+  const selloGirando360 = faseSobre === 'girandoSello'
+  const selloOculto = faseSobre === 'abriendoListones' || faseSobre === 'cerrandoListones'
+
   return (
-    <div className="min-h-screen bg-[#140D0C] text-[#FAF6F2] flex flex-col items-center justify-center p-4 sm:p-8 relative overflow-hidden font-sans select-none">
-      {/* Animaciones personalizadas de revelación y fuentes */}
+    <div className="min-h-[100dvh] bg-[#140D0C] text-[#FAF6F2] flex flex-col items-center justify-center p-4 sm:p-8 relative overflow-hidden font-sans select-none">
+      {/* Animaciones personalizadas de revelación y guardado en reversa */}
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Playfair+Display:wght@600;700&display=swap');
 
@@ -380,6 +421,17 @@ export default function GiftCardReveal() {
           }
         }
 
+        @keyframes guardarTarjeta3D {
+          0% {
+            opacity: 1;
+            transform: translateY(0px) scale(1) rotateX(0deg);
+          }
+          100% {
+            opacity: 0;
+            transform: translateY(80px) scale(0.84) rotateX(24deg);
+          }
+        }
+
         @keyframes fadeUpControls {
           0% {
             opacity: 0;
@@ -395,6 +447,10 @@ export default function GiftCardReveal() {
           animation: revelarTarjeta3D 1.05s cubic-bezier(0.22, 1, 0.36, 1) forwards;
         }
 
+        .animate-guardar-tarjeta {
+          animation: guardarTarjeta3D 0.55s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
         .animate-controles-entrada {
           opacity: 0;
           animation: fadeUpControls 0.65s ease-out 0.35s forwards;
@@ -408,7 +464,7 @@ export default function GiftCardReveal() {
       <canvas ref={canvasRef} className="fixed inset-0 pointer-events-none z-0 opacity-75" />
 
       {/* CONTENEDOR PRINCIPAL */}
-      <div className="w-full max-w-[460px] relative z-10 flex flex-col items-center">
+      <div className="w-full max-w-[460px] md:max-w-[520px] relative z-10 flex flex-col items-center">
         {/* CINTA SUPERIOR DE MARCA */}
         <div className="w-full flex items-center justify-between mb-6 px-1">
           <div className="flex items-center gap-2">
@@ -487,12 +543,14 @@ export default function GiftCardReveal() {
         )}
 
         {/* ===================================================================== */}
-        {/* ETAPA 2: EL SOBRE DE LUJO CON CINTAS DE SEDA Y SELLO DE LACRE         */}
+        {/* ETAPA 2: SOBRE BLANCO HUESO CON LISTONES BORDÓ Y SELLO DE LACRE       */}
         {/* ===================================================================== */}
         {etapa === 'sobre' && giftCard && (
           <div
             className={`w-full flex flex-col items-center space-y-6 transition-all duration-700 ${
-              desatandoSobre ? 'scale-105 opacity-0 translate-y-4' : 'opacity-100 scale-100'
+              faseSobre === 'abriendoListones'
+                ? 'scale-105 opacity-0 translate-y-4'
+                : 'opacity-100 scale-100 translate-y-0'
             }`}
           >
             <div className="text-center space-y-1">
@@ -504,84 +562,95 @@ export default function GiftCardReveal() {
               </p>
             </div>
 
-            {/* EL SOBRE INTERACTIVO */}
-            <div className="relative w-full aspect-[1.52/1] rounded-2xl bg-gradient-to-br from-[#2B1C1B] via-[#201413] to-[#140C0B] shadow-[0_28px_60px_-10px_rgba(0,0,0,0.9),0_0_25px_rgba(184,138,114,0.2)] border border-[#B88A72]/40 p-5 flex flex-col justify-between overflow-hidden">
-              {/* Asomo luminoso de la tarjeta subiendo al abrirse el sobre */}
+            {/* EL SOBRE BLANCO HUESO INTERACTIVO */}
+            <div className="relative w-full aspect-[1.52/1] rounded-2xl bg-gradient-to-br from-[#FAF6F2] via-[#F2E9DF] to-[#E6D9CC] shadow-[0_28px_60px_-10px_rgba(0,0,0,0.85),0_0_25px_rgba(250,246,242,0.18)] border border-[#D4C2B2] p-5 flex flex-col justify-between overflow-hidden">
+              {/* Marco fino interior del papel */}
+              <div className="absolute inset-2 rounded-xl border border-[#B88A72]/30 pointer-events-none z-5" />
+
+              {/* Asomo luminoso de la tarjeta subiendo al abrirse el sobre (y bajando en reversa) */}
               <div
-                className={`absolute inset-x-6 bottom-2 h-[78%] rounded-t-xl bg-gradient-to-b from-[#FAF6F2] to-[#E8D8CC] border border-[#C9A088] shadow-2xl transition-all duration-700 z-5 ${
-                  desatandoSobre ? '-translate-y-12 opacity-100' : 'translate-y-12 opacity-0'
+                className={`absolute inset-x-6 bottom-2 h-[78%] rounded-t-xl bg-gradient-to-b from-[#FFFFFF] to-[#F4ECE5] border border-[#C9A088] shadow-2xl transition-all duration-700 ease-out z-5 ${
+                  listonesAbiertos ? '-translate-y-12 opacity-100' : 'translate-y-12 opacity-0'
                 }`}
               />
 
-              {/* Solapa triangular superior */}
+              {/* Solapa triangular superior en tono hueso ligeramente sombreado */}
               <div
-                className={`absolute top-0 inset-x-0 h-[52%] bg-gradient-to-b from-[#3A2624] to-[#271918] [clip-path:polygon(0_0,100%_0,50%_100%)] shadow-xl pointer-events-none z-10 origin-top transition-transform duration-700 ${
-                  desatandoSobre ? '-scale-y-0 opacity-0' : 'scale-y-100 opacity-100'
+                className={`absolute top-0 inset-x-0 h-[52%] bg-gradient-to-b from-[#EAE0D5] to-[#DFD2C5] [clip-path:polygon(0_0,100%_0,50%_100%)] shadow-[0_8px_18px_rgba(61,29,28,0.12)] pointer-events-none z-10 origin-top transition-transform duration-700 ease-in-out ${
+                  listonesAbiertos ? '-scale-y-0 opacity-0' : 'scale-y-100 opacity-100'
                 }`}
               />
+              {/* Filo cobrizo en el borde de la solapa */}
               <div
-                className={`absolute top-0 inset-x-0 h-[53%] bg-gradient-to-b from-transparent via-[#B88A72]/25 to-[#E6C786]/50 [clip-path:polygon(0_0,100%_0,50%_100%)] pointer-events-none z-10 transition-opacity duration-500 ${
-                  desatandoSobre ? 'opacity-0' : 'opacity-60'
+                className={`absolute top-0 inset-x-0 h-[52.5%] bg-gradient-to-b from-transparent via-[#B88A72]/20 to-[#8C5E48]/45 [clip-path:polygon(0_0,100%_0,50%_100%)] pointer-events-none z-10 transition-opacity duration-500 ${
+                  listonesAbiertos ? 'opacity-0' : 'opacity-70'
                 }`}
               />
 
-              {/* Cinta horizontal */}
+              {/* Listón horizontal BORDÓ */}
               <div
-                className={`absolute top-1/2 -translate-y-1/2 left-0 right-0 h-8 bg-gradient-to-r from-[#2D1A19] via-[#4A2C2A] to-[#2D1A19] shadow-[0_4px_16px_rgba(0,0,0,0.7)] flex items-center justify-center z-15 transition-transform duration-700 ${
-                  desatandoSobre ? 'scale-x-0' : 'scale-x-100'
+                className={`absolute top-1/2 -translate-y-1/2 left-0 right-0 h-8 bg-gradient-to-r from-[#3D161A] via-[#5C2026] to-[#3D161A] shadow-[0_4px_14px_rgba(61,22,26,0.38)] flex items-center justify-center z-15 transition-transform duration-700 ease-in-out ${
+                  listonesAbiertos ? 'scale-x-0' : 'scale-x-100'
                 }`}
               >
-                <div className="w-full h-[1px] bg-gradient-to-r from-transparent via-[#E6C786]/50 to-transparent" />
+                <div className="w-full h-[1px] bg-gradient-to-r from-transparent via-[#E6C786]/65 to-transparent" />
               </div>
 
-              {/* Cinta vertical */}
+              {/* Listón vertical BORDÓ */}
               <div
-                className={`absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-8 bg-gradient-to-b from-[#4A2C2A] via-[#2D1A19] to-[#4A2C2A] shadow-[0_0_20px_rgba(0,0,0,0.8)] flex justify-center z-15 transition-transform duration-700 ${
-                  desatandoSobre ? 'scale-y-0' : 'scale-y-100'
+                className={`absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-8 bg-gradient-to-b from-[#5C2026] via-[#3D161A] to-[#5C2026] shadow-[0_0_16px_rgba(61,22,26,0.4)] flex justify-center z-15 transition-transform duration-700 ease-in-out ${
+                  listonesAbiertos ? 'scale-y-0' : 'scale-y-100'
                 }`}
               >
-                <div className="h-full w-[1px] bg-gradient-to-b from-[#E6C786]/50 via-[#B88A72]/30 to-transparent" />
+                <div className="h-full w-[1px] bg-gradient-to-b from-[#E6C786]/65 via-[#E6C786]/35 to-transparent" />
               </div>
 
-              {/* Detalles superiores */}
+              {/* Detalles superiores sobre el papel blanco hueso */}
               <div className="relative z-20 flex justify-between items-start w-full pointer-events-none">
                 <div className="flex flex-col">
-                  <span className="text-[9px] tracking-[0.22em] text-[#E6C786] uppercase font-semibold">
+                  <span className="text-[9px] tracking-[0.22em] text-[#5C2026] uppercase font-bold">
                     Lumiere Studio
                   </span>
-                  <span className="text-[10px] text-[#D0C5B5]/70">Edición Exclusiva</span>
+                  <span className="text-[10px] text-[#7A6260]">Edición Exclusiva</span>
                 </div>
-                <div className="px-2.5 py-1 rounded-full bg-black/40 border border-[#B88A72]/30 backdrop-blur-md">
-                  <span className="font-mono text-[10px] text-[#E6C786] tracking-wider">
+                <div className="px-2.5 py-1 rounded-full bg-[#3D161A]/10 border border-[#5C2026]/25 backdrop-blur-sm">
+                  <span className="font-mono text-[10px] text-[#4A1B20] font-semibold tracking-wider">
                     {giftCard.codigo}
                   </span>
                 </div>
               </div>
 
-              {/* SELLO DE LACRE DORADO */}
+              {/* SELLO DE LACRE DORADO CON GIRO 360° ANTES DE ABRIR LISTONES */}
               <div className="relative z-30 flex items-center justify-center my-auto">
                 <button
                   type="button"
                   onClick={handleDesatarSobre}
-                  aria-label="Romper sello y abrir sobre"
-                  className={`group relative w-[76px] h-[76px] rounded-full flex items-center justify-center bg-gradient-to-b from-[#F5DFAD] via-[#D8B47C] to-[#8C5E48] shadow-[0_10px_28px_rgba(230,199,134,0.45),0_0_35px_rgba(230,199,134,0.3)] active:scale-95 transition-all duration-500 focus:outline-none cursor-pointer ${
-                    desatandoSobre ? 'scale-150 rotate-90 opacity-0' : 'hover:scale-105'
+                  aria-label="Girar sello y abrir sobre"
+                  style={{
+                    transform: selloGirando360
+                      ? 'rotate(360deg) scale(1.08)'
+                      : selloOculto
+                      ? 'rotate(360deg) scale(0.5)'
+                      : 'rotate(0deg) scale(1)',
+                  }}
+                  className={`group relative w-[76px] h-[76px] rounded-full flex items-center justify-center bg-gradient-to-b from-[#F5DFAD] via-[#D8B47C] to-[#8C5E48] shadow-[0_10px_25px_rgba(61,22,26,0.45),0_0_25px_rgba(230,199,134,0.4)] active:scale-95 transition-all duration-500 ease-in-out focus:outline-none cursor-pointer ${
+                    selloOculto ? 'opacity-0 pointer-events-none' : 'opacity-100 hover:scale-105'
                   }`}
                 >
-                  <div className="absolute -inset-2.5 rounded-full bg-[#E6C786]/25 blur-sm animate-ping pointer-events-none" />
-                  <div className="absolute inset-1 rounded-full border border-[#3D1D1C]/30 pointer-events-none" />
+                  <div className="absolute -inset-2.5 rounded-full bg-[#E6C786]/35 blur-sm animate-ping pointer-events-none" />
+                  <div className="absolute inset-1 rounded-full border border-[#3D161A]/35 pointer-events-none" />
 
                   <svg
-                    className="w-11 h-11 relative z-10 drop-shadow-[0_2px_4px_rgba(0,0,0,0.4)] group-hover:rotate-45 transition-transform duration-500"
+                    className="w-11 h-11 relative z-10 drop-shadow-[0_2px_4px_rgba(0,0,0,0.35)]"
                     fill="none"
                     viewBox="0 0 100 100"
                   >
-                    <circle cx="50" cy="50" r="44" stroke="#2D1A19" strokeOpacity="0.35" strokeWidth="2" />
-                    <circle cx="50" cy="50" r="38" stroke="#2D1A19" strokeDasharray="3 3" strokeWidth="1.5" />
+                    <circle cx="50" cy="50" r="44" stroke="#3D161A" strokeOpacity="0.4" strokeWidth="2" />
+                    <circle cx="50" cy="50" r="38" stroke="#3D161A" strokeDasharray="3 3" strokeWidth="1.5" />
                     <path
                       d="M50 15L59 41L85 50L59 59L50 85L41 59L15 50L41 41L50 15Z"
-                      fill="#2D1A19"
-                      fillOpacity="0.9"
+                      fill="#3D161A"
+                      fillOpacity="0.92"
                     />
                     <circle cx="50" cy="50" fill="#FAF6F2" r="5" />
                   </svg>
@@ -590,7 +659,7 @@ export default function GiftCardReveal() {
 
               {/* Pie del sobre */}
               <div className="relative z-20 flex justify-end items-end w-full pointer-events-none">
-                <span className="font-serif italic text-sm text-[#E6C786]">
+                <span className="font-serif italic text-sm text-[#4A1B20] font-medium">
                   De: {giftCard.remitente}
                 </span>
               </div>
@@ -601,7 +670,8 @@ export default function GiftCardReveal() {
               <button
                 type="button"
                 onClick={handleDesatarSobre}
-                className="group relative w-full overflow-hidden rounded-full bg-gradient-to-r from-[#F3DCAB] via-[#E2C083] to-[#C69B63] py-4 px-6 text-[#2D1A19] shadow-[0_12px_32px_rgba(230,199,134,0.28)] active:scale-[0.98] transition-transform cursor-pointer"
+                disabled={faseSobre !== 'cerrado'}
+                className="group relative w-full overflow-hidden rounded-full bg-gradient-to-r from-[#F3DCAB] via-[#E2C083] to-[#C69B63] py-4 px-6 text-[#2D1A19] shadow-[0_12px_32px_rgba(230,199,134,0.28)] active:scale-[0.98] transition-all disabled:opacity-75 cursor-pointer"
               >
                 <span className="relative z-10 text-xs font-bold uppercase tracking-[0.2em] flex items-center justify-center gap-2">
                   <span>✦</span> Tocar para desatar y revelar
@@ -619,7 +689,11 @@ export default function GiftCardReveal() {
         {/* ===================================================================== */}
         {etapa === 'revelada' && giftCard && (
           <div className="w-full space-y-5">
-            <div className="text-center space-y-0.5 animate-controles-entrada">
+            <div
+              className={`text-center space-y-0.5 transition-opacity duration-300 ${
+                guardandoTarjeta ? 'opacity-0' : 'animate-controles-entrada'
+              }`}
+            >
               <span className="text-[9px] uppercase tracking-[0.3em] text-[#E6C786] block">
                 {rotada ? 'Detalles de tu Experiencia' : 'Tu Gift Card Oficial'}
               </span>
@@ -630,9 +704,11 @@ export default function GiftCardReveal() {
               </p>
             </div>
 
-            {/* ESCENARIO 3D CON ANIMACIÓN DE EMERGENCIA AL APARECER */}
+            {/* ESCENARIO 3D CON ANIMACIÓN DE EMERGENCIA Y GUARDADO EN REVERSA */}
             <div
-              className="relative w-full [perspective:1500px] animate-revelar-tarjeta"
+              className={`relative w-full [perspective:1500px] ${
+                guardandoTarjeta ? 'animate-guardar-tarjeta' : 'animate-revelar-tarjeta'
+              }`}
               onMouseMove={handleMovimientoTarjeta}
               onTouchMove={handleMovimientoTarjeta}
               onMouseLeave={() => setBrilloPos((p) => ({ ...p, activo: false }))}
@@ -652,33 +728,33 @@ export default function GiftCardReveal() {
                 {/* ==================== CARA FRONTAL (DISEÑO EXACTO TARJETA LUMIERE + FOIL) ==================== */}
                 <FrenteTarjetaLumiere brilloPos={brilloPos} />
 
-                {/* ==================== CARA TRASERA (REVERSO 180° CON LOS DATOS CREADOS) ==================== */}
+                {/* ==================== CARA TRASERA (REVERSO 180° RESPONSIVO) ==================== */}
                 <div
                   style={{
                     backfaceVisibility: 'hidden',
                     WebkitBackfaceVisibility: 'hidden',
                     transform: 'rotateY(180deg)',
                   }}
-                  className="absolute inset-0 w-full h-full rounded-[22px] sm:rounded-[26px] bg-gradient-to-br from-[#FAF6F2] via-[#F4ECE5] to-[#EAE0D7] text-[#3D1D1C] p-5 sm:p-6 shadow-[0_30px_70px_rgba(0,0,0,0.9),0_0_25px_rgba(184,138,114,0.25)] border-[1.5px] border-[#B88A72] flex flex-col justify-between overflow-hidden"
+                  className="absolute inset-0 w-full h-full rounded-[22px] sm:rounded-[26px] bg-gradient-to-br from-[#FAF6F2] via-[#F4ECE5] to-[#EAE0D7] text-[#3D1D1C] p-3.5 sm:p-6 shadow-[0_30px_70px_rgba(0,0,0,0.9),0_0_25px_rgba(184,138,114,0.25)] border-[1.5px] border-[#B88A72] flex flex-col justify-between overflow-hidden"
                 >
                   {/* Marco interno fino cobrizo */}
-                  <div className="absolute inset-2.5 rounded-[16px] border border-[#B88A72]/40 pointer-events-none" />
+                  <div className="absolute inset-2 sm:inset-2.5 rounded-[15px] sm:rounded-[16px] border border-[#B88A72]/40 pointer-events-none" />
 
                   {/* Encabezado: Para y De parte de */}
-                  <div className="relative z-10 flex justify-between items-start border-b border-[#B88A72]/30 pb-2">
-                    <div className="text-left">
-                      <span className="text-[8px] uppercase tracking-[0.22em] text-[#8C5E48] font-bold block">
+                  <div className="relative z-10 flex justify-between items-start border-b border-[#B88A72]/30 pb-1 sm:pb-2 gap-2">
+                    <div className="text-left min-w-0">
+                      <span className="text-[7px] sm:text-[8px] uppercase tracking-[0.2em] text-[#8C5E48] font-bold block leading-none mb-0.5">
                         Para
                       </span>
-                      <span className="font-serif text-base sm:text-lg text-[#3D1D1C] font-medium leading-tight">
+                      <span className="font-serif text-sm sm:text-lg text-[#3D1D1C] font-medium leading-tight block truncate">
                         {giftCard.destinatario}
                       </span>
                     </div>
-                    <div className="text-right">
-                      <span className="text-[8px] uppercase tracking-[0.22em] text-[#8C5E48] font-bold block">
+                    <div className="text-right min-w-0">
+                      <span className="text-[7px] sm:text-[8px] uppercase tracking-[0.2em] text-[#8C5E48] font-bold block leading-none mb-0.5">
                         De parte de
                       </span>
-                      <span className="font-serif italic text-sm sm:text-base text-[#3D1D1C] leading-tight">
+                      <span className="font-serif italic text-xs sm:text-base text-[#3D1D1C] leading-tight block truncate">
                         {giftCard.remitente}
                       </span>
                     </div>
@@ -687,34 +763,34 @@ export default function GiftCardReveal() {
                   {/* Centro: Servicio contratado + Animación temática */}
                   <div className="relative z-10 text-center my-auto py-0.5">
                     <AnimacionServicio nombreServicio={giftCard.servicio_nombre} />
-                    <span className="text-[8px] uppercase tracking-[0.24em] text-[#7A6260] block">
+                    <span className="text-[7px] sm:text-[8px] uppercase tracking-[0.22em] text-[#7A6260] block leading-none mt-0.5">
                       Experiencia Regalo
                     </span>
-                    <h3 className="font-serif text-lg sm:text-xl text-[#3D1D1C] font-semibold leading-tight">
+                    <h3 className="font-serif text-base sm:text-xl text-[#3D1D1C] font-semibold leading-tight mt-0.5">
                       {giftCard.servicio_nombre}
                     </h3>
                     {giftCard.mensaje && (
-                      <p className="font-serif italic text-[11px] text-[#5C3A30] line-clamp-2 mt-1 px-2">
+                      <p className="font-serif italic text-[10px] sm:text-[11px] text-[#5C3A30] line-clamp-1 sm:line-clamp-2 mt-0.5 px-2 leading-tight">
                         “{giftCard.mensaje}”
                       </p>
                     )}
                   </div>
 
                   {/* Pie: Código Único + Fecha de vencimiento */}
-                  <div className="relative z-10 flex items-center justify-between bg-white/80 rounded-xl px-3 py-1.5 border border-[#B88A72]/35">
+                  <div className="relative z-10 flex items-center justify-between bg-white/85 rounded-lg sm:rounded-xl px-2.5 sm:px-3 py-1 sm:py-1.5 border border-[#B88A72]/35">
                     <div className="text-left">
-                      <span className="text-[7px] uppercase tracking-widest text-[#7A6260] block">
+                      <span className="text-[6.5px] sm:text-[7px] uppercase tracking-widest text-[#7A6260] block leading-none mb-0.5">
                         Código de Canje
                       </span>
-                      <span className="font-mono text-xs sm:text-sm font-bold tracking-[0.2em] text-[#3D1D1C]">
+                      <span className="font-mono text-[11px] sm:text-sm font-bold tracking-[0.18em] text-[#3D1D1C] leading-none block">
                         {giftCard.codigo}
                       </span>
                     </div>
                     <div className="text-right">
-                      <span className="text-[7px] uppercase tracking-widest text-[#7A6260] block">
+                      <span className="text-[6.5px] sm:text-[7px] uppercase tracking-widest text-[#7A6260] block leading-none mb-0.5">
                         Vigencia
                       </span>
-                      <span className="text-[10px] font-medium text-[#3D1D1C]">
+                      <span className="text-[9.5px] sm:text-[10px] font-medium text-[#3D1D1C] leading-none block">
                         {giftCard.fecha_vencimiento || 'Válida 3 meses'}
                       </span>
                     </div>
@@ -724,7 +800,11 @@ export default function GiftCardReveal() {
             </div>
 
             {/* CONTROLES INTERACTIVOS BAJO LA TARJETA (ROTAR 180° Y COPIAR CÓDIGO) */}
-            <div className="grid grid-cols-2 gap-2.5 animate-controles-entrada">
+            <div
+              className={`grid grid-cols-2 gap-2.5 transition-opacity duration-300 ${
+                guardandoTarjeta ? 'opacity-0' : 'animate-controles-entrada'
+              }`}
+            >
               <button
                 type="button"
                 onClick={handleRotarConBrillo}
@@ -754,7 +834,11 @@ export default function GiftCardReveal() {
             </div>
 
             {/* BOTÓN PRINCIPAL PARA AGENDAR */}
-            <div className="space-y-2.5 pt-1 animate-controles-entrada">
+            <div
+              className={`space-y-2.5 pt-1 transition-opacity duration-300 ${
+                guardandoTarjeta ? 'opacity-0' : 'animate-controles-entrada'
+              }`}
+            >
               <Link
                 to="/agenda"
                 className="block w-full text-center bg-gradient-to-r from-[#F3DCAB] via-[#E2C083] to-[#C69B63] text-[#2D1A19] font-bold text-xs uppercase tracking-[0.2em] py-4 rounded-full shadow-lg hover:brightness-105 transition-all"
@@ -763,10 +847,8 @@ export default function GiftCardReveal() {
               </Link>
               <button
                 type="button"
-                onClick={() => {
-                  setRotada(false)
-                  setEtapa('sobre')
-                }}
+                onClick={handleCerrarSobreReversa}
+                disabled={guardandoTarjeta}
                 className="w-full text-center py-2 text-[11px] text-[#D0C5B5]/70 hover:text-[#FAF6F2] uppercase tracking-widest transition-colors cursor-pointer"
               >
                 ↺ Volver a cerrar el sobre
