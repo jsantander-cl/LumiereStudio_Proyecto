@@ -519,7 +519,7 @@ export default function GiftCardReveal() {
   const selloOculto = faseSobre === 'abriendoListones' || faseSobre === 'cerrandoListones'
 
   return (
-    <div className="min-h-[100dvh] bg-[#140D0C] text-[#FAF6F2] flex flex-col items-center justify-center p-4 sm:p-8 relative overflow-hidden font-sans select-none">
+    <div className="min-h-screen sm:min-h-[100dvh] bg-[#140D0C] text-[#FAF6F2] flex flex-col items-center justify-start sm:justify-center pt-6 pb-8 px-4 sm:p-8 relative overflow-x-hidden font-sans select-none">
       {/* Animaciones personalizadas de revelación y guardado en reversa */}
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap');
@@ -582,12 +582,12 @@ export default function GiftCardReveal() {
       <div className="fixed inset-0 pointer-events-none bg-[radial-gradient(circle_at_50%_35%,rgba(184,138,114,0.18)_0%,rgba(29,18,17,0.85)_55%,rgba(16,10,9,1)_95%)] z-0" />
 
       {/* Canvas de polvo dorado flotante */}
-      <canvas ref={canvasRef} className="fixed inset-0 pointer-events-none z-0 opacity-75" />
+      <canvas ref={canvasRef} className="fixed inset-0 w-full h-full pointer-events-none z-0 opacity-75" />
 
       {/* CONTENEDOR PRINCIPAL */}
       <div className="w-full max-w-[460px] md:max-w-[520px] relative z-10 flex flex-col items-center">
         {/* CINTA SUPERIOR DE MARCA */}
-        <div className="w-full flex items-center justify-between mb-6 px-1">
+        <div className="w-full flex items-center justify-between mb-4 sm:mb-6 px-1">
           <div className="flex items-center gap-2">
             <span className="w-1.5 h-1.5 rounded-full bg-[#E6C786] shadow-[0_0_8px_rgba(230,199,134,0.9)]" />
             <span className="text-[10px] uppercase tracking-[0.28em] text-[#D0C5B5]">
@@ -608,10 +608,10 @@ export default function GiftCardReveal() {
         {/* ETAPA 1: INGRESO DE CÓDIGO SECRETO (EL CANDADO DEL SOBRE)             */}
         {/* ===================================================================== */}
         {etapa === 'codigo' && (
-          <div className="w-full bg-[#FAF6F2] text-[#3D1D1C] rounded-[28px] p-8 sm:p-10 shadow-[0_24px_60px_rgba(0,0,0,0.85)] border border-[#B88A72]/60 relative overflow-hidden transition-all duration-500">
+          <div className="w-full bg-[#FAF6F2] text-[#3D1D1C] rounded-[28px] p-7 sm:p-10 shadow-[0_24px_60px_rgba(0,0,0,0.85)] border border-[#B88A72]/60 relative overflow-hidden transition-all duration-500">
             <div className="absolute inset-3 rounded-[20px] border border-[#B88A72]/35 pointer-events-none" />
 
-            <div className="text-center space-y-2 mb-7 relative z-10">
+            <div className="text-center space-y-2 mb-6 sm:mb-7 relative z-10">
               <h1 className="font-serif text-3xl sm:text-4xl tracking-wide text-[#3D1D1C]">
                 GIFT <span className="italic font-normal text-[#8C5E48]">CARD</span>
               </h1>
@@ -625,7 +625,7 @@ export default function GiftCardReveal() {
               </p>
             </div>
 
-            <form onSubmit={handleValidarCodigo} className="space-y-5 relative z-10">
+            <form onSubmit={handleValidarCodigo} className="space-y-4 sm:space-y-5 relative z-10">
               <div className="text-center space-y-2">
                 <label className="text-xs text-[#7A6260] block">
                   Ingresa el código secreto impreso en tu tarjeta para desbloquear tu sobre
@@ -655,7 +655,7 @@ export default function GiftCardReveal() {
               </button>
             </form>
 
-            <div className="flex items-center justify-center gap-3 mt-7 relative z-10">
+            <div className="flex items-center justify-center gap-3 mt-6 sm:mt-7 relative z-10">
               <span className="h-[1px] w-10 bg-[#3D1D1C]/25" />
               <span className="text-[#3D1D1C] text-base">♡</span>
               <span className="h-[1px] w-10 bg-[#3D1D1C]/25" />
@@ -668,7 +668,7 @@ export default function GiftCardReveal() {
         {/* ===================================================================== */}
         {etapa === 'sobre' && giftCard && (
           <div
-            className={`w-full flex flex-col items-center space-y-6 transition-all duration-700 ${
+            className={`w-full flex flex-col items-center space-y-5 sm:space-y-6 transition-all duration-700 ${
               faseSobre === 'abriendoListones'
                 ? 'scale-105 opacity-0 translate-y-4'
                 : 'opacity-100 scale-100 translate-y-0'
@@ -809,7 +809,7 @@ export default function GiftCardReveal() {
         {/* ETAPA 3: TARJETA FÍSICA RECREADA CON ANIMACIÓN DE EMERGENCIA + 180°   */}
         {/* ===================================================================== */}
         {etapa === 'revelada' && giftCard && (
-          <div className="w-full space-y-5">
+          <div className="w-full space-y-4 sm:space-y-5">
             <div
               className={`text-center space-y-0.5 transition-opacity duration-300 ${
                 guardandoTarjeta ? 'opacity-0' : 'animate-controles-entrada'
@@ -916,7 +916,7 @@ export default function GiftCardReveal() {
       {/* Enlace discreto para volver a la web */}
       <Link
         to="/"
-        className="mt-8 text-[10px] text-[#FAF6F2]/50 hover:text-[#FAF6F2] tracking-[0.25em] uppercase transition-colors z-10"
+        className="mt-6 sm:mt-8 text-[10px] text-[#FAF6F2]/50 hover:text-[#FAF6F2] tracking-[0.25em] uppercase transition-colors z-10"
       >
         ← Volver a Lumiere Studio
       </Link>
