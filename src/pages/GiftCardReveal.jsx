@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 
-// Parte delantera exacta de la Gift Card Lumiere con Foil Dorado automático en Logo, Letras y Ornamentos
+// Parte delantera exacta de la Gift Card Lumiere con Foil Dorado automático en Logo, Letras, Ornamentos y Corazón
 function FrenteTarjetaLumiere() {
   return (
     <div
@@ -122,7 +122,7 @@ function FrenteTarjetaLumiere() {
             BELLEZA QUE ILUMINA
           </p>
 
-{/* Líneas laterales + Corazón en Foil Dorado Estampado */}
+          {/* Líneas laterales + Corazón en Foil Dorado Estampado */}
           <div className="flex items-center justify-center gap-3 mt-1.5 w-full max-w-[175px]">
             <span className="h-[1px] flex-1 bg-[#A88238]/60" />
             <div
@@ -160,8 +160,31 @@ function formatearFechaDDMMAAAA(fechaStr) {
   return fechaStr
 }
 
-// Cara trasera exacta (sin remitente arriba a la derecha y fecha dd-mm-aaaa)
+// Limpia el prefijo "Pack $70.000:" o "Pack:" y separa los servicios incluidos si es un pack
+function parsearExperienciaRegalo(nombreRaw) {
+  if (!nombreRaw) return { esPack: false, titulo: '', items: [] }
+
+  const sinPrefijo = nombreRaw
+    .replace(/^Pack\s*(\$[0-9\.]+\s*)?:\s*/i, '')
+    .trim()
+
+  const esPack = /^Pack\b/i.test(nombreRaw) || sinPrefijo.includes('+')
+
+  if (esPack && sinPrefijo.includes('+')) {
+    const items = sinPrefijo
+      .split('+')
+      .map((item) => item.trim())
+      .filter(Boolean)
+    return { esPack: true, titulo: sinPrefijo, items }
+  }
+
+  return { esPack: false, titulo: sinPrefijo, items: [] }
+}
+
+// Cara trasera exacta (sin remitente arriba a la derecha, fecha dd-mm-aaaa y diseño limpio para packs)
 function ReversoTarjetaLumiere({ giftCard }) {
+  const { esPack, titulo, items } = parsearExperienciaRegalo(giftCard.servicio_nombre)
+
   return (
     <div
       style={{
@@ -254,10 +277,10 @@ function ReversoTarjetaLumiere({ giftCard }) {
         </div>
       </div>
 
-      {/* ==================== CENTRO: ESTRELLA + EXPERIENCIA REGALO + SERVICIO ==================== */}
-      <div className="relative z-20 flex flex-col items-center justify-center text-center my-auto px-6 sm:px-10">
+      {/* ==================== CENTRO: ESTRELLA + EXPERIENCIA REGALO + SERVICIO O PACK ==================== */}
+      <div className="relative z-20 flex flex-col items-center justify-center text-center my-auto px-5 sm:px-9">
         {/* Líneas laterales + Estrella de 4 puntas cobriza */}
-        <div className="flex items-center justify-center gap-3 w-full max-w-[165px] sm:max-w-[220px] mb-1 sm:mb-2">
+        <div className="flex items-center justify-center gap-3 w-full max-w-[165px] sm:max-w-[220px] mb-1 sm:mb-1.5">
           <span className="h-[1px] flex-1 bg-[#B88A72]/75" />
           <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0">
             <path
@@ -268,21 +291,38 @@ function ReversoTarjetaLumiere({ giftCard }) {
           <span className="h-[1px] flex-1 bg-[#B88A72]/75" />
         </div>
 
-        {/* Subtítulo: EXPERIENCIA REGALO */}
+        {/* Subtítulo: EXPERIENCIA REGALO / PACK EXPERIENCIA REGALO */}
         <span
           style={{ fontFamily: "'Montserrat', sans-serif" }}
           className="text-[7px] sm:text-[9.5px] uppercase tracking-[0.3em] text-[#5C3A30] font-medium block leading-none"
         >
-          EXPERIENCIA REGALO
+          {esPack ? 'PACK EXPERIENCIA REGALO' : 'EXPERIENCIA REGALO'}
         </span>
 
-        {/* Nombre del servicio en tipografía editorial */}
-        <h3
-          style={{ fontFamily: "'Playfair Display', serif" }}
-          className="text-[19px] sm:text-[29px] text-[#8E5641] font-normal leading-tight mt-0.5 sm:mt-1 line-clamp-1"
-        >
-          {giftCard.servicio_nombre}
-        </h3>
+        {/* Si es Pack con varios servicios, los muestra completos y bien distribuidos */}
+        {esPack && items.length > 0 ? (
+          <div className="mt-1 sm:mt-1.5 flex flex-wrap items-center justify-center gap-x-1.5 gap-y-0.5 max-w-[265px] sm:max-w-[380px]">
+            {items.map((item, idx) => (
+              <span
+                key={idx}
+                style={{ fontFamily: "'Playfair Display', serif" }}
+                className="text-[12px] sm:text-[17px] text-[#8E5641] font-normal leading-snug inline-flex items-center gap-1.5"
+              >
+                <span>{item}</span>
+                {idx < items.length - 1 && (
+                  <span className="text-[#B88A72] text-[9px] sm:text-[11px]">✦</span>
+                )}
+              </span>
+            ))}
+          </div>
+        ) : (
+          <h3
+            style={{ fontFamily: "'Playfair Display', serif" }}
+            className="text-[19px] sm:text-[29px] text-[#8E5641] font-normal leading-tight mt-0.5 sm:mt-1 line-clamp-1"
+          >
+            {titulo}
+          </h3>
+        )}
 
         {/* Mensaje con líneas laterales */}
         {giftCard.mensaje && (
@@ -530,7 +570,7 @@ export default function GiftCardReveal() {
 
   return (
     <div className="min-h-screen sm:min-h-[100dvh] bg-[#140D0C] text-[#FAF6F2] flex flex-col items-center justify-start sm:justify-center pt-14 pb-8 px-4 sm:p-8 relative overflow-x-hidden font-sans select-none">
-     {/* Animaciones personalizadas de revelación, guardado y Foil Dorado Estampado Automático */}
+      {/* Animaciones personalizadas de revelación, guardado y Foil Dorado Estampado sin costura */}
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap');
 
@@ -914,7 +954,7 @@ export default function GiftCardReveal() {
                 {/* ==================== CARA FRONTAL (FOIL DORADO AUTOMÁTICO) ==================== */}
                 <FrenteTarjetaLumiere />
 
-                {/* ==================== CARA TRASERA (DISEÑO BOTÁNICO CON ONDAS) ==================== */}
+                {/* ==================== CARA TRASERA (DISEÑO BOTÁNICO + PACKS SIN PRECIO) ==================== */}
                 <ReversoTarjetaLumiere giftCard={giftCard} />
               </div>
             </div>

@@ -14,6 +14,10 @@ export default function GestorGiftCards({ giftCards, setGiftCards, servicios }) 
   const [creando, setCreando] = useState(false)
   const [mostrarQRUniversal, setMostrarQRUniversal] = useState(false)
 
+  // Filtramos dinámicamente desde la tabla `servicios` de Supabase sin hardcodear nada
+  const packsGiftCard = (servicios || []).filter((s) => s.es_pack_giftcard === true)
+  const serviciosIndividuales = (servicios || []).filter((s) => !s.es_pack_giftcard)
+
   // URL pública fija donde apuntará el QR impreso en todas las tarjetas
   const urlRegaloPublica = `${window.location.origin}/regalo`
   const qrImageUrl = `https://api.qrserver.com/v1/create-qr-code/?size=400x400&color=3D1D1C&bgcolor=FAF6F2&data=${encodeURIComponent(
@@ -167,12 +171,25 @@ export default function GestorGiftCards({ giftCards, setGiftCards, servicios }) 
             className="bg-[#FDFBF9] border border-[#DCD0C7] rounded-xl px-3 py-1.5 text-xs text-[#2D1A19]"
             required
           >
-            <option value="">Selecciona el tratamiento...</option>
-            {servicios.map((s) => (
-              <option key={s.id} value={s.id}>
-                {s.nombre} (${(s.precio || 0).toLocaleString('es-CL')})
-              </option>
-            ))}
+            <option value="">Selecciona tratamiento o pack...</option>
+
+            {packsGiftCard.length > 0 && (
+              <optgroup label="✦ Packs Gift Card">
+                {packsGiftCard.map((p) => (
+                  <option key={p.id} value={p.id}>
+                    {p.nombre} (${(p.precio || 0).toLocaleString('es-CL')})
+                  </option>
+                ))}
+              </optgroup>
+            )}
+
+            <optgroup label="✦ Servicios Individuales">
+              {serviciosIndividuales.map((s) => (
+                <option key={s.id} value={s.id}>
+                  {s.nombre} (${(s.precio || 0).toLocaleString('es-CL')})
+                </option>
+              ))}
+            </optgroup>
           </select>
           <input
             type="date"
